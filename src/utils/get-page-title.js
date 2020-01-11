@@ -1,6 +1,6 @@
 import defaultSettings from '@/settings'
 
-const title = defaultSettings.title || 'Vienna admin'
+const title = defaultSettings.title || '伊品众后台管理'
 
 export default function getPageTitle(pageTitle) {
   if (pageTitle) {

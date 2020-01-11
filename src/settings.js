@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Vienna admin',
+  title: '伊品众后台管理系统',
 
   /**
    * @type {boolean} true | false

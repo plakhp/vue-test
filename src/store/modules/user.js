@@ -6,16 +6,41 @@ const state = {
   token: getToken(),
   name: '',
   avatar: '',
-  introduction: '',
-  roles: []
+  roles: [],
+  roleButtons: []
+}
+
+function genRoles(menus) {
+  const roles = []
+  menus.map(menu => {
+    if (menu.menuCode) {
+      roles.push(menu.menuCode)
+    }
+    if (menu.subMenu && menu.subMenu.length > 0) {
+      genRoles(menu.subMenu).map(role => {
+        roles.push(role)
+      })
+    }
+  })
+  return roles
+}
+
+function genRoleButtons(menus) {
+  const buttons = []
+  menus.map(menu => {
+    if (menu.menuType === 'button') {
+      buttons.push(menu.menuCode)
+    }
+    if (menu.subMenu && menu.subMenu.length > 0) {
+      genRoleButtons(menu.subMenu)
+    }
+  })
+  return buttons
 }
 
 const mutations = {
   SET_TOKEN: (state, token) => {
     state.token = token
-  },
-  SET_INTRODUCTION: (state, introduction) => {
-    state.introduction = introduction
   },
   SET_NAME: (state, name) => {
     state.name = name
@@ -25,6 +50,9 @@ const mutations = {
   },
   SET_ROLES: (state, roles) => {
     state.roles = roles
+  },
+  SET_ROLE_BUTTONS: (state, roleButtons) => {
+    state.roleButtons = roleButtons
   }
 }
 
@@ -33,58 +61,49 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      commit('SET_TOKEN', '11111111111111111')
-      setToken('11111111111111111')
-      resolve()
-
       // Change the right API
-      // login({ username: username.trim(), password: password }).then(response => {
-      //   const { data } = response
-      //   commit('SET_TOKEN', data.token)
-      //   setToken(data.token)
-      //   resolve()
-      // }).catch(error => {
-      //   reject(error)
-      // })
+      login({ username: username.trim(), password: password }).then(response => {
+        const { data } = response
+        commit('SET_TOKEN', data.token)
+        setToken(data.token)
+        resolve()
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 
   // get user info
   getInfo({ commit, state }) {
     return new Promise((resolve, reject) => {
-      const data = {
-        roles: ['admin'],
-        name: 'Admin',
-        avatar: ''
-      }
-      commit('SET_ROLES', data.roles)
-      commit('SET_NAME', data.name)
-      commit('SET_AVATAR', data.avatar)
-      resolve(data)
-
       // Change the right API
-      // getInfo(state.token).then(response => {
-      //   const { data } = response
-      //
-      //   if (!data) {
-      //     reject('Verification failed, please Login again.')
-      //   }
-      //
-      //   const { roles, name, avatar, introduction } = data
-      //
-      //   // roles must be a non-empty array
-      //   if (!roles || roles.length <= 0) {
-      //     reject('getInfo: roles must be a non-null array!')
-      //   }
-      //
-      //   commit('SET_ROLES', roles)
-      //   commit('SET_NAME', name)
-      //   commit('SET_AVATAR', avatar)
-      //   commit('SET_INTRODUCTION', introduction)
-      //   resolve(data)
-      // }).catch(error => {
-      //   reject(error)
-      // })
+      getInfo(state.token).then(response => {
+        const { data } = response
+
+        if (!data) {
+          reject('验证失败，请重新登录')
+        }
+
+        const { userMenus, nickName, avatar } = data
+
+        // roles must be a non-empty array
+        if (!userMenus || userMenus.length <= 0) {
+          reject('getInfo: roles must be a non-null array!')
+        }
+
+        console.log('menus', userMenus)
+        const roles = genRoles(userMenus)
+        console.log('roles: ', roles)
+        const roleButtons = genRoleButtons(userMenus)
+
+        commit('SET_ROLES', roles)
+        commit('SET_ROLE_BUTTONS', roleButtons)
+        commit('SET_NAME', nickName)
+        commit('SET_AVATAR', avatar)
+        resolve({ roles })
+      }).catch(error => {
+        reject(error)
+      })
     })
   },
 

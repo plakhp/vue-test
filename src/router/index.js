@@ -7,7 +7,7 @@ Vue.use(Router)
 import Layout from '@/layout'
 
 /* Router Modules */
-// import componentsRouter from './modules/components'
+import userRouter from './modules/user'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -63,32 +63,6 @@ export const constantRoutes = [
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
-  },
-  {
-    path: '/park',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        component: () => import('@/views/park/index'),
-        name: 'PointOfInterest',
-        meta: { title: '园区管理', icon: 'park', affix: true }
-      },
-      {
-        path: 'add',
-        component: () => import('@/views/park/components/View'),
-        name: 'PointOfInterestAdd',
-        meta: { title: 'Add Point of interest', icon: 'poi', affix: true },
-        hidden: true
-      },
-      {
-        path: 'edit/:id',
-        component: () => import('@/views/park/components/View'),
-        name: 'PointOfInterestEdit',
-        meta: { title: 'Edit Point of interest', icon: 'poi', affix: true },
-        hidden: true
-      }
-    ]
   }
 ]
 
@@ -98,7 +72,7 @@ export const constantRoutes = [
  */
 export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
-  // componentsRouter,
+  userRouter,
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
