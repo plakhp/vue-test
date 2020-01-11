@@ -73,7 +73,7 @@ const users = {
             {
               title: '查询角色',
               menuCode: 'role_manager_search',
-              menuType: 'button',
+              menuType: 'button'
             }
           ]
         }

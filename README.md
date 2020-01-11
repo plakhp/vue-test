@@ -144,16 +144,16 @@ npm run lint
 npm run lint -- --fix
 ```
 
-更多信息请参考 [使用文档](https://panjiachen.github.io/vue-element-admin-site/zh/)
+更多信息请参考 [使用文档]()
+
+## 组件库
+- **[View UI](https://www.iviewui.com/docs/introduce) 即原先的 iView，是一套基于 Vue.js 的开源 UI 组件库，主要服务于 PC 界面的中后台产品。** 
 
 ## Changelog
 
 Detailed changes for each release are documented in the [release notes](https://github.com/PanJiaChen/vue-element-admin/releases).
 
 ## Online Demo
-
-[在线 Demo](https://panjiachen.github.io/vue-element-admin)
-
 
 ## Browsers support
 

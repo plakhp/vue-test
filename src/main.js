@@ -19,6 +19,11 @@ import './utils/error-log' // error log
 
 import * as filters from './filters' // global filters
 
+import ViewUI from 'view-design'
+import 'view-design/dist/styles/iview.css'
+
+Vue.use(ViewUI)
+
 /**
  * If you don't want to use mock-server
  * you want to use MockJs for mock api
