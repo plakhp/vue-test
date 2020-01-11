@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard-container">
-    Dashboard
+    <div class="flex" style="height: calc(100vh - 50px);justify-content: center;font-size: 40px;">欢迎进入伊品众后台管理系统</div>
   </div>
 </template>
 

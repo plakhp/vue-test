@@ -32,7 +32,9 @@ function genRoleButtons(menus) {
       buttons.push(menu.menuCode)
     }
     if (menu.subMenu && menu.subMenu.length > 0) {
-      genRoleButtons(menu.subMenu)
+      genRoleButtons(menu.subMenu).map(button => {
+        buttons.push(button)
+      })
     }
   })
   return buttons
@@ -91,10 +93,10 @@ const actions = {
           reject('getInfo: roles must be a non-null array!')
         }
 
-        console.log('menus', userMenus)
         const roles = genRoles(userMenus)
         console.log('roles: ', roles)
         const roleButtons = genRoleButtons(userMenus)
+        console.log('buttons: ', roleButtons)
 
         commit('SET_ROLES', roles)
         commit('SET_ROLE_BUTTONS', roleButtons)

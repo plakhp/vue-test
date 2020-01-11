@@ -57,20 +57,134 @@ div:focus {
   outline: none;
 }
 
-.fr {
-  float: right;
+$red: #e52236;
+$dark-black: #000000;
+$black: #303133;
+$light-black: #525457;
+$dark-gray: #606266;
+$gray: #909399;
+$light-gray: #e4e7ed;
+
+.fs-16 {
+  font-size: 16px !important;
+}
+
+.fs-18 {
+  font-size: 18px !important;
+}
+
+.fs-20 {
+  font-size: 20px !important;
+}
+
+.fs-24 {
+  font-size: 24px !important;
+}
+
+.fs-26 {
+  font-size: 26px !important;
+}
+
+.fs-28 {
+  font-size: 28px !important;
+}
+
+.fs-30 {
+  font-size: 30px !important;
+}
+
+.fb {
+  font-family: GraphikLCG Medium;
+  font-weight: bold;
+}
+
+.color-red {
+  color: $red !important;
+}
+
+.color-dark-black {
+  color: $dark-black !important;
+}
+
+.color-black {
+  color: $black !important;
+}
+
+.color-light-black {
+  color: $light-black !important;
+}
+
+.color-dark-gray {
+  color: $dark-gray !important;
+}
+
+.color-gray {
+  color: $gray !important;
+}
+
+.color-light-gray {
+  color: $light-gray !important;
+}
+
+.ml-10 {
+  margin-left: 10px !important;
+}
+
+.ml-20 {
+  margin-left: 20px !important;
+}
+
+.ml-30 {
+  margin-left: 30px !important;
+}
+
+.ml-40 {
+  margin-left: 40px !important;
+}
+
+.mt-10 {
+  margin-top: 10px !important;
+}
+
+.mt-20 {
+  margin-top: 20px !important;
+}
+
+.mt-30 {
+  margin-top: 30px !important;
+}
+
+.mt-40 {
+  margin-top: 40px !important;
+}
+
+.mb-10 {
+  margin-bottom: 10px !important;
+}
+
+.mb-20 {
+  margin-bottom: 20px !important;
+}
+
+.mb-30 {
+  margin-bottom: 30px !important;
+}
+
+.mb-40 {
+  margin-bottom: 40px !important;
 }
 
 .fl {
-  float: left;
+  float: left !important;
 }
 
-.pr-5 {
-  padding-right: 5px;
+.fr {
+  float: right !important;
 }
 
-.pl-5 {
-  padding-left: 5px;
+.flex {
+  display: flex;
+  align-items: center;
 }
 
 .block {

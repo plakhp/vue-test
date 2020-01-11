@@ -19,46 +19,66 @@ const users = {
     userName: 'admin',
     status: 1,
     userMenus: [{
-      id: 12,
-      menuCode: 'user_manager',
-      parentId: 0,
+      title: '系统管理',
+      menuCode: 'system_manager',
       menuType: 'menu',
-      level: 1,
-      orders: 1,
-      dropDown: 1,
       subMenu: [
         {
-          id: 13,
-          menuCode: 'user_manager_add',
-          parentId: 12,
-          menuType: 'button',
-          level: 2,
-          orders: 1,
-          icon: null,
-          dropDown: null,
-          subMenu: []
+          title: '账号管理',
+          menuCode: 'account_manager',
+          menuType: 'menu',
+          subMenu: [
+            {
+              title: '新增账号',
+              menuCode: 'account_manager_add',
+              menuType: 'button',
+            },
+            {
+              title: '编辑账号',
+              menuCode: 'account_manager_modify',
+              menuType: 'button',
+            },
+            {
+              title: '删除账号',
+              menuCode: 'account_manager_delete',
+              menuType: 'button',
+            },
+            {
+              title: '查询账号',
+              menuCode: 'account_manager_search',
+              menuType: 'button',
+            }
+          ]
         },
         {
-          id: 14,
-          menuCode: 'user_manager_modify',
-          parentId: 12,
-          menuType: 'button',
-          level: 2,
-          orders: 1,
-          icon: null,
-          dropDown: null,
-          subMenu: []
+          title: '角色管理',
+          menuCode: 'role_manager',
+          menuType: 'menu',
+          subMenu: [
+            {
+              title: '新增角色',
+              menuCode: 'role_manager_add',
+              menuType: 'button',
+            },
+            {
+              title: '编辑角色',
+              menuCode: 'role_manager_modify',
+              menuType: 'button',
+            },
+            {
+              title: '删除角色',
+              menuCode: 'role_manager_delete',
+              menuType: 'button',
+            },
+            {
+              title: '查询角色',
+              menuCode: 'role_manager_search',
+              menuType: 'button',
+            }
+          ]
         }
       ]
     }],
-    role: {
-      remark: '系统总管理员拥有全部权限',
-      menuIds: '12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,31,32,33,1,2,3,4,5,6,7,8,9,10,11',
-      roleName: '系统总管理员',
-      leafMenuIds: '12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,31,32,33,1,2,3,4,5,6,7,8,9,10,11',
-      status: 0,
-      id: 1
-    },
     token: 'admin-token'
   },
   'customer-token': {}
