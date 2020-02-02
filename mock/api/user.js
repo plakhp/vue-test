@@ -31,22 +31,22 @@ const users = {
             {
               title: '新增账号',
               menuCode: 'account_manager_add',
-              menuType: 'button',
+              menuType: 'button'
             },
             {
               title: '编辑账号',
               menuCode: 'account_manager_modify',
-              menuType: 'button',
+              menuType: 'button'
             },
             {
               title: '删除账号',
               menuCode: 'account_manager_delete',
-              menuType: 'button',
+              menuType: 'button'
             },
             {
               title: '查询账号',
               menuCode: 'account_manager_search',
-              menuType: 'button',
+              menuType: 'button'
             }
           ]
         },
@@ -58,17 +58,17 @@ const users = {
             {
               title: '新增角色',
               menuCode: 'role_manager_add',
-              menuType: 'button',
+              menuType: 'button'
             },
             {
               title: '编辑角色',
               menuCode: 'role_manager_modify',
-              menuType: 'button',
+              menuType: 'button'
             },
             {
               title: '删除角色',
               menuCode: 'role_manager_delete',
-              menuType: 'button',
+              menuType: 'button'
             },
             {
               title: '查询角色',
@@ -102,7 +102,7 @@ export default [
       }
 
       return {
-        code: 200,
+        code: 0,
         data: token
       }
     }
@@ -125,7 +125,7 @@ export default [
       }
 
       return {
-        code: 200,
+        code: 0,
         data: info
       }
     }
@@ -137,7 +137,7 @@ export default [
     type: 'post',
     response: _ => {
       return {
-        code: 200,
+        code: 0,
         data: 'success'
       }
     }

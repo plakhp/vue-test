@@ -30,12 +30,12 @@ export default {
     },
     limit: {
       type: Number,
-      default: 20
+      default: 10
     },
     pageSizes: {
       type: Array,
       default() {
-        return [10, 20, 30, 50]
+        return [5, 10, 20, 30, 50]
       }
     },
     layout: {
@@ -53,6 +53,11 @@ export default {
     hidden: {
       type: Boolean,
       default: false
+    }
+  },
+  data() {
+    return {
+      isSizeChange: false
     }
   },
   computed: {
@@ -75,12 +80,17 @@ export default {
   },
   methods: {
     handleSizeChange(val) {
-      this.$emit('pagination', { page: this.currentPage, limit: val })
+      this.isSizeChange = true
+      this.$emit('pagination', { page: 1, limit: val })
       if (this.autoScroll) {
         scrollTo(0, 800)
       }
     },
     handleCurrentChange(val) {
+      if (val === 1 && this.isSizeChange) {
+        this.isSizeChange = false
+        return
+      }
       this.$emit('pagination', { page: val, limit: this.pageSize })
       if (this.autoScroll) {
         scrollTo(0, 800)
@@ -90,12 +100,19 @@ export default {
 }
 </script>
 
-<style scoped>
-.pagination-container {
-  background: #fff;
-  padding: 32px 16px;
-}
-.pagination-container.hidden {
-  display: none;
-}
+<style>
+  .pagination-container {
+    text-align: right;
+    background: #fff;
+    padding: 20px 10px;
+    margin-top: 10px;
+  }
+  .pagination-container.hidden {
+    display: none;
+  }
+
+  /* fix input text vertical align issue (BPSD-1202) */
+  .pagination-container .el-input__inner {
+    line-height: 28px;
+  }
 </style>
