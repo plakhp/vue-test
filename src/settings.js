@@ -1,6 +1,8 @@
 module.exports = {
   title: '伊品众后台管理系统',
 
+  appId: false,
+
   /**
    * @type {boolean} true | false
    * @description Whether show the settings right-panel
@@ -32,4 +34,5 @@ module.exports = {
    * If you want to also use it in dev, you can pass ['production', 'development']
    */
   errorLog: 'production'
+
 }

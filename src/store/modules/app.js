@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie'
 
 const state = {
+  appId: 'appid-xxxxxxxxxxxxxxxxxxxxx',
   sidebar: {
     opened: Cookies.get('sidebarStatus') ? !!+Cookies.get('sidebarStatus') : true,
     withoutAnimation: false

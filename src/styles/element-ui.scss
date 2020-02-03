@@ -82,3 +82,13 @@
 .el-range-separator {
   box-sizing: content-box;
 }
+
+.el-table--border {
+  .el-table__header {
+    tr {
+      th {
+        background-color: #f0f0f0;
+      }
+    }
+  }
+}

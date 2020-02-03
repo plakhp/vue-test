@@ -20,6 +20,7 @@
       v-loading="loading"
       :data="list"
       stripe
+      border
       style="width: 100%"
     >
       <el-table-column
@@ -33,6 +34,10 @@
       <el-table-column
         prop="nickName"
         label="昵称"
+      />
+      <el-table-column
+        prop="phone"
+        label="手机号"
       />
       <el-table-column
         prop="role"

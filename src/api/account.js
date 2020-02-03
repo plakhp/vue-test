@@ -11,7 +11,7 @@ import request from '@/utils/request'
 
 export function list(data) {
   return request({
-    url: '/accounts',
+    url: '/admin/adminUser/select',
     method: 'get',
     params: data
   })

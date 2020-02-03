@@ -63,8 +63,7 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      // Change the right API
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ userName: username.trim(), password: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
         setToken(data.token)

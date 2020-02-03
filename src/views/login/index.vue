@@ -77,7 +77,7 @@ export default {
     return {
       loginForm: {
         username: 'admin',
-        password: '111111'
+        password: '12345678'
       },
       loginRules: {
         username: [{ required: true, trigger: ['blur', 'change'], message: '请输入用户名' }],
@@ -92,7 +92,7 @@ export default {
   },
   mounted() {
     if (this.loginForm.username === '') {
-      this.$refs.username.focus()
+      this.$refs.userName.focus()
     } else if (this.loginForm.password === '') {
       this.$refs.password.focus()
     }

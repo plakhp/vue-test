@@ -16,8 +16,11 @@ for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
     id: '@increment',
     timestamp: +Mock.Random.date('T'),
+    'deptId|1': [1,2,3,4,5],
     userName: '@first',
     nickName: '@first',
+    email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    phone: /^1[3456789]\d{9}$/,
     'role|1': ['管理员', '普通用户'],
     'status|1': [0, 1],
     display_time: '@datetime',
@@ -26,7 +29,7 @@ for (let i = 0; i < count; i++) {
 
 export default [
   {
-    url: '/accounts',
+    url: '/admin/adminUser/select',
     type: 'get',
     response: config => {
       const { searchKey, pageNum = 1, pageSize = 20, sort } = config.query

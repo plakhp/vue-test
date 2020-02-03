@@ -87,11 +87,12 @@ const users = {
 export default [
   // user login
   {
-    url: '/user/login',
-    type: 'post',
+    url: '/admin-auth/oauth/admin/login',
+    type: 'get',
     response: config => {
-      const { username } = config.body
-      const token = tokens[username]
+      debugger
+      const { userName } = config.query
+      const token = tokens[userName]
 
       // mock error
       if (!token) {
