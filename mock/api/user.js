@@ -20,7 +20,7 @@ const users = {
     status: 1,
     userMenus: [{
       title: '系统管理',
-      menuCode: 'system_manager',
+      menuCode: 'oauth_manager',
       menuType: 'menu',
       subMenu: [
         {

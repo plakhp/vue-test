@@ -6,7 +6,7 @@ const router = {
   path: '/system',
   component: Layout,
   name: '系统管理',
-  meta: { title: '系统管理', icon: 'system', affix: true, roles: ['system_manager'] },
+  meta: { title: '系统管理', icon: 'system', affix: true, roles: ['oauth_manager'] },
   children: [
     {
       path: 'account',
