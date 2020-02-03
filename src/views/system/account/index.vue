@@ -32,8 +32,8 @@
         label="用户名"
       />
       <el-table-column
-        prop="nickName"
-        label="昵称"
+        prop="employee"
+        label="员工姓名"
       />
       <el-table-column
         prop="phone"
@@ -43,14 +43,6 @@
         prop="role"
         label="角色"
       />
-      <el-table-column
-        label="状态"
-      >
-        <template slot-scope="scope">
-          <span v-if="scope.row.status === 1">正常</span>
-          <span v-if="scope.row.status === 0">冻结</span>
-        </template>
-      </el-table-column>
       <el-table-column
         label="操作"
       >
@@ -64,11 +56,10 @@
           </el-button>
           <el-button
             plain
-            type="warning"
-            @click="updateStatus(scope.row)"
+            type="danger"
+            @click="delAccount(scope.row)"
           >
-            <span v-if="scope.row.status === 0">解冻</span>
-            <span v-if="scope.row.status === 1">冻结</span>
+            <span>删除</span>
           </el-button>
         </template>
       </el-table-column>
@@ -140,23 +131,6 @@ export default {
           this.loading = false
         })
     },
-    updateStatus(item) {
-      if (item.status === 0) {
-        this.$confirm('此操作将解冻该账号, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-        })
-      } else {
-        this.$confirm('此操作将冻结该账号, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-        })
-      }
-    },
     addAccount() {
       this.accountDialog.visible = true
       this.accountDialog.status = 0
@@ -166,6 +140,22 @@ export default {
       this.accountDialog.visible = true
       this.accountDialog.status = 1
       this.accountDialog.data = item
+    },
+    delAccount(item) {
+      this.$confirm('此操作将删除该账号, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('account/del', item.id)
+          .then(data => {
+            this.$notify({
+              title: '成功',
+              message: '删除成功',
+              type: 'success'
+            })
+          })
+      })
     },
     accountDialogCallback(type) {
       if (type === 'refresh') {

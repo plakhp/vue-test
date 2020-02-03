@@ -19,7 +19,7 @@ export function list(data) {
 
 export function add(data) {
   return request({
-    url: `/accounts/`,
+    url: `/admin/adminUser/insert`,
     method: 'post',
     data
   })
@@ -27,14 +27,14 @@ export function add(data) {
 
 export function del(id) {
   return request({
-    url: `/accounts/${id}`,
+    url: `/admin/adminUser/deleteById/${id}`,
     method: 'delete'
   })
 }
 
 export function edit(data) {
   return request({
-    url: `/accounts/${data.id}`,
+    url: `/admin/adminUser/${data.id}/update`,
     method: 'put',
     data
   })

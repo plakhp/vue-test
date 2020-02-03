@@ -58,6 +58,7 @@ div:focus {
 }
 
 $red: #e52236;
+$green: #30B08F;
 $dark-black: #000000;
 $black: #303133;
 $light-black: #525457;
@@ -100,6 +101,10 @@ $light-gray: #e4e7ed;
 
 .color-red {
   color: $red !important;
+}
+
+.color-green {
+  color: $green !important;
 }
 
 .color-dark-black {

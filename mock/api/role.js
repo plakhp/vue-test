@@ -15,13 +15,9 @@ const count = 100
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
     id: '@increment',
-    timestamp: +Mock.Random.date('T'),
-    'deptId|1': [1,2,3,4,5],
-    userName: '@first',
+    'menuIds|1': [1,2,3,4,5],
     employee: '@first @last',
-    email: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    phone: /^1[3456789]\d{9}$/,
-    'role|1': ['管理员', '普通用户'],
+    'roleName|1': ['管理员', '普通用户'],
     'status|1': [0, 1],
     display_time: '@datetime',
   }))
@@ -29,19 +25,15 @@ for (let i = 0; i < count; i++) {
 
 export default [
   {
-    url: '/admin/adminUser/select',
+    url: '/admin/role/select',
     type: 'get',
     response: config => {
-      const { searchKey, pageNum = 1, pageSize = 20, sort } = config.query
+      const { name, pageNum = 1, pageSize = 20 } = config.query
 
       let mockList = List.filter(item => {
-        if (searchKey && item.userName.indexOf(searchKey) < 0) return false
+        if (name && item.name.indexOf(name) < 0) return false
         return true
       })
-
-      if (sort === '-id') {
-        mockList = mockList.reverse()
-      }
 
       const pageList = mockList.filter((item, index) => index < pageSize * pageNum && index >= pageSize * (pageNum - 1))
 
@@ -86,7 +78,7 @@ export default [
   },
 
   {
-    url: '/admin/adminUser/\.*/update',
+    url: '/admin/adminUser/updateById/\.*',
     type: 'put',
     response: config => {
       return {

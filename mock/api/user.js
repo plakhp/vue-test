@@ -90,7 +90,6 @@ export default [
     url: '/admin-auth/oauth/admin/login',
     type: 'get',
     response: config => {
-      debugger
       const { userName } = config.query
       const token = tokens[userName]
 
@@ -111,9 +110,10 @@ export default [
 
   // get user info
   {
-    url: '/user/info\.*',
+    url: '/admin-auth/admin/userInfo',
     type: 'get',
     response: config => {
+      console.log(config)
       const { token } = config.query
       const info = users[token]
 
@@ -128,6 +128,17 @@ export default [
       return {
         code: 0,
         data: info
+      }
+    }
+  },
+
+  {
+    url: '/adminUser/resetPassword',
+    type: 'put',
+    response: config => {
+      return {
+        code: 0,
+        data: {}
       }
     }
   },

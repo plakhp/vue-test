@@ -2,12 +2,10 @@ import Mock from 'mockjs'
 import { param2Obj } from '../src/utils'
 
 import user from './api/user'
-import article from './api/article'
 import account from './api/account'
 
 const mocks = [
   ...user,
-  ...article,
   ...account
 ]
 
