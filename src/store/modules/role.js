@@ -7,7 +7,7 @@
  * @Last Modified time: 2020/1/29 1:59 PM
  * @Desc
  */
-import { list, add, del, edit } from '@/api/account'
+import { list, dropdown, add, del, edit, getMenusById, getAllMenus } from '@/api/role'
 
 const state = {}
 
@@ -17,6 +17,17 @@ const actions = {
   list({ commit }, data) {
     return new Promise((resolve, reject) => {
       list(data).then(response => {
+        const { data } = response
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  dropdown({ commit }) {
+    return new Promise((resolve, reject) => {
+      dropdown().then(response => {
         const { data } = response
         resolve(data)
       }).catch(error => {
@@ -56,8 +67,29 @@ const actions = {
         reject(error)
       })
     })
-  }
+  },
 
+  getMenusById({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      getMenusById(data).then(response => {
+        const { data } = response
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  getAllMenus({ commit }) {
+    return new Promise((resolve, reject) => {
+      getAllMenus().then(response => {
+        const { data } = response
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  }
 }
 
 export default {

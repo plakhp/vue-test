@@ -39,10 +39,3 @@ export function edit(data) {
     data
   })
 }
-
-export function detail(id) {
-  return request({
-    url: `/accounts/${id}`,
-    method: 'get'
-  })
-}

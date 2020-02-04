@@ -16,6 +16,14 @@ export function getInfo(token) {
   })
 }
 
+export function editPassword(data) {
+  return request({
+    url: '/adminUser/resetPassword',
+    method: 'put',
+    data
+  })
+}
+
 export function logout() {
   return request({
     url: '/user/logout',

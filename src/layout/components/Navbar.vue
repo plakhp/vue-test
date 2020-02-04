@@ -25,15 +25,16 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown">
-          <router-link to="/profile/index">
-            <el-dropdown-item>个人中心</el-dropdown-item>
-          </router-link>
+          <el-dropdown-item>
+            <div @click="editPassword">修改密码</div>
+          </el-dropdown-item>
           <el-dropdown-item divided>
-            <span style="display:block;" @click="logout">登出</span>
+            <div @click="logout">登出</div>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </div>
+    <edit-password-dialog v-if="editPasswordDialog.visible" :visible="editPasswordDialog.visible" @cb="editPasswordDialogCallback" />
   </div>
 </template>
 
@@ -45,6 +46,7 @@ import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
+import EditPasswordDialog from './EditPassword/index'
 
 export default {
   components: {
@@ -53,7 +55,8 @@ export default {
     ErrorLog,
     Screenfull,
     SizeSelect,
-    Search
+    Search,
+    EditPasswordDialog
   },
   computed: {
     ...mapGetters([
@@ -62,6 +65,13 @@ export default {
       'device'
     ])
   },
+  data() {
+    return {
+      editPasswordDialog: {
+        visible: false
+      }
+    }
+  },
   methods: {
     toggleSideBar() {
       this.$store.dispatch('app/toggleSideBar')
@@ -69,6 +79,12 @@ export default {
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
+    },
+    editPassword() {
+      this.editPasswordDialog.visible = true
+    },
+    editPasswordDialogCallback() {
+      this.editPasswordDialog.visible = false
     }
   }
 }

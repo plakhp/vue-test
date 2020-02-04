@@ -2,6 +2,24 @@
   <div class="app-container">
     <div class="filter-container">
       <div class="filter-left">
+        <el-input
+          v-model="filter.userName"
+          placeholder="用户名"
+          @keyup.enter.native="search"
+        />
+        <el-input
+          v-model="filter.employee"
+          placeholder="昵称"
+          @keyup.enter.native="search"
+        />
+        <el-input
+          v-model="filter.phoneNum"
+          placeholder="手机号"
+          @keyup.enter.native="search"
+        />
+        <el-button type="primary" plain @click="search">
+          查询
+        </el-button>
         <el-button type="primary" plain icon="el-icon-plus" @click="addAccount">
           新增账号
         </el-button>
@@ -11,9 +29,10 @@
           ref="search"
           v-model="filter.searchKey"
           placeholder="关键字搜索"
-          suffix-icon="el-icon-search"
           @keyup.enter.native="search"
-        />
+        >
+          <i slot="suffix" class="el-icon-search" style="cursor: pointer;margin: 10px" @click="search" />
+        </el-input>
       </div>
     </div>
     <el-table
@@ -32,15 +51,15 @@
         label="用户名"
       />
       <el-table-column
-        prop="employee"
-        label="员工姓名"
+        prop="nickName"
+        label="昵称"
       />
       <el-table-column
         prop="phone"
         label="手机号"
       />
       <el-table-column
-        prop="role"
+        prop="roleName"
         label="角色"
       />
       <el-table-column
@@ -65,7 +84,7 @@
       </el-table-column>
     </el-table>
     <pagination :hidden="list.length === 0" :total="pages.total" :page="pages.page" :limit="pages.limit" @pagination="changeSize" />
-    <account-dialog v-if="accountDialog.visible" :visible="accountDialog.visible" :status="accountDialog.status" :data="accountDialog.data" @cb="accountDialogCallback" />
+    <account-dialog v-if="accountDialog.visible" :visible="accountDialog.visible" :status="accountDialog.status" :form-data="accountDialog.formData" @cb="accountDialogCallback" />
   </div>
 </template>
 
@@ -80,13 +99,12 @@ export default {
     Pagination,
     AccountDialog
   },
-  computed: {
-    ...mapGetters([])
-  },
   data() {
     return {
       filter: {
-        searchKey: '',
+        userName: '',
+        employee: '',
+        phoneNum: null,
         pageNum: 1,
         pageSize: 10
       },
@@ -100,9 +118,12 @@ export default {
       accountDialog: {
         visible: false,
         status: 0,
-        data: {}
+        formData: {}
       }
     }
+  },
+  computed: {
+    ...mapGetters([])
   },
   created() {
     this.fetchData()
@@ -134,12 +155,12 @@ export default {
     addAccount() {
       this.accountDialog.visible = true
       this.accountDialog.status = 0
-      this.accountDialog.data = {}
+      this.accountDialog.formData = {}
     },
     editAccount(item) {
       this.accountDialog.visible = true
       this.accountDialog.status = 1
-      this.accountDialog.data = item
+      this.accountDialog.formData = item
     },
     delAccount(item) {
       this.$confirm('此操作将删除该账号, 是否继续?', '提示', {
@@ -148,10 +169,9 @@ export default {
         type: 'warning'
       }).then(() => {
         this.$store.dispatch('account/del', item.id)
-          .then(data => {
+          .then(_ => {
             this.$notify({
-              title: '成功',
-              message: '删除成功',
+              title: '删除成功',
               type: 'success'
             })
           })

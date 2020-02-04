@@ -135,7 +135,7 @@ export default [
   {
     url: '/adminUser/resetPassword',
     type: 'put',
-    response: config => {
+    response: _ => {
       return {
         code: 0,
         data: {}
