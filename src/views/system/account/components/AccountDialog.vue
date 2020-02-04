@@ -5,7 +5,7 @@
         <el-input v-model="form.userName" autocomplete="off" />
       </el-form-item>
       <el-form-item v-if="status === 0" label="密码" prop="password">
-        <el-input v-model="form.password" autocomplete="off" />
+        <el-input v-model="form.password" type="password" autocomplete="off" />
       </el-form-item>
       <el-form-item label="昵称" prop="nickName">
         <el-input v-model="form.nickName" autocomplete="off" />
@@ -120,6 +120,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.loading = true
+          this.form.roleName = this.roles.filter(role => role.id === this.form.roleId)[0].roleName
           const url = this.status === 0 ? 'account/add' : 'account/edit'
           this.$store.dispatch(url, this.form)
             .then(() => {
