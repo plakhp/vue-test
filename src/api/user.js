@@ -18,7 +18,7 @@ export function getInfo(token) {
 
 export function editPassword(data) {
   return request({
-    url: '/adminUser/resetPassword',
+    url: '/admin/adminUser/resetPassword',
     method: 'put',
     data
   })

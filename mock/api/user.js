@@ -133,7 +133,7 @@ export default [
   },
 
   {
-    url: '/adminUser/resetPassword',
+    url: '/admin/adminUser/resetPassword',
     type: 'put',
     response: _ => {
       return {
