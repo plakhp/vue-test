@@ -124,8 +124,8 @@ export default {
           const url = this.status === 0 ? 'account/add' : 'account/edit'
           this.$store.dispatch(url, this.form)
             .then(() => {
-              this.$notify({
-                title: this.status === 0 ? '账号新增成功' : '账号编辑成功',
+              this.$message({
+                message: this.status === 0 ? '账号新增成功' : '账号编辑成功',
                 type: 'success'
               })
               this.$emit('cb', 'refresh')

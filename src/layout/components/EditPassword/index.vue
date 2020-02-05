@@ -82,8 +82,8 @@ export default {
           this.loading = true
           this.$store.dispatch('user/editPassword', this.form)
             .then(() => {
-              this.$notify({
-                title: '密码修改成功',
+              this.$message({
+                message: '密码修改成功',
                 type: 'success'
               })
               this.$emit('cb', 'refresh')

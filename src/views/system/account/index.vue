@@ -199,8 +199,8 @@ export default {
       }).then(() => {
         this.$store.dispatch('account/del', item.id)
           .then(_ => {
-            this.$notify({
-              title: '删除成功',
+            this.$message({
+              message: '删除成功',
               type: 'success'
             })
             this.fetchData()
@@ -215,8 +215,8 @@ export default {
       }).then(() => {
         this.$store.dispatch('account/resetPassword', { userId: item.id })
           .then(_ => {
-            this.$notify({
-              title: '重置密码成功',
+            this.$message({
+              message: '重置密码成功',
               type: 'success'
             })
           })
@@ -236,8 +236,8 @@ export default {
       }).then(() => {
         this.$store.dispatch('account/editStatus', item.id)
           .then(_ => {
-            this.$notify({
-              title: `账号${message}成功`,
+            this.$message({
+              message: `账号${message}成功`,
               type: 'success'
             })
             this.fetchData()
