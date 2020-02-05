@@ -22,7 +22,7 @@ for (let i = 0; i < count; i++) {
     phone: /^1[3456789]\d{9}$/,
     'roleId|1': [1, 2],
     'roleName|1': ['管理员', '普通用户'],
-    'status|1': [0, 1]
+    'status|1': [-1, 0, 1]
   }))
 }
 
@@ -86,6 +86,32 @@ export default [
     url: '/admin/adminUser/\.*/update',
     type: 'put',
     response: _ => {
+      return {
+        code: 0,
+        data: {}
+      }
+    }
+  },
+
+  {
+    url: '/admin/adminUser/resetPassword',
+    type: 'put',
+    response: _ => {
+      return {
+        code: 0,
+        data: {}
+      }
+    }
+  },
+
+  {
+    url: '/admin/adminUser/\.*/frozen-on-off',
+    type: 'patch',
+    response: config => {
+      console.log(config)
+      List.map(item => {
+        return item
+      })
       return {
         code: 0,
         data: {}

@@ -7,7 +7,7 @@
  * @Last Modified time: 2020/1/29 1:59 PM
  * @Desc
  */
-import { list, add, del, edit } from '@/api/account'
+import { list, add, del, edit, resetPassword, editStatus } from '@/api/account'
 
 const state = {}
 
@@ -50,6 +50,28 @@ const actions = {
   edit({ commit }, data) {
     return new Promise((resolve, reject) => {
       edit(data).then(response => {
+        const { data } = response
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  resetPassword({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      resetPassword(data).then(response => {
+        const { data } = response
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  editStatus({ commit }, data) {
+    return new Promise((resolve, reject) => {
+      editStatus(data).then(response => {
         const { data } = response
         resolve(data)
       }).catch(error => {

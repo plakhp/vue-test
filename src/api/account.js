@@ -39,3 +39,19 @@ export function edit(data) {
     data
   })
 }
+
+export function resetPassword(data) {
+  return request({
+    url: `/admin/adminUser/resetPassword`,
+    method: 'put',
+    data
+  })
+}
+
+export function editStatus(id) {
+  return request({
+    url: `/admin/adminUser/${id}/frozen-on-off`,
+    method: 'patch'
+  })
+}
+

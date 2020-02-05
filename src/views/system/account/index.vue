@@ -57,13 +57,26 @@
       <el-table-column
         prop="phone"
         label="手机号"
+        width="120px"
       />
       <el-table-column
         prop="roleName"
         label="角色"
+        width="100px"
       />
       <el-table-column
+        label="状态"
+        width="100"
+      >
+        <template slot-scope="scope">
+          <span v-if="scope.row.status === -1" class="color-red">冻结</span>
+          <span v-if="scope.row.status === 1" class="color-green">正常</span>
+          <span v-if="scope.row.status === 0" class="color-gray">待激活</span>
+        </template>
+      </el-table-column>
+      <el-table-column
         label="操作"
+        width="320"
       >
         <template slot-scope="scope">
           <el-button
@@ -75,10 +88,26 @@
           </el-button>
           <el-button
             plain
+            type="warning"
+            @click="editStatus(scope.row)"
+          >
+            <span v-if="scope.row.status === 1">冻结</span>
+            <span v-if="scope.row.status === -1">解冻</span>
+            <span v-if="scope.row.status === 0">激活</span>
+          </el-button>
+          <el-button
+            plain
             type="danger"
             @click="delAccount(scope.row)"
           >
             <span>删除</span>
+          </el-button>
+          <el-button
+            plain
+            type="danger"
+            @click="resetPassword(scope.row)"
+          >
+            <span>重置密码</span>
           </el-button>
         </template>
       </el-table-column>
@@ -172,6 +201,43 @@ export default {
           .then(_ => {
             this.$notify({
               title: '删除成功',
+              type: 'success'
+            })
+            this.fetchData()
+          })
+      })
+    },
+    resetPassword(item) {
+      this.$confirm('此操作将删除该重置该账号密码, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('account/resetPassword', item.id)
+          .then(_ => {
+            this.$notify({
+              title: '重置密码成功',
+              type: 'success'
+            })
+          })
+      })
+    },
+    editStatus(item) {
+      let message = '冻结'
+      if (item.status === -1) {
+        message = '解冻'
+      } else if (item.status === 0) {
+        message = '激活'
+      }
+      this.$confirm(`此操作将${message}该账号, 是否继续?`, '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.$store.dispatch('account/editStatus', item.id)
+          .then(_ => {
+            this.$notify({
+              title: `账号${message}成功`,
               type: 'success'
             })
             this.fetchData()
