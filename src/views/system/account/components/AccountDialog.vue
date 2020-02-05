@@ -2,7 +2,7 @@
   <el-dialog :title="dialogTitle" :visible="dialogVisible" :close-on-click-modal="false" :destroy-on-close="true" @close="close">
     <el-form ref="form" :model="form" label-width="120px" class="dialog-form-container" :rules="rules">
       <el-form-item label="用户名" prop="userName">
-        <el-input v-model="form.userName" autocomplete="off" />
+        <el-input v-model="form.userName" autocomplete="off" :disabled="status===1" />
       </el-form-item>
       <el-form-item v-if="status === 0" label="密码" prop="password">
         <el-input v-model="form.password" type="password" autocomplete="off" />

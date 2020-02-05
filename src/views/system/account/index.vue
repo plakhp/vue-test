@@ -24,16 +24,16 @@
           新增账号
         </el-button>
       </div>
-      <div class="filter-right">
-        <el-input
-          ref="search"
-          v-model="filter.searchKey"
-          placeholder="关键字搜索"
-          @keyup.enter.native="search"
-        >
-          <i slot="suffix" class="el-icon-search" style="cursor: pointer;margin: 10px" @click="search" />
-        </el-input>
-      </div>
+      <!--<div class="filter-right">-->
+      <!--<el-input-->
+      <!--ref="search"-->
+      <!--v-model="filter.searchKey"-->
+      <!--placeholder="关键字搜索"-->
+      <!--@keyup.enter.native="search"-->
+      <!--&gt;-->
+      <!--<i slot="suffix" class="el-icon-search" style="cursor: pointer;margin: 10px" @click="search" />-->
+      <!--</el-input>-->
+      <!--</div>-->
     </div>
     <el-table
       v-loading="loading"
@@ -174,6 +174,7 @@ export default {
               title: '删除成功',
               type: 'success'
             })
+            this.fetchData()
           })
       })
     },
