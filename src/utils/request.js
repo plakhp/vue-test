@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { Message } from 'element-ui'
+import { Notification } from 'element-ui'
 import store from '@/store'
 import { getToken, getTenantId } from '@/utils/auth'
 
@@ -62,12 +62,16 @@ service.interceptors.response.use(
     const res = response.data
 
     // if the custom code is not 200 or 0, it is judged as an error.
-    if (res.code !== 200 && res.code !== 0) {
-      Message({
-        message: res.msg || 'Error',
-        type: 'error',
-        duration: 5 * 1000
+    if (res.code !== 0) {
+      Notification.error({
+        title: '请求异常',
+        message: res.msg
       })
+      // Message({
+      //   message: res.msg || 'Error',
+      //   type: 'error',
+      //   duration: 5 * 1000
+      // })
 
       // 401: Token expired;
       if (res.code === 401) {
@@ -83,10 +87,14 @@ service.interceptors.response.use(
   },
   error => {
     console.log('err' + error) // for debug
-    Message({
-      message: error.message,
-      type: 'error',
-      duration: 5 * 1000
+    // Message({
+    //   message: error.message,
+    //   type: 'error',
+    //   duration: 5 * 1000
+    // })
+    Notification.error({
+      title: '系统异常',
+      message: error.message
     })
     return Promise.reject(error)
   }
