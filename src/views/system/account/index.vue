@@ -213,7 +213,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
-        this.$store.dispatch('account/resetPassword', item.id)
+        this.$store.dispatch('account/resetPassword', { userId: item.id })
           .then(_ => {
             this.$notify({
               title: '重置密码成功',
