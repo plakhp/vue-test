@@ -315,8 +315,16 @@ aside {
   }
   > .filter-left {
     display: flex;
-    .el-input+.el-input {
+    .el-input+.el-input,
+    .el-input+.el-select,
+    .el-select+.el-input,
+    .el-select+.el-button,
+    .el-input+.el-button {
       margin-left: 10px;
+    }
+    > .el-input,
+    > .el-select {
+      width: 160px;
     }
   }
   > .filter-right {

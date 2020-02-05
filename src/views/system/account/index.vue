@@ -20,7 +20,7 @@
         <el-button type="primary" plain @click="search">
           查询
         </el-button>
-        <el-button type="primary" plain icon="el-icon-plus" @click="addAccount">
+        <el-button type="primary" plain icon="el-icon-plus" @click="add">
           新增账号
         </el-button>
       </div>
@@ -82,7 +82,7 @@
           <el-button
             plain
             type="primary"
-            @click="editAccount(scope.row)"
+            @click="edit(scope.row)"
           >
             <span>编辑</span>
           </el-button>
@@ -98,7 +98,7 @@
           <el-button
             plain
             type="danger"
-            @click="delAccount(scope.row)"
+            @click="del(scope.row)"
           >
             <span>删除</span>
           </el-button>
@@ -113,7 +113,7 @@
       </el-table-column>
     </el-table>
     <pagination :hidden="list.length === 0" :total="pages.total" :page="pages.page" :limit="pages.limit" @pagination="changeSize" />
-    <account-dialog v-if="accountDialog.visible" :visible="accountDialog.visible" :status="accountDialog.status" :form-data="accountDialog.formData" @cb="accountDialogCallback" />
+    <account-dialog v-if="dialogData.visible" :visible="dialogData.visible" :status="dialogData.status" :form-data="dialogData.formData" @cb="dialogCallback" />
   </div>
 </template>
 
@@ -144,7 +144,7 @@ export default {
       },
       list: [],
       loading: false,
-      accountDialog: {
+      dialogData: {
         visible: false,
         status: 0,
         formData: {}
@@ -181,17 +181,17 @@ export default {
           this.loading = false
         })
     },
-    addAccount() {
-      this.accountDialog.visible = true
-      this.accountDialog.status = 0
-      this.accountDialog.formData = {}
+    add() {
+      this.dialogData.visible = true
+      this.dialogData.status = 0
+      this.dialogData.formData = {}
     },
-    editAccount(item) {
-      this.accountDialog.visible = true
-      this.accountDialog.status = 1
-      this.accountDialog.formData = item
+    edit(item) {
+      this.dialogData.visible = true
+      this.dialogData.status = 1
+      this.dialogData.formData = item
     },
-    delAccount(item) {
+    del(item) {
       this.$confirm('此操作将删除该账号, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
@@ -244,11 +244,11 @@ export default {
           })
       })
     },
-    accountDialogCallback(type) {
+    dialogCallback(type) {
       if (type === 'refresh') {
         this.fetchData()
       }
-      this.accountDialog.visible = false
+      this.dialogData.visible = false
     }
   }
 }

@@ -10,14 +10,15 @@
 import Mock from 'mockjs'
 
 const List = []
-const count = 2
+const count = 5
 
 for (let i = 0; i < count; i++) {
   List.push(Mock.mock({
     id: '@increment',
     'menuIds|1': [1,2,3,4,5],
-    'roleName|1': ['管理员', '普通用户'],
+    'roleName|1': ['管理员', '普通用户', '财务专员', '运营专员', '客服'],
     'status|1': [0, 1],
+    'remark': '角色描述信息'
   }))
 }
 
@@ -30,7 +31,7 @@ export default [
 
       let mockList = List.filter(item => {
         if (name && item.roleName.indexOf(name) < 0) return false
-        if (status && item.status.indexOf(status) < 0) return false
+        if (status && item.status !== parseInt(status)) return false
         return true
       })
 
@@ -80,7 +81,7 @@ export default [
   },
 
   {
-    url: '/admin/adminUser/deleteById/\.*',
+    url: '/admin/role/deleteById/\.*',
     type: 'delete',
     response: _ => {
       return {
