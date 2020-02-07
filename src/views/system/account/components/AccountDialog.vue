@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { validPhone } from '@/utils/validate'
+import { validPhone, deepClone } from '@/utils/validate'
 export default {
   name: 'Dialog',
   props: {
@@ -110,7 +110,7 @@ export default {
   },
   methods: {
     fetchData() {
-      this.form = this.formData
+      this.form = deepClone(this.formData)
       this.$store.dispatch('role/dropdown')
         .then(data => {
           this.roles = data

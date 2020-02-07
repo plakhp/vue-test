@@ -13,6 +13,7 @@
           :data="roles"
           show-checkbox
           node-key="id"
+          :default-expanded-keys="defaultExpandedKeys"
           :default-checked-keys="form.menuIds"
           :props="defaultProps"
         />
@@ -26,6 +27,7 @@
 </template>
 
 <script>
+import { deepClone } from '@/utils'
 export default {
   name: 'Dialog',
   props: {
@@ -78,6 +80,7 @@ export default {
         ]
       },
       roles: [],
+      defaultExpandedKeys: [],
       defaultProps: {
         children: 'subMenu',
         label: 'title'
@@ -105,16 +108,21 @@ export default {
   },
   methods: {
     fetchData() {
-      this.form = this.formData
+      this.form = deepClone(this.formData)
       this.$store.dispatch('role/getAllMenus')
         .then(data => {
           this.roles = data
+          if (data.length === 1) {
+            this.defaultExpandedKeys = [data[0].id]
+          }
         })
     },
     save() {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.loading = true
+          const form = deepClone(this.form)
+          form.menuIds = this.$refs.tree.getCheckedKeys().join(',')
           const url = this.status === 0 ? 'role/add' : 'role/edit'
           this.$store.dispatch(url, this.form)
             .then(() => {

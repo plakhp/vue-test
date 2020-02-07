@@ -164,8 +164,9 @@ export default {
     edit(item) {
       this.dialogData.visible = true
       this.dialogData.status = 1
-      console.log(item)
-      this.dialogData.formData = item
+      const form = item
+      form.menuIds = item.menuIds.split(',')
+      this.dialogData.formData = form
     },
     del(item) {
       this.$confirm('此操作将删除该角色, 是否继续?', '提示', {
