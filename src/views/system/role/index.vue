@@ -164,6 +164,7 @@ export default {
     edit(item) {
       this.dialogData.visible = true
       this.dialogData.status = 1
+      console.log(item)
       this.dialogData.formData = item
     },
     del(item) {

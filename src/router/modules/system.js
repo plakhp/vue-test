@@ -19,7 +19,7 @@ const router = {
       path: 'role',
       name: '角色管理',
       component: () => import('@/views/system/role/index'),
-      meta: { title: '角色管理', icon: 'role', affix: true, roles: ['role_manager'], activeMenu: '/system/account' },
+      meta: { title: '角色管理', icon: 'role', affix: true, roles: ['role_manager'], activeMenu: '/system/role' },
       children: []
     }
   ]

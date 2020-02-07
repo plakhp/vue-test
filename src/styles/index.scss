@@ -347,6 +347,12 @@ aside {
   .el-input {
     width: 380px;
   }
+  .el-tree {
+    width: 380px;
+    border: 1px solid #e1e1e1;
+    border-radius: 4px;
+    padding: 10px 0;
+  }
 }
 
 @import './custom.scss';
