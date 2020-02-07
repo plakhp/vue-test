@@ -1,27 +1,22 @@
 <template>
   <el-dialog :title="dialogTitle" :visible="dialogVisible" :close-on-click-modal="false" :destroy-on-close="true" @close="close">
     <el-form ref="form" :model="form" label-width="120px" class="dialog-form-container" :rules="rules">
-      <el-form-item label="用户名" prop="userName">
-        <el-input v-model="form.userName" autocomplete="off" :disabled="status===1" />
+      <el-form-item label="角色名称" prop="roleName">
+        <el-input v-model="form.roleName" autocomplete="off" />
       </el-form-item>
-      <el-form-item v-if="status === 0" label="密码" prop="password">
-        <el-input v-model="form.password" type="password" autocomplete="off" />
+      <el-form-item label="角色描述" prop="remark">
+        <el-input v-model="form.remark" autocomplete="off" />
       </el-form-item>
-      <el-form-item label="昵称" prop="nickName">
-        <el-input v-model="form.nickName" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="手机号" prop="phone">
-        <el-input v-model="form.phone" autocomplete="off" />
-      </el-form-item>
-      <el-form-item label="角色" prop="roleId">
-        <el-select v-model="form.roleId">
-          <el-option
-            v-for="(item, index) in roles"
-            :key="index"
-            :label="item.roleName"
-            :value="item.id"
-          />
-        </el-select>
+      <el-form-item label="角色权限" prop="menuIds">
+        <el-tree
+          ref="tree"
+          :data="roles"
+          show-checkbox
+          node-key="id"
+          :default-expanded-keys="defaultExpandedKeys"
+          :default-checked-keys="form.menuIds"
+          :props="defaultProps"
+        />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -33,8 +28,6 @@
 
 <script>
 import { deepClone } from '@/utils'
-import { validPhone } from '@/utils/validate'
-
 export default {
   name: 'Dialog',
   props: {
@@ -64,9 +57,10 @@ export default {
     }
   },
   data() {
-    const validatePhone = (rule, value, callback) => {
-      if (!validPhone(value)) {
-        callback(new Error('请输入正确的手机号'))
+    const validateRoles = (rule, value, callback) => {
+      const ids = this.$refs.tree.getCheckedKeys()
+      if (ids.length <= 0) {
+        callback(new Error('角色权限必选'))
       } else {
         callback()
       }
@@ -74,20 +68,22 @@ export default {
     return {
       loading: false,
       form: {},
-      roles: [],
       rules: {
-        userName: [
-          { required: true, message: '用户名必填', trigger: ['blur', 'change'] }
+        roleName: [
+          { required: true, message: '角色名称必填', trigger: ['blur', 'change'] }
         ],
-        password: [
-          { required: true, message: '密码必填', trigger: ['blur', 'change'] }
+        remark: [
+          { required: true, message: '角色描述必填', trigger: ['blur', 'change'] }
         ],
-        phone: [
-          { required: true, trigger: ['blur', 'change'], validator: validatePhone }
-        ],
-        roleId: [
-          { required: true, message: '请选择角色', trigger: ['blur', 'change'] }
+        menuIds: [
+          { required: true, trigger: ['blur', 'change'], validator: validateRoles }
         ]
+      },
+      roles: [],
+      defaultExpandedKeys: [],
+      defaultProps: {
+        children: 'subMenu',
+        label: 'title'
       }
     }
   },
@@ -100,9 +96,9 @@ export default {
       return dialogVisible
     },
     dialogTitle() {
-      let title = '新增账号'
+      let title = '新增角色'
       if (this.status === 1) {
-        title = '编辑账号'
+        title = '编辑角色'
       }
       return title
     }
@@ -113,21 +109,25 @@ export default {
   methods: {
     fetchData() {
       this.form = deepClone(this.formData)
-      this.$store.dispatch('role/dropdown')
+      this.$store.dispatch('role/getAllMenus')
         .then(data => {
           this.roles = data
+          if (data.length === 1) {
+            this.defaultExpandedKeys = [data[0].id]
+          }
         })
     },
     save() {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.loading = true
-          this.form.roleName = this.roles.filter(role => role.id === this.form.roleId)[0].roleName
-          const url = this.status === 0 ? 'account/add' : 'account/edit'
-          this.$store.dispatch(url, this.form)
+          const form = deepClone(this.form)
+          form.menuIds = this.$refs.tree.getCheckedKeys().join(',')
+          const url = this.status === 0 ? 'role/add' : 'role/edit'
+          this.$store.dispatch(url, form)
             .then(() => {
               this.$message({
-                message: this.status === 0 ? '账号新增成功' : '账号编辑成功',
+                message: this.status === 0 ? '角色新增成功' : '角色编辑成功',
                 type: 'success'
               })
               this.$emit('cb', 'refresh')

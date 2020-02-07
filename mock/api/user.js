@@ -76,6 +76,33 @@ const users = {
               menuType: 'button'
             }
           ]
+        },
+        {
+          title: '菜单管理',
+          menuCode: 'menu_manager',
+          menuType: 'menu',
+          subMenu: [
+            {
+              title: '新增菜单',
+              menuCode: 'menu_manager_add',
+              menuType: 'button'
+            },
+            {
+              title: '编辑菜单',
+              menuCode: 'menu_manager_modify',
+              menuType: 'button'
+            },
+            {
+              title: '删除菜单',
+              menuCode: 'menu_manager_delete',
+              menuType: 'button'
+            },
+            {
+              title: '查询菜单',
+              menuCode: 'menu_manager_search',
+              menuType: 'button'
+            }
+          ]
         }
       ]
     }],
