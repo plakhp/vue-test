@@ -124,7 +124,7 @@ export default {
           const form = deepClone(this.form)
           form.menuIds = this.$refs.tree.getCheckedKeys().join(',')
           const url = this.status === 0 ? 'role/add' : 'role/edit'
-          this.$store.dispatch(url, this.form)
+          this.$store.dispatch(url, form)
             .then(() => {
               this.$message({
                 message: this.status === 0 ? '角色新增成功' : '角色编辑成功',
