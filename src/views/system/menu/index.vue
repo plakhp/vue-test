@@ -129,8 +129,8 @@ export default {
     },
     edit(node, data) {
       this.type = 1
+      data.menuName = data.title
       this.form = deepClone(data)
-      this.form.menuName = this.form.title
       if (node.data.id === node.parent.data.id) {
         this.form.parentId = null
       } else {
