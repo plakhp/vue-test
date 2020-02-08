@@ -20,7 +20,7 @@
         <el-button type="primary" plain @click="search">
           查询
         </el-button>
-        <el-button type="primary" plain icon="el-icon-plus" @click="add">
+        <el-button type="primary" plain icon="el-icon-circle-plus-outline" @click="add">
           新增账号
         </el-button>
       </div>
