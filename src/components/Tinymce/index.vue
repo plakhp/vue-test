@@ -1,9 +1,9 @@
 <template>
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
-    <div class="editor-custom-btn-container">
-      <editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />
-    </div>
+    <!--<div class="editor-custom-btn-container">-->
+    <!--<editorImage color="#1890ff" class="editor-upload-btn" @successCBK="imageSuccessCBK" />-->
+    <!--</div>-->
   </div>
 </template>
 
@@ -12,7 +12,7 @@
  * docs:
  * https://panjiachen.github.io/vue-element-admin-site/feature/component/rich-editor.html#tinymce
  */
-import editorImage from './components/EditorImage'
+// import editorImage from './components/EditorImage'
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
@@ -22,7 +22,7 @@ const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymc
 
 export default {
   name: 'Tinymce',
-  components: { editorImage },
+  components: { },
   props: {
     id: {
       type: String,
@@ -116,12 +116,12 @@ export default {
       const _this = this
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
-        language: this.languageTypeList['en'],
+        language: this.languageTypeList['zh'],
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
         toolbar: this.toolbar.length > 0 ? this.toolbar : toolbar,
-        menubar: this.menubar,
+        menubar: false,
         plugins: plugins,
         end_container_on_empty_block: true,
         powerpaste_word_import: 'clean',
@@ -147,7 +147,7 @@ export default {
           editor.on('FullscreenStateChanged', (e) => {
             _this.fullscreen = e.state
           })
-        }
+        },
         // 整合七牛上传
         // images_dataimg_filter(img) {
         //   setTimeout(() => {
@@ -163,24 +163,34 @@ export default {
         //   }, 0);
         //   return img
         // },
-        // images_upload_handler(blobInfo, success, failure, progress) {
-        //   progress(0);
-        //   const token = _this.$store.getters.token;
-        //   getToken(token).then(response => {
-        //     const url = response.data.qiniu_url;
-        //     const formData = new FormData();
-        //     formData.append('token', response.data.qiniu_token);
-        //     formData.append('key', response.data.qiniu_key);
-        //     formData.append('file', blobInfo.blob(), url);
-        //     upload(formData).then(() => {
-        //       success(url);
-        //       progress(100);
-        //     })
-        //   }).catch(err => {
-        //     failure('出现未知问题，刷新页面，或者联系程序员')
-        //     console.log(err);
-        //   });
-        // },
+        images_upload_handler: (blobInfo, success, failure, progress) => {
+          // progress(0);
+          // const token = _this.$store.getters.token;
+          // getToken(token).then(response => {
+          //   const url = response.data.qiniu_url;
+          //   const formData = new FormData();
+          //   formData.append('token', response.data.qiniu_token);
+          //   formData.append('key', response.data.qiniu_key);
+          //   formData.append('file', blobInfo.blob(), url);
+          //   upload(formData).then(() => {
+          //     success(url);
+          //     progress(100);
+          //   })
+          // }).catch(err => {
+          //   failure('出现未知问题，刷新页面，或者联系程序员')
+          //   console.log(err);
+          // });
+
+          const formData = new FormData()
+          console.log(blobInfo.filename())
+          formData.append('file', blobInfo.blob())
+          this.$store.dispatch('common/upload', formData)
+            .then(data => {
+              console.log(data)
+              success(data.url)
+              // failure('上传失败！')
+            })
+        }
       })
     },
     destroyTinymce() {
@@ -209,10 +219,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .tinymce-container {
   position: relative;
   line-height: normal;
+  .mce-last {
+    display: none;
+  }
 }
 .tinymce-container>>>.mce-fullscreen {
   z-index: 10000;
@@ -234,4 +247,11 @@ export default {
 .editor-upload-btn {
   display: inline-block;
 }
+</style>
+<style lang="scss">
+  .tinymce-container {
+    .mce-btn {
+      border-radius: 4px;
+    }
+  }
 </style>

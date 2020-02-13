@@ -345,3 +345,24 @@ export function removeClass(ele, cls) {
     ele.className = ele.className.replace(reg, ' ')
   }
 }
+
+/**
+ * export excel file
+ * @param {blob} content
+ * @param {string} filename
+ */
+export function exportExcel(content, filename) {
+  const blob = new Blob([content], { type: 'application/vnd.ms-excel' })
+  // fix ie 11 export
+  if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+    navigator.msSaveBlob(blob, filename)
+  } else {
+    const link = document.createElement('a')
+    link.download = filename
+    link.href = URL.createObjectURL(blob)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(link)
+  }
+}

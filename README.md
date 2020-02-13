@@ -139,8 +139,9 @@ npm run lint -- --fix
 ```
 
 ## 组件库
-- **[View UI](https://www.iviewui.com/docs/introduce) 即原先的 iView，是一套基于 Vue.js 的开源 UI 组件库，主要服务于 PC 界面的中后台产品。** 
-
+- **[View UI](https://www.iviewui.com/docs/introduce) 即原先的 iView，是一套基于 Vue.js 的开源 UI 组件库，主要服务于 PC 界面的中后台产品。**
+- **[Vue-html5-editor](https://github.com/PeakTai/vue-html5-editor) Vue Html5 富文本编辑器**
+- **[tiptap](https://github.com/scrumpy/tiptap) A renderless rich-text editor for Vue.js [Document](https://tiptap.scrumpy.io/docs)**
 ## 在线示例
 
 [Demo](http://dev-admin-base.ipzoe.com/)

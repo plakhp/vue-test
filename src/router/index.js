@@ -63,6 +63,98 @@ export const constantRoutes = [
         meta: { title: '首页', icon: 'dashboard', affix: true }
       }
     ]
+  },
+  {
+    path: '/demo',
+    component: Layout,
+    redirect: 'noRedirect',
+    hidden: true,
+    children: [
+      {
+        path: 'tinymce',
+        component: () => import('@/views/demo/tinymce'),
+        name: 'TinymceDemo',
+        meta: { title: 'Tinymce' }
+      },
+      {
+        path: 'markdown',
+        component: () => import('@/views/demo/markdown'),
+        name: 'MarkdownDemo',
+        meta: { title: 'Markdown' }
+      },
+      {
+        path: 'json-editor',
+        component: () => import('@/views/demo/json-editor'),
+        name: 'JsonEditorDemo',
+        meta: { title: 'Json Editor' }
+      },
+      {
+        path: 'split-pane',
+        component: () => import('@/views/demo/split-pane'),
+        name: 'SplitpaneDemo',
+        meta: { title: 'SplitPane' }
+      },
+      {
+        path: 'avatar-upload',
+        component: () => import('@/views/demo/avatar-upload'),
+        name: 'AvatarUploadDemo',
+        meta: { title: 'Avatar Upload' }
+      },
+      {
+        path: 'dropzone',
+        component: () => import('@/views/demo/dropzone'),
+        name: 'DropzoneDemo',
+        meta: { title: 'Dropzone' }
+      },
+      {
+        path: 'sticky',
+        component: () => import('@/views/demo/sticky'),
+        name: 'StickyDemo',
+        meta: { title: 'Sticky' }
+      },
+      {
+        path: 'count-to',
+        component: () => import('@/views/demo/count-to'),
+        name: 'CountToDemo',
+        meta: { title: 'Count To' }
+      },
+      {
+        path: 'mixin',
+        component: () => import('@/views/demo/mixin'),
+        name: 'ComponentMixinDemo',
+        meta: { title: 'componentMixin' }
+      },
+      {
+        path: 'back-to-top',
+        component: () => import('@/views/demo/back-to-top'),
+        name: 'BackToTopDemo',
+        meta: { title: 'Back To Top' }
+      },
+      {
+        path: 'drag-dialog',
+        component: () => import('@/views/demo/drag-dialog'),
+        name: 'DragDialogDemo',
+        meta: { title: 'Drag Dialog' }
+      },
+      {
+        path: 'drag-select',
+        component: () => import('@/views/demo/drag-select'),
+        name: 'DragSelectDemo',
+        meta: { title: 'Drag Select' }
+      },
+      {
+        path: 'dnd-list',
+        component: () => import('@/views/demo/dnd-list'),
+        name: 'DndListDemo',
+        meta: { title: 'Dnd List' }
+      },
+      {
+        path: 'drag-kanban',
+        component: () => import('@/views/demo/drag-kanban'),
+        name: 'DragKanbanDemo',
+        meta: { title: 'Drag Kanban' }
+      }
+    ]
   }
 ]
 

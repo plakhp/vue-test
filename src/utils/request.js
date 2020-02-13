@@ -12,9 +12,16 @@ const service = axios.create({
 
 service.postJson = (params) => service({
   url: params.url,
-  method: 'get',
+  method: 'post',
   data: params.data,
   headers: { 'Content-Type': 'application/json' }
+})
+
+service.postForm = (params) => service({
+  url: params.url,
+  method: 'post',
+  data: params.data,
+  headers: { 'Content-Type': 'multipart/form-data' }
 })
 
 // request interceptor

@@ -38,6 +38,15 @@ export function validURL(url) {
 }
 
 /**
+ * @param {string} number
+ * @returns {Boolean}
+ */
+export function validInt(number) {
+  const reg = /^-?[1-9]\d*$/
+  return reg.test(number)
+}
+
+/**
  * @param {string} str
  * @returns {Boolean}
  */
