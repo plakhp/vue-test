@@ -31,6 +31,11 @@ service.interceptors.request.use(
 
     // 启用时，修改为正确的app_id
     config.headers['AppId'] = store.state.app.appId
+    debugger
+
+    if (config.headers['Content-Type'] === 'multipart/form-data') {
+      config.headers['post']['Content-Type'] = 'multipart/form-data'
+    }
 
     if (store.getters.token) {
       // let each request carry token

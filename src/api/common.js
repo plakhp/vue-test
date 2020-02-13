@@ -10,8 +10,9 @@
 import request from '@/utils/request'
 
 export function upload(data) {
+  console.log(data)
   return request.postForm({
     url: '/storage/storage/upload',
-    params: data
+    data
   })
 }

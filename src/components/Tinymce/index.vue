@@ -184,11 +184,14 @@ export default {
           const formData = new FormData()
           console.log(blobInfo.filename())
           formData.append('file', blobInfo.blob())
+          console.log(formData)
           this.$store.dispatch('common/upload', formData)
             .then(data => {
               console.log(data)
               success(data.url)
-              // failure('上传失败！')
+            })
+            .catch(_ => {
+              failure('上传失败！')
             })
         }
       })
