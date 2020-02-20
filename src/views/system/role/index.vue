@@ -47,8 +47,8 @@
         width="100"
       >
         <template slot-scope="scope">
-          <span v-if="scope.row.status === 1" class="color-red">禁用</span>
-          <span v-if="scope.row.status === 0" class="color-green">正常</span>
+          <span v-if="scope.row.status === 0" class="color-red">禁用</span>
+          <span v-if="scope.row.status === 1" class="color-green">正常</span>
         </template>
       </el-table-column>
       <el-table-column
@@ -68,8 +68,8 @@
             type="warning"
             @click="editStatus(scope.row)"
           >
-            <span v-if="scope.row.status === 0">禁用</span>
-            <span v-if="scope.row.status === 1">启用</span>
+            <span v-if="scope.row.status === 1">禁用</span>
+            <span v-if="scope.row.status === 0">启用</span>
           </el-button>
           <el-button
             plain
@@ -185,13 +185,13 @@ export default {
       })
     },
     editStatus(item) {
-      let message = '启用'
+      let message = '禁用'
       let status = 0
       if (item.status === 0) {
-        message = '禁用'
+        message = '启用'
         status = 1
       }
-      this.$confirm(`此操作将${message}该账号, 是否继续?`, '提示', {
+      this.$confirm(`此操作将${message}该角色, 是否继续?`, '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'

@@ -32,10 +32,10 @@ Vue.use(ViewUI)
  * Currently MockJs will be used in the production environment,
  * please remove it before going online! ! !
  */
-import { mockXHR } from '../mock'
-if (process.env.NODE_ENV === 'development') {
-  mockXHR()
-}
+// import { mockXHR } from '../mock'
+// if (process.env.NODE_ENV === 'development') {
+//   mockXHR()
+// }
 
 Vue.use(Element, {
   size: Cookies.get('size') || 'small' // set element-ui default size

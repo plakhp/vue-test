@@ -9,10 +9,11 @@
  */
 import request from '@/utils/request'
 
+const storageServer = process.env.VUE_APP_SERVER_STORAGE
+
 export function upload(data) {
-  console.log(data)
   return request.postForm({
-    url: '/storage/storage/upload',
+    url: `/${storageServer}/storage/upload`,
     data
   })
 }

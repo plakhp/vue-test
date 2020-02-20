@@ -9,9 +9,11 @@
  */
 import request from '@/utils/request'
 
+const server = process.env.VUE_APP_SERVER_ADMIN
+
 export function list(data) {
   return request({
-    url: '/admin/adminUser/select',
+    url: `/${server}/adminUser/select`,
     method: 'get',
     params: data
   })
@@ -19,7 +21,7 @@ export function list(data) {
 
 export function add(data) {
   return request({
-    url: `/admin/adminUser/insert`,
+    url: `/${server}/adminUser/insert`,
     method: 'post',
     data
   })
@@ -27,14 +29,14 @@ export function add(data) {
 
 export function del(id) {
   return request({
-    url: `/admin/adminUser/deleteById/${id}`,
+    url: `/${server}/adminUser/deleteById/${id}`,
     method: 'delete'
   })
 }
 
 export function edit(data) {
   return request({
-    url: `/admin/adminUser/${data.id}/update`,
+    url: `/${server}/adminUser/${data.id}/update`,
     method: 'put',
     data
   })
@@ -42,7 +44,7 @@ export function edit(data) {
 
 export function resetPassword(data) {
   return request({
-    url: `/admin/adminUser/resetPassword`,
+    url: `/${server}/adminUser/resetPassword`,
     method: 'put',
     data
   })
@@ -50,7 +52,7 @@ export function resetPassword(data) {
 
 export function editStatus(id) {
   return request({
-    url: `/admin/adminUser/${id}/frozen-on-off`,
+    url: `/${server}/adminUser/${id}/frozen-on-off`,
     method: 'patch'
   })
 }

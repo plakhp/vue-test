@@ -9,16 +9,18 @@
  */
 import request from '@/utils/request'
 
+const server = process.env.VUE_APP_SERVER_ADMIN
+
 export function list() {
   return request({
-    url: '/admin/menu/treeList',
+    url: `/${server}/menu/treeList`,
     method: 'get'
   })
 }
 
 export function add(data) {
   return request({
-    url: `/admin/menu/insert`,
+    url: `/${server}/menu/insert`,
     method: 'post',
     data
   })
@@ -26,14 +28,14 @@ export function add(data) {
 
 export function del(id) {
   return request({
-    url: `/admin/menu/${id}`,
+    url: `/${server}/menu/${id}`,
     method: 'delete'
   })
 }
 
 export function edit(data) {
   return request({
-    url: `/admin/menu/${data.id}`,
+    url: `/${server}/menu/${data.id}`,
     method: 'put',
     data
   })
