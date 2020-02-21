@@ -175,7 +175,11 @@ export default {
         if (valid) {
           this.loading = true
           const url = this.type === 0 ? 'menu/add' : 'menu/edit'
-          this.$store.dispatch(url, this.form)
+          const data = deepClone(this.form)
+          if (!data.parentId) {
+            data.parentId = 0
+          }
+          this.$store.dispatch(url, data)
             .then(() => {
               this.$message({
                 message: this.type === 0 ? '菜单新增成功' : '菜单编辑成功',

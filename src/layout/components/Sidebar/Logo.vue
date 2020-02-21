@@ -5,7 +5,7 @@
         <i class="icon icon-menu-logo" />
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <svg-icon icon-class="logo" class="sidebar-logo" />
+        <i class="icon icon-menu-logo" />
         <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
     </transition>
