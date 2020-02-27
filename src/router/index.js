@@ -153,6 +153,12 @@ export const constantRoutes = [
         component: () => import('@/views/demo/drag-kanban'),
         name: 'DragKanbanDemo',
         meta: { title: 'Drag Kanban' }
+      },
+      {
+        path: 'upload',
+        component: () => import('@/views/demo/upload'),
+        name: 'Upload',
+        meta: { title: 'Upload' }
       }
     ]
   }
