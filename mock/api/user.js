@@ -140,7 +140,7 @@ export default [
     url: '/admin-auth/admin/userInfo',
     type: 'get',
     response: config => {
-      console.log(config)
+
       const { token } = config.query
       const info = users[token]
 

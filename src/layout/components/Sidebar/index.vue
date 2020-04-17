@@ -11,8 +11,21 @@
         :active-text-color="variables.menuActiveText"
         :collapse-transition="false"
         mode="vertical"
+        router
       >
-        <sidebar-item v-for="route in permission_routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item
+          v-for="route in permission_routes"
+          :key="route.path"
+          :item="route"
+          :base-path="route.path"
+        />
+        <!-- <el-submenu index="banner">
+          <template slot="title">
+            <svg-icon icon-class="dashboard"/>
+            <span>运营管理</span>
+          </template>
+            <el-menu-item index="banner"> <svg-icon icon-class="dashboard"/><span>banner管理</span></el-menu-item>
+        </el-submenu> -->
       </el-menu>
     </el-scrollbar>
   </div>
@@ -27,10 +40,7 @@ import variables from '@/styles/variables.scss'
 export default {
   components: { SidebarItem, Logo },
   computed: {
-    ...mapGetters([
-      'permission_routes',
-      'sidebar'
-    ]),
+    ...mapGetters(['permission_routes', 'sidebar']),
     activeMenu() {
       const route = this.$route
       const { meta, path } = route
@@ -49,6 +59,9 @@ export default {
     isCollapse() {
       return !this.sidebar.opened
     }
+  },
+  methods: {
+
   }
 }
 </script>

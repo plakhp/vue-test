@@ -1,13 +1,22 @@
 <template>
   <div v-if="!item.hidden" class="menu-wrapper">
-    <template v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow">
+    <template
+      v-if="hasOneShowingChild(item.children,item) && (!onlyOneChild.children||onlyOneChild.noShowingChildren)&&!item.alwaysShow"
+    >
+      <!-- 一级菜单 -->
       <app-link v-if="onlyOneChild.meta" :to="resolvePath(onlyOneChild.path)">
-        <el-menu-item :index="resolvePath(onlyOneChild.path)" :class="{'submenu-title-noDropdown':!isNest}">
-          <item :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)" :title="onlyOneChild.meta.title" />
+        <el-menu-item
+          :index="resolvePath(onlyOneChild.path)"
+          :class="{'submenu-title-noDropdown':!isNest}"
+        >
+          <item
+            :icon="onlyOneChild.meta.icon||(item.meta&&item.meta.icon)"
+            :title="onlyOneChild.meta.title"
+          />
         </el-menu-item>
       </app-link>
     </template>
-
+    <!-- 多级菜单 -->
     <el-submenu v-else ref="subMenu" :index="resolvePath(item.path)" popper-append-to-body>
       <template slot="title">
         <item v-if="item.meta" :icon="item.meta && item.meta.icon" :title="item.meta.title" />
@@ -56,6 +65,10 @@ export default {
     this.onlyOneChild = null
     return {}
   },
+  created() {
+    // console.log(this.onlyOneChild,'111111111111111')
+
+  },
   methods: {
     hasOneShowingChild(children = [], parent) {
       const showingChildren = children.filter(item => {
@@ -75,13 +88,15 @@ export default {
 
       // Show parent if there are no child router to display
       if (showingChildren.length === 0) {
-        this.onlyOneChild = { ... parent, path: '', noShowingChildren: true }
+        this.onlyOneChild = { ...parent, path: '', noShowingChildren: true }
         return true
       }
 
       return false
     },
     resolvePath(routePath) {
+      // console.log(routePath,'99999');
+
       if (isExternal(routePath)) {
         return routePath
       }

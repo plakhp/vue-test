@@ -8,6 +8,12 @@ import Layout from '@/layout'
 
 /* Router Modules */
 import systemRouter from './modules/system' // 系统管理
+import yunyingRouter from './modules/yunying' // 运营管理
+import baseSystem from './modules/baseSystem' // 基础设置
+import trends from './modules/trends' // 动态管理 trends
+import goods from './modules/goods' // 商品管理
+import order from './modules/order' // 订单管理
+import shopManage from './modules/shopManage' // 商户管理
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -35,133 +41,159 @@ import systemRouter from './modules/system' // 系统管理
  * a base page that does not have permission requirements
  * all roles can be accessed
  */
-export const constantRoutes = [
-  {
-    path: '/login',
-    component: () => import('@/views/login/index'),
-    hidden: true
-  },
-  {
-    path: '/404',
-    component: () => import('@/views/error/404'),
-    hidden: true
-  },
-  {
-    path: '/401',
-    component: () => import('@/views/error/401'),
-    hidden: true
-  },
-  {
-    path: '/',
-    component: Layout,
-    redirect: '/dashboard',
-    children: [
-      {
-        path: 'dashboard',
-        component: () => import('@/views/dashboard/index'),
-        name: 'Dashboard',
-        meta: { title: '首页', icon: 'dashboard', affix: true }
-      }
-    ]
-  },
-  {
-    path: '/demo',
-    component: Layout,
-    redirect: 'noRedirect',
-    hidden: true,
-    children: [
-      {
-        path: 'tinymce',
-        component: () => import('@/views/demo/tinymce'),
-        name: 'TinymceDemo',
-        meta: { title: 'Tinymce' }
-      },
-      {
-        path: 'markdown',
-        component: () => import('@/views/demo/markdown'),
-        name: 'MarkdownDemo',
-        meta: { title: 'Markdown' }
-      },
-      {
-        path: 'json-editor',
-        component: () => import('@/views/demo/json-editor'),
-        name: 'JsonEditorDemo',
-        meta: { title: 'Json Editor' }
-      },
-      {
-        path: 'split-pane',
-        component: () => import('@/views/demo/split-pane'),
-        name: 'SplitpaneDemo',
-        meta: { title: 'SplitPane' }
-      },
-      {
-        path: 'avatar-upload',
-        component: () => import('@/views/demo/avatar-upload'),
-        name: 'AvatarUploadDemo',
-        meta: { title: 'Avatar Upload' }
-      },
-      {
-        path: 'dropzone',
-        component: () => import('@/views/demo/dropzone'),
-        name: 'DropzoneDemo',
-        meta: { title: 'Dropzone' }
-      },
-      {
-        path: 'sticky',
-        component: () => import('@/views/demo/sticky'),
-        name: 'StickyDemo',
-        meta: { title: 'Sticky' }
-      },
-      {
-        path: 'count-to',
-        component: () => import('@/views/demo/count-to'),
-        name: 'CountToDemo',
-        meta: { title: 'Count To' }
-      },
-      {
-        path: 'mixin',
-        component: () => import('@/views/demo/mixin'),
-        name: 'ComponentMixinDemo',
-        meta: { title: 'componentMixin' }
-      },
-      {
-        path: 'back-to-top',
-        component: () => import('@/views/demo/back-to-top'),
-        name: 'BackToTopDemo',
-        meta: { title: 'Back To Top' }
-      },
-      {
-        path: 'drag-dialog',
-        component: () => import('@/views/demo/drag-dialog'),
-        name: 'DragDialogDemo',
-        meta: { title: 'Drag Dialog' }
-      },
-      {
-        path: 'drag-select',
-        component: () => import('@/views/demo/drag-select'),
-        name: 'DragSelectDemo',
-        meta: { title: 'Drag Select' }
-      },
-      {
-        path: 'dnd-list',
-        component: () => import('@/views/demo/dnd-list'),
-        name: 'DndListDemo',
-        meta: { title: 'Dnd List' }
-      },
-      {
-        path: 'drag-kanban',
-        component: () => import('@/views/demo/drag-kanban'),
-        name: 'DragKanbanDemo',
-        meta: { title: 'Drag Kanban' }
-      },
-      {
-        path: 'upload',
-        component: () => import('@/views/demo/upload'),
-        name: 'Upload',
-        meta: { title: 'Upload' }
-      }
-    ]
+// 广告管理
+// import Banner from '../views/banner/banner.vue'
+export const constantRoutes = [{
+  path: '/login',
+  component: () =>
+    import('@/views/login/index'),
+  hidden: true
+},
+{
+  path: '/404',
+  component: () =>
+    import('@/views/error/404'),
+  hidden: true
+},
+{
+  path: '/401',
+  component: () =>
+    import('@/views/error/401'),
+  hidden: true
+},
+{
+  path: '/',
+  component: Layout,
+  redirect: '/dashboard',
+  children: [{
+    path: 'dashboard',
+    component: () =>
+      import('@/views/dashboard/index'),
+    name: 'Dashboard',
+    meta: { title: '首页', icon: 'dashboard', affix: true }
   }
+
+    // {
+    //   path: '/banner',
+    //   component: () =>
+    //     import ('@/views/banner/banner')
+    // }
+
+  ]
+
+}
+  // {
+  //   path: '/demo',
+  //   component: Layout,
+  //   redirect: 'noRedirect',
+  //   hidden: true,
+  //   children: [{
+  //       path: 'tinymce',
+  //       component: () =>
+  //         import ('@/views/demo/tinymce'),
+  //       name: 'TinymceDemo',
+  //       meta: { title: 'Tinymce' }
+  //     },
+  //     {
+  //       path: 'markdown',
+  //       component: () =>
+  //         import ('@/views/demo/markdown'),
+  //       name: 'MarkdownDemo',
+  //       meta: { title: 'Markdown' }
+  //     },
+  //     {
+  //       path: 'json-editor',
+  //       component: () =>
+  //         import ('@/views/demo/json-editor'),
+  //       name: 'JsonEditorDemo',
+  //       meta: { title: 'Json Editor' }
+  //     },
+  //     {
+  //       path: 'split-pane',
+  //       component: () =>
+  //         import ('@/views/demo/split-pane'),
+  //       name: 'SplitpaneDemo',
+  //       meta: { title: 'SplitPane' }
+  //     },
+  //     {
+  //       path: 'avatar-upload',
+  //       component: () =>
+  //         import ('@/views/demo/avatar-upload'),
+  //       name: 'AvatarUploadDemo',
+  //       meta: { title: 'Avatar Upload' }
+  //     },
+  //     {
+  //       path: 'dropzone',
+  //       component: () =>
+  //         import ('@/views/demo/dropzone'),
+  //       name: 'DropzoneDemo',
+  //       meta: { title: 'Dropzone' }
+  //     },
+  //     {
+  //       path: 'sticky',
+  //       component: () =>
+  //         import ('@/views/demo/sticky'),
+  //       name: 'StickyDemo',
+  //       meta: { title: 'Sticky' }
+  //     },
+  //     {
+  //       path: 'count-to',
+  //       component: () =>
+  //         import ('@/views/demo/count-to'),
+  //       name: 'CountToDemo',
+  //       meta: { title: 'Count To' }
+  //     },
+  //     {
+  //       path: 'mixin',
+  //       component: () =>
+  //         import ('@/views/demo/mixin'),
+  //       name: 'ComponentMixinDemo',
+  //       meta: { title: 'componentMixin' }
+  //     },
+  //     {
+  //       path: 'back-to-top',
+  //       component: () =>
+  //         import ('@/views/demo/back-to-top'),
+  //       name: 'BackToTopDemo',
+  //       meta: { title: 'Back To Top' }
+  //     },
+  //     {
+  //       path: 'drag-dialog',
+  //       component: () =>
+  //         import ('@/views/demo/drag-dialog'),
+  //       name: 'DragDialogDemo',
+  //       meta: { title: 'Drag Dialog' }
+  //     },
+  //     {
+  //       path: 'drag-select',
+  //       component: () =>
+  //         import ('@/views/demo/drag-select'),
+  //       name: 'DragSelectDemo',
+  //       meta: { title: 'Drag Select' }
+  //     },
+  //     {
+  //       path: 'dnd-list',
+  //       component: () =>
+  //         import ('@/views/demo/dnd-list'),
+  //       name: 'DndListDemo',
+  //       meta: { title: 'Dnd List' }
+  //     },
+  //     {
+  //       path: 'drag-kanban',
+  //       component: () =>
+  //         import ('@/views/demo/drag-kanban'),
+  //       name: 'DragKanbanDemo',
+  //       meta: { title: 'Drag Kanban' }
+  //     },
+  //     {
+  //       path: 'upload',
+  //       component: () =>
+  //         import ('@/views/demo/upload'),
+  //       name: 'Upload',
+  //       meta: { title: 'Upload' }
+  //     }
+  //   ]
+  // }
 ]
 
 /**
@@ -171,7 +203,12 @@ export const constantRoutes = [
 export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
   systemRouter,
-
+  yunyingRouter,
+  baseSystem,
+  trends,
+  goods,
+  order,
+  shopManage,
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]

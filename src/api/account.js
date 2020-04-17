@@ -10,6 +10,7 @@
 import request from '@/utils/request'
 
 const server = process.env.VUE_APP_SERVER_ADMIN
+// console.log(process.env)
 
 export function list(data) {
   return request({
@@ -56,4 +57,3 @@ export function editStatus(id) {
     method: 'patch'
   })
 }
-

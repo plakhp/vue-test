@@ -1,10 +1,10 @@
 <template>
   <div class="login-container">
     <div class="title-container">
-      <h3 class="title">
-        <svg-icon icon-class="logo" style="width: 165px;" />
-        <div class="mt-20">伊品众后台管理系统</div>
-      </h3>
+      <h2 class="title">
+        <!-- <svg-icon icon-class="logo" style="width: 165px;" /> -->
+        <div class="mt-30">宠物社区后台管理系统</div>
+      </h2>
     </div>
     <el-form
       ref="loginForm"
@@ -49,16 +49,16 @@
       <el-button
         :loading="loading"
         type="primary"
-        style="width:100%;font-weight: bold;"
+        style="width:100%;font-weight:700;height:40px;margin-top:20px"
         @click.native.prevent="handleLogin"
       >
         登录
       </el-button>
     </el-form>
-    <el-row class="email">
+    <!-- <el-row class="email">
       <div>Need support?</div>
       <div>Contact <a href="mailto:charles@ipzoe.com">charles@ipzoe.com</a></div>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
@@ -168,7 +168,9 @@ export default {
 </style>
 
 <style lang="scss" scoped>
-  $bg: #2531ec;
+  // $bg: #2531ec;
+  $bg:  #2b4b6b;
+
   $dark_gray: #889aa4;
   $light_gray:#889aa4;
 
@@ -183,7 +185,7 @@ export default {
       margin-top: 160px;
 
       .title {
-        font-size: 26px;
+        font-size: 30px;
         margin: 0px auto 40px auto;
         text-align: center;
         font-weight: bold;

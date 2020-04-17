@@ -108,7 +108,7 @@ export default [
     url: '/admin/adminUser/\.*/frozen-on-off',
     type: 'patch',
     response: config => {
-      console.log(config)
+     
       List.map(item => {
         return item
       })

@@ -1,5 +1,5 @@
 module.exports = {
-  title: '伊品众后台管理系统',
+  title: '宠物社区后台管理系统',
 
   appId: false,
 

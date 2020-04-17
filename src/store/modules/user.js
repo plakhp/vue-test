@@ -93,9 +93,8 @@ const actions = {
         }
 
         const roles = genRoles(userMenus)
-        console.log('roles: ', roles)
+
         const roleButtons = genRoleButtons(userMenus)
-        console.log('buttons: ', roleButtons)
 
         commit('SET_ROLES', roles)
         commit('SET_ROLE_BUTTONS', roleButtons)

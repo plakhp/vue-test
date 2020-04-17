@@ -2,10 +2,11 @@
   <div class="sidebar-logo-container" :class="{'collapse':collapse}">
     <transition name="sidebarLogoFade">
       <router-link v-if="collapse" key="collapse" class="sidebar-logo-link" to="/">
-        <i class="icon icon-menu-logo" />
+        <!-- <i class="icon icon-menu-logo" /> -->
       </router-link>
       <router-link v-else key="expand" class="sidebar-logo-link" to="/">
-        <i class="icon icon-menu-logo" />
+        <!-- logo图片 -->
+        <!-- <i class="icon icon-menu-logo" /> -->
         <h1 class="sidebar-title">{{ title }} </h1>
       </router-link>
     </transition>
@@ -23,7 +24,7 @@ export default {
   },
   data() {
     return {
-      title: '伊品众后台管理系统'
+      title: '宠物社区后台管理'
     }
   }
 }
