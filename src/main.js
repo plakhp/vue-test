@@ -38,6 +38,17 @@ axios.interceptors.request.use(config => {
 Vue.prototype.$http = axios
 import Qs from 'qs' // 引入方式
 Vue.prototype.$qs = Qs // 全局加载
+// 时间过滤器
+Vue.filter('dateFormat', function(originVal) {
+  const dt = new Date(originVal)
+  const y = dt.getFullYear()
+  const m = (dt.getMonth() + 1 + '').padStart(2, '0')
+  const d = (dt.getDate() + '').padStart(2, '0')
+  const hh = (dt.getHours() + '').padStart(2, '0')
+  const mm = (dt.getMinutes() + '').padStart(2, '0')
+  const ss = (dt.getSeconds() + '').padStart(2, '0')
+  return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+})
 /**
    * If you don't want to use mock-server
    * you want to use MockJs for mock api

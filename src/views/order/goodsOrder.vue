@@ -46,19 +46,31 @@
     <!-- 导出按钮 -->
     <!-- <div class="leading-out">
       <el-button>导出</el-button>
-    </div> -->
+    </div>-->
     <!-- 表格 -->
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
-      <el-table-column prop="nickName" label="商户名称" />
-      <el-table-column prop="nickName" label="订单编号" />
-      <el-table-column prop="nickName" label="下单时间" />
-      <el-table-column prop="nickName" label="商品类型" width="100" />
-      <el-table-column prop="nickName" label="购买商品" />
-      <el-table-column prop="nickName" label="购买数量" width="100" />
-      <el-table-column prop="nickName" label="买家昵称" width="100" />
-      <el-table-column prop="nickName" label="实付款" width="100" />
-      <el-table-column prop="nickName" label="支付方式" width="100" />
+      <el-table-column prop="shopName" label="商户名称" />
+      <el-table-column prop="orderNo" label="订单编号" />
+      <el-table-column prop="orderTime" label="下单时间" />
+      <el-table-column label="商品类型" width="100">
+        <template slot-scope="scope">
+          <span v-if="scope.row.orderType === 1">商品</span>
+          <span v-if="scope.row.orderType === 2">套餐</span>
+          <span v-if="scope.row.orderType === 3">拼团</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="goodsName" label="购买商品" />
+      <el-table-column prop="goodsQuantity" label="购买数量" width="100" />
+      <el-table-column prop="userName" label="买家昵称" width="100" />
+      <el-table-column prop="payAmount" label="实付款" width="100" />
+
+      <el-table-column label="支付方式" width="100">
+        <template slot-scope="scope">
+          <span v-if="scope.row.payType === 1">微信支付</span>
+          <span v-if="scope.row.payType === 2">支付宝支付</span>
+        </template>
+      </el-table-column>
       <el-table-column label="订单状态" width="120">
         <template slot-scope="scope">
           <span v-if="scope.row.state === 10" class="color-red">待付款</span>
@@ -67,10 +79,8 @@
           <span v-if="scope.row.state === 13" class="color-green">已完成</span>
           <span v-if="scope.row.state === 14" class="color-gray">已取消</span>
           <span v-if="scope.row.state === 15" class="color-gray">已退款</span>
-          <!-- <span v-if="scope.row.status === 0" class="color-gray">停用</span> -->
         </template>
       </el-table-column>
-
     </el-table>
     <!-- 弹出框 -->
     <el-dialog title="查看大图" :visible.sync="centerDialogVisible" width="30%" center />
@@ -85,8 +95,11 @@
 </template>
 
 <script>
+
 import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination'
+import {getDate} from '../getDate.js'
+
 
 export default {
   name: 'Account',
@@ -150,6 +163,7 @@ export default {
   },
   computed: {
     ...mapGetters([])
+ 
   },
   created() {
     this.fetchData()
@@ -167,20 +181,48 @@ export default {
       this.filter.pageSize = pagination.limit
       this.fetchData()
     },
+    // 页面请求数据
     async fetchData() {
       this.loading = true
-      const { data: res } = await this.$http.get('order/1/list', { params: this.filter })
-      //     this.list = data.records
-      //     this.pages.total = data.total
-      //     this.pages.page = data.current
-      //     this.pages.limit = data.size
-      this.loading = false
-      console.log(res, 1111)
+      var data = this.filter
+      if(!data.orderNo){
+        delete data.orderNo
+      }
+      if(!data.shopId){
+        delete data.shopId
+      }
+          if(!data.orderTimeStart){
+        delete data.orderTimeStart
+      }
+          if(!data.orderTimeEnd){
+        delete data.orderTimeEnd
+      }
+          if(!data.state){
+        delete data.state
+      }
+          if(!data.goodsType){
+        delete data.goodsType
+      }
+      
+      const { data: res } = await this.$http.get(`order/${1}/list`, {params:data} )
+          this.list = res.data.records
+          this.pages.total =  res.data.total
+          this.pages.page =   res.data.current
+          this.pages.limit =  res.data.size
+          this.loading = false
+   
     },
     // 选择日期时间
     changeDate(e) {
-      this.filter.orderTimeStart = e[0]
-      this.filter.orderTimeEnd = e[1]
+
+      
+      this.filter.orderTimeStart = getDate(e[0])
+      this.filter.orderTimeEnd =getDate(e[1])
+
+    // console.log(this.filter.orderTimeStart,1);
+    // console.log(this.filter.orderTimeEnd,2);
+
+    
     },
     add() {
       this.centerDialogVisible = true
@@ -199,6 +241,7 @@ export default {
       this.centerDialogVisible = false
       this.value = ''
     }
+  
   }
 }
 </script>
@@ -216,20 +259,20 @@ export default {
   display: flex;
   margin-bottom: 20px;
   div {
-    margin-right: 96px;
+    margin-right: 72px;
   }
   .el-input {
     width: 200px;
   }
 }
-  .leading-out {
-    margin-bottom: 20px;;
-    .el-button {
-           background-color: #44C9AB;
-              color: #fff;
-              border: none;
-    }
+.leading-out {
+  margin-bottom: 20px;
+  .el-button {
+    background-color: #44c9ab;
+    color: #fff;
+    border: none;
   }
+}
 
 // 解封按钮
 

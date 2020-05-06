@@ -21,19 +21,29 @@
       <el-table-column prop="goodsName" label="商品标题" />
       <el-table-column label="商品类型" width="120">
         <template slot-scope="scope">
-          <span v-if="scope.row.goodsType === -1">服务</span>
-          <span v-if="scope.row.goodsType === 1">拼团</span>
-          <!-- <span v-if="scope.row.status === 0" class="color-gray">停用</span> -->
+          <span v-if="scope.row.goodsType === 1">商品</span>
+          <span v-if="scope.row.goodsType === 2">套餐</span>
+          <span v-if="scope.row.goodsType === 3">拼团</span>
+     
         </template>
       </el-table-column>
       <el-table-column label="商品价格" width="120">
         <template slot-scope="scope">
-          <span v-if="scope.row.goodsType === -1">￥{{ scope.row.originPrice }}</span>
-          <span v-if="scope.row.goodsType === 1" class="color-green" @click="lookPintuan">查看</span>
-          <!-- <span v-if="scope.row.status === 0" class="color-gray">停用</span> -->
+          <span v-if="scope.row.goodsType === 1">￥{{ scope.row.originPrice }}</span>
+          <span v-if="scope.row.goodsType === 2">￥{{ scope.row.originPrice }}</span>
+
+          <span v-if="scope.row.goodsType === 3" class="color-green" @click="lookPintuan(scope.row)">查看</span>
+         
         </template>
       </el-table-column>
-      <el-table-column prop="price" label="商品原价" width="120" />
+      <el-table-column label="商品原价" width="120" >
+         <template slot-scope="scope">
+          <span >￥{{ scope.row.price }}</span>
+        
+
+         
+        </template>
+      </el-table-column>  
       <el-table-column label="商品详情" width="120">
         <template slot-scope="scope">
           <span class="color-green" @click="lookGoodsdetail">查看</span>
@@ -75,8 +85,8 @@
     <!-- 拼团弹出框 -->
     <el-dialog title="查看拼团价格" :visible.sync="DialogVisible" width="30%" center>
       <div class="content">
-        <div class="pintuan_list">4人拼团20元</div>
-        <div class="pintuan_list">8人10元</div>
+        <div class="pintuan_list" v-for="(item,index) in groupPriceVOList" :key="index">{{item.groupNum}}人拼团{{item.groupPrice}}元</div>
+     
       </div>
     </el-dialog>
     <!-- 商品详情弹出框 -->
@@ -109,6 +119,8 @@ export default {
       id: '',
       // 拼团
       DialogVisible: false,
+      // 拼团价格
+      groupPriceVOList:[],
       // 商品详情
       goodsDialogVisible: false,
       // 下架
@@ -192,7 +204,9 @@ export default {
       this.fetchData(this.id)
     },
     // 拼团
-    lookPintuan() {
+    lookPintuan(item) {
+      console.log(item.groupPriceVOList,111111111);
+      this.groupPriceVOList = item.groupPriceVOList
       this.DialogVisible = true
     },
     // 查看商品详情
@@ -244,6 +258,9 @@ span {
 .goods_img {
   width: 80px;
   height: 80px;
+}
+.content {
+  text-align: center;
 }
 </style>
 <style lang="scss">

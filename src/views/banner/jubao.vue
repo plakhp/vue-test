@@ -16,7 +16,7 @@
       <el-table-column prop="content" label="举报内容" />
       <el-table-column label="图片/视频" width="100">
         <template slot-scope="scope">
-          <span class="color-green" @click="look(scope.row)">查看</span>
+          <span class="color-green" @click="look(scope.row)" style="cursor: pointer;">查看</span>
         </template>
       </el-table-column>
       <el-table-column prop="reason" label="举报原因" />
@@ -232,6 +232,7 @@ export default {
   resize: none !important;
   outline: none !important;
   background-color: #eee;
+
 }
 .demo-image__preview {
   text-align: center;

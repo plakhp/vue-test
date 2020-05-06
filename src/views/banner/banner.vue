@@ -24,7 +24,6 @@
           <div class="banner_img">
             <el-image v-if="scope.row.picture" :src="scope.row.picture" />
             <!-- <div v-else>暂无</div> -->
-
           </div>
         </template>
       </el-table-column>
@@ -46,7 +45,8 @@
             <span>删除</span>
           </el-button>
           <el-button plain type="success" @click="changeStatus(scope.row)">
-            <span>启动</span>
+            <span v-if="scope.row.state === 0">上架</span>
+            <span v-if="scope.row.state === 1">下架</span>
           </el-button>
         </template>
       </el-table-column>

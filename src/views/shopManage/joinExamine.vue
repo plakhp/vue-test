@@ -71,9 +71,9 @@
         <template slot-scope="scope">
           <div class="control">
             <span v-if="scope.row.status === 0" class="color-gray">审核</span>
-            <span v-if="scope.row.status === 1" class="color-green" @click="examine">审核</span>
+            <span v-if="scope.row.status === 1" class="color-green" @click="examine(scope.row)">审核</span>
             <span v-if="scope.row.status === 2" class="color-green" @click="examineSystem(scope.row)">设置</span>
-            <span v-if="scope.row.status === 3" class="color-green" @click="examine">查看</span>
+            <span v-if="scope.row.status === 3" class="color-green" @click="examine(scope.row)">查看</span>
           </div>
         </template>
       </el-table-column>
@@ -90,24 +90,30 @@
         <el-image style="width: 200px; height: 200px" :src="doorUrl" :preview-src-list="doorList" />
       </div>
     </el-dialog>
-    <!-- 审核弹出框 -->
+    <!-- 审核结果弹出框 -->
     <el-dialog title="审核" :visible.sync="examineDialogVisible" width="30%" center>
       <div class="content">
         <div class="radioRow">
           <span>审核结果</span>
-          <el-radio v-model="radio" label="1">通过</el-radio>
-          <el-radio v-model="radio" label="2">拒绝</el-radio>
+          <div v-if="item.result">
+            <span v-if="item.result==0">拒绝</span>
+            <span v-if="item.result==1">通过</span>
+          </div>
+         <div v-if="!item.result">
+            <el-radio v-model="radio" label="1">通过</el-radio>
+          <el-radio v-model="radio" label="0">拒绝</el-radio>
+         </div>
         </div>
         <div class="title">拒绝原因</div>
         <el-input
-          v-model="textarea"
+          v-model="rejectReason"
           type="textarea"
           :rows="2"
           placeholder="请输入内容"
           :autosize="{ minRows: 1, maxRows: 8}"
         />
       </div>
-      <span slot="footer" class="dialog-footer">
+      <span slot="footer" class="dialog-footer" v-if="!item.result">
         <el-button @click="closeDialog">取 消</el-button>
         <el-button type="primary" @click="saveDialog">确 定</el-button>
       </span>
@@ -164,7 +170,7 @@ export default {
       examineDialogVisible: false,
       // 设置
       systemDialogVisible: false,
-      textarea: '',
+      rejectReason: '',
       radio: '1',
       // 审核设置
       radio1: '',
@@ -185,8 +191,11 @@ export default {
       },
       list: [],
       loading: false,
-      // id
-      infoId: ''
+      // 审核id
+      infoId: '',
+      id:'',
+      // 审核数据
+       item:{}
     }
   },
   computed: {
@@ -251,8 +260,13 @@ export default {
 
       this.DialogVisible = true
     },
-    // 审核 examine
-    examine() {
+    // 入驻审核 examine
+    examine(item) {
+
+      // 审核结果
+    this.item = item
+     // 拒绝原因
+    this.rejectReason = item.rejectReason
       this.examineDialogVisible = true
     },
     // 关闭
@@ -261,22 +275,26 @@ export default {
       this.textarea = ''
       this.systemDialogVisible = false
     },
-    // 保存备注
-    saveDialog() {
+    // 保存审核结果备注 shop/{approveId}/approve
+   async saveDialog() {
+        const { data: res } = await this.$http.put(`shop/${this.item.id}/approve`, { id:this.item.id,result:this.radio,rejectReason:this.rejectReason })
+         this.fetchData()
       this.examineDialogVisible = false
-      this.textarea = ''
+      this.rejectReason = ''
     },
 
     // 审核设置
     examineSystem(item) {
-      // console.log(item.id, 111111111)
+      // console.log(item.settlementMethod, 111111111)
+      // console.log(item.result, 2222222222)
+
       this.infoId = item.id
       this.systemDialogVisible = true
     },
     // 保存店铺设置
     async saveShopDialog() {
       const { data: res } = await this.$http.put(`shop/${this.infoId}/set`, { isFirst: this.radio1, settlementMethod: this.radio2 })
-      console.log(res, 1111111111)
+      // console.log(res, 1111111111)
       this.fetchData()
       this.systemDialogVisible = false
     },
@@ -339,9 +357,13 @@ export default {
   text-align: center;
 }
 .radioRow {
+
   margin-bottom: 20px;
 }
-.radioRow > span {
+.radioRow div {
+    display: inline-block;
+}
+.radioRow >span  {
   display: inline-block;
   margin-right: 30px;
   width: 120px;
