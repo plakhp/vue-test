@@ -114,7 +114,7 @@ const users = {
 export default [
   // user login
   {
-    url: '/admin-auth/oauth/admin/login',
+    url: '/pet-admin/oauth/admin/login',
     type: 'get',
     response: config => {
       const { userName } = config.query
@@ -137,10 +137,9 @@ export default [
 
   // get user info
   {
-    url: '/admin-auth/admin/userInfo',
+    url: '/pet-admi/admin/userInfo',
     type: 'get',
     response: config => {
-
       const { token } = config.query
       const info = users[token]
 

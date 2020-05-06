@@ -9,7 +9,7 @@
  */
 import request from '@/utils/request'
 
-const storageServer = process.env.VUE_APP_SERVER_STORAGE
+const storageServer = process.env.VUE_APP_SERVER_OAUTH
 
 export function upload(data) {
   return request.postForm({

@@ -21,7 +21,7 @@ export function getInfo(token) {
 
 export function editPassword(data) {
   return request({
-    url: `/${adminServer}/adminUser/changePassword`,
+    url: `/${authServer}/adminUser/changePassword`,
     method: 'put',
     data
   })

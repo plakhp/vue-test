@@ -7,7 +7,9 @@ const state = {
   name: '',
   avatar: '',
   roles: [],
-  roleButtons: []
+  roleButtons: [],
+  // 用户信息
+  userData: {}
 }
 
 function genRoles(menus) {
@@ -55,6 +57,10 @@ const mutations = {
   },
   SET_ROLE_BUTTONS: (state, roleButtons) => {
     state.roleButtons = roleButtons
+  },
+  // 保存用户信息
+  getUserData: (state, userData) => {
+    state.userData = userData
   }
 }
 
@@ -66,6 +72,10 @@ const actions = {
       login({ userName: username.trim(), password: password }).then(response => {
         const { data } = response
         commit('SET_TOKEN', data.token)
+        // 保存用户信息
+        // commit('getUserData', data)
+        window.localStorage.setItem('getUserData', JSON.stringify(data))
+        // window.sessionStorage.setItem('token', data.token)
         setToken(data.token)
         resolve()
       }).catch(error => {
@@ -76,34 +86,32 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
+    // console.log(this.$store.state.userData, 111112222)
     return new Promise((resolve, reject) => {
       // Change the right API
-      getInfo(state.token).then(response => {
-        const { data } = response
 
-        if (!data) {
-          reject('验证失败，请重新登录')
-        }
+      const data = JSON.parse(window.localStorage.getItem('getUserData'))
 
-        const { userMenus, nickName, avatar } = data
+      if (!data) {
+        reject('验证失败，请重新登录')
+      }
 
-        // roles must be a non-empty array
-        if (!userMenus || userMenus.length <= 0) {
-          reject('getInfo: roles must be a non-null array!')
-        }
+      const { userMenus, nickName, avatar } = data
 
-        const roles = genRoles(userMenus)
+      // roles must be a non-empty array
+      if (!userMenus || userMenus.length <= 0) {
+        reject('getInfo: roles must be a non-null array!')
+      }
+      const roles = genRoles(userMenus)
+      // console.log(roles, 1111111111)
 
-        const roleButtons = genRoleButtons(userMenus)
+      const roleButtons = genRoleButtons(userMenus)
 
-        commit('SET_ROLES', roles)
-        commit('SET_ROLE_BUTTONS', roleButtons)
-        commit('SET_NAME', nickName)
-        commit('SET_AVATAR', avatar)
-        resolve({ roles })
-      }).catch(error => {
-        reject(error)
-      })
+      commit('SET_ROLES', roles)
+      commit('SET_ROLE_BUTTONS', roleButtons)
+      commit('SET_NAME', nickName)
+      commit('SET_AVATAR', avatar)
+      resolve({ roles })
     })
   },
 
@@ -163,6 +171,7 @@ const actions = {
       setToken(token)
 
       const { roles } = await dispatch('getInfo')
+      console.log(roles, 1111)
 
       resetRouter()
 

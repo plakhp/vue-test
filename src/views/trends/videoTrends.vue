@@ -12,12 +12,17 @@
         </div>
         <div>
           <span>状态:</span>
-          <el-select v-model="filter.status" placeholder="全部" :clearable="true">
+          <el-select
+            v-model="filter.status"
+            placeholder="全部"
+            :clearable="true"
+            @change="changeStatus"
+          >
             <el-option
               v-for="(item, index) in roleStatus"
               :key="index"
-              :label="item.name"
-              :value="item.id"
+              :label="item.label"
+              :value="item.value"
             />
           </el-select>
         </div>
@@ -27,12 +32,12 @@
     </div>
     <!-- <div class="title">
       <span>数据列表</span>
-    </div> -->
+    </div>-->
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
       <el-table-column prop="nickName" label="用户昵称" width="200" />
-      <el-table-column prop="nickName" label="发布时间" width="200" />
-      <el-table-column prop="nickName" label="文字" />
+      <el-table-column prop="createTime" label="发布时间" width="200" />
+      <el-table-column prop="content" label="文字" />
       <el-table-column label="视频" width="200">
         <template slot-scope="scope">
           <div class="control">
@@ -42,20 +47,20 @@
       </el-table-column>
       <el-table-column label="状态" width="120">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === -1" class="color-red">停用</span>
-          <span v-if="scope.row.status === 1" class="color-green">启用</span>
-          <!-- <span v-if="scope.row.status === 0" class="color-gray">停用</span> -->
+          <span v-if="scope.row.status === 0" class="color-red">封禁</span>
+          <span v-if="scope.row.status === 1" class="color-green">正常</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
           <div class="button_control">
-            <el-button type="primary">
+            <el-button v-if="scope.row.status === 0" type="primary" @click="closeStatus(scope.row)">
+              <span>解封</span>
+            </el-button>
+            <el-button v-if="scope.row.status === 1" type="danger" @click="closeStatus(scope.row)">
               <span>封禁</span>
-            <!-- <span>解封</span> -->
             </el-button>
           </div>
-
         </template>
       </el-table-column>
     </el-table>
@@ -86,18 +91,25 @@ export default {
   },
   data() {
     return {
-      roleStatus: [],
+      roleStatus: [{
+        value: '0',
+        label: '封禁'
+      }, {
+        value: '1',
+        label: '正常'
+      }],
 
       centerDialogVisible: false,
-      url:
-        'https://apd-421275995afef25fd1576864c706b121.v.smtcdns.com/mv.music.tc.qq.com/AAva_HEsP8jgQ-Kpye9BjReqmiZT6foInR32EbsAZbSI/07B883435DD047613333D87F37051B6413951F7BA411548C9F730E58BF995D87C7410A11B8B35F190098A58BA7391D71ZZqqmusic_default/1049_M01103000046vwzC2MYicl1001719213.f9844.mp4?fname=1049_M01103000046vwzC2MYicl1001719213.f9844.mp4',
+      url: '',
 
       filter: {
-        userName: '',
-        employee: '',
-        phoneNum: null,
+        nickName: '',
+        content: '',
+        status: '',
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        orderBy: 'modify_time',
+        orderType: 2
       },
       pages: {
         total: 0,
@@ -120,6 +132,7 @@ export default {
     this.fetchData()
   },
   methods: {
+    // 播放视频
     playVideo() {
       var myVideo = document.getElementById('video1')
 
@@ -129,9 +142,12 @@ export default {
     //     myVideo.pause();
     //   }
     },
+    // 查看状态
     changeStatus(event) {
-      console.log(event)
+      // console.log(event)
+      this.filter.status = event
     },
+    // 点击查询
     search() {
       this.filter.pageNum = 1
       this.fetchData()
@@ -141,28 +157,33 @@ export default {
       this.filter.pageSize = pagination.limit
       this.fetchData()
     },
-    fetchData() {
+    // 获取数据
+    async fetchData() {
       this.loading = true
-      this.$store
-        .dispatch('account/list', this.filter)
-        .then(data => {
-          // console.log(data)
 
-          this.loading = false
-          this.list = data.records
-          this.pages.total = data.total
-          this.pages.page = data.current
-          this.pages.limit = data.size
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      const { data: res } = await this.$http.get(`dynamic/2/list`, { params: this.filter })
+
+      this.list = res.data.records
+      this.pages.total = res.data.total
+      this.pages.page = res.data.current
+      this.pages.limit = res.data.size
+
+      this.loading = false
     },
-    add() {
+    // 查看弹窗
+    edit(item) {
+      if (!item.videoLink) {
+        return this.$message.warning('视频不存在')
+      }
+
+      this.url = item.videoLink
       this.centerDialogVisible = true
     },
-    edit() {
-      this.centerDialogVisible = true
+    // 启动和禁用
+    async closeStatus(item) {
+      const { data: res } = await this.$http.put(`dynamic/${item.id}/up-down`)
+      // console.log(res, '999999999999')
+      this.fetchData()
     }
   }
 }
@@ -194,13 +215,12 @@ export default {
 }
 // 解封按钮
 .button_control {
-    .el-button {
-  background-color: #44c9ab;
-  color: #fff;
-  border: none;
+  .el-button {
+    background-color: #44c9ab;
+    color: #fff;
+    border: none;
+  }
 }
-}
-
 </style>
 <style lang="scss">
 </style>

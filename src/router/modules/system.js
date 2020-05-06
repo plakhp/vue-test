@@ -21,14 +21,14 @@ const router = {
       component: () => import('@/views/system/role/index'),
       meta: { title: '角色管理', icon: 'role', affix: true, roles: ['role_manager'], activeMenu: '/system/role' },
       children: []
+    },
+    {
+      path: 'menu',
+      name: '菜单管理',
+      component: () => import('@/views/system/menu/index'),
+      meta: { title: '菜单管理', icon: 'menu', affix: true, roles: ['menu_manager'], activeMenu: '/system/menu' },
+      children: []
     }
-    // {
-    //   path: 'menu',
-    //   name: '菜单管理',
-    //   component: () => import('@/views/system/menu/index'),
-    //   meta: { title: '菜单管理', icon: 'menu', affix: true, roles: ['menu_manager'], activeMenu: '/system/menu' },
-    //   children: []
-    // }
   ]
 }
 

@@ -4,20 +4,20 @@
       <div class="filter-left">
         <div>
           <span>用户昵称:</span>
-          <el-input v-model="filter.userName" placeholder="请输入用户昵称" @keyup.enter.native="search" />
+          <el-input v-model="filter.nickName" placeholder="请输入用户昵称" @keyup.enter.native="search" />
         </div>
         <div>
           <span>动态文字:</span>
-          <el-input v-model="filter.userName" placeholder="请输入动态文字" @keyup.enter.native="search" />
+          <el-input v-model="filter.content" placeholder="请输入动态文字" @keyup.enter.native="search" />
         </div>
         <div>
           <span>状态:</span>
-          <el-select v-model="filter.status" placeholder="全部" :clearable="true">
+          <el-select v-model="filter.status" placeholder="全部" :clearable="true" @change="changeStatus">
             <el-option
               v-for="(item, index) in roleStatus"
               :key="index"
-              :label="item.name"
-              :value="item.id"
+              :label="item.label"
+              :value="item.value"
             />
           </el-select>
         </div>
@@ -29,8 +29,8 @@
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
       <el-table-column prop="nickName" label="用户昵称" width="200" />
-      <el-table-column prop="nickName" label="发布时间" width="200" />
-      <el-table-column prop="nickName" label="文字" />
+      <el-table-column prop="createTime" label="发布时间" width="200" />
+      <el-table-column prop="content" label="文字" />
       <el-table-column label="图片" width="200">
         <template slot-scope="scope">
           <div class="control">
@@ -40,17 +40,19 @@
       </el-table-column>
       <el-table-column label="状态" width="120">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === -1" class="color-red">停用</span>
-          <span v-if="scope.row.status === 1" class="color-green">启用</span>
-          <!-- <span v-if="scope.row.status === 0" class="color-gray">停用</span> -->
+          <span v-if="scope.row.status === 0" class="color-red">封禁</span>
+          <span v-if="scope.row.status === 1" class="color-green">正常</span>
+
         </template>
       </el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
           <div class="button_control">
-            <el-button type="primary">
+            <el-button v-if="scope.row.status === 0" type="primary" @click="closeStatus(scope.row)">
+              <span>解封</span>
+            </el-button>
+            <el-button v-if="scope.row.status === 1" type="danger" @click="closeStatus(scope.row)">
               <span>封禁</span>
-            <!-- <span>解封</span> -->
             </el-button>
           </div>
 
@@ -84,20 +86,26 @@ export default {
   },
   data() {
     return {
-      roleStatus: [],
+      roleStatus: [{
+        value: '0',
+        label: '封禁'
+      }, {
+        value: '1',
+        label: '正常'
+      }],
 
       centerDialogVisible: false,
-      url:
-        'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-      srcList: [
-        'https://apd-421275995afef25fd1576864c706b121.v.smtcdns.com/mv.music.tc.qq.com/AAva_HEsP8jgQ-Kpye9BjReqmiZT6foInR32EbsAZbSI/07B883435DD047613333D87F37051B6413951F7BA411548C9F730E58BF995D87C7410A11B8B35F190098A58BA7391D71ZZqqmusic_default/1049_M01103000046vwzC2MYicl1001719213.f9844.mp4?fname=1049_M01103000046vwzC2MYicl1001719213.f9844.mp4'
-      ],
+      // 预览图片
+      url: '',
+      srcList: [],
       filter: {
-        userName: '',
-        employee: '',
-        phoneNum: null,
+        nickName: '',
+        content: '',
+        status: '',
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        orderBy: 'modify_time',
+        orderType: 2
       },
       pages: {
         total: 0,
@@ -120,8 +128,10 @@ export default {
     this.fetchData()
   },
   methods: {
+    // 查看状态
     changeStatus(event) {
-      console.log(event)
+      // console.log(event)
+      this.filter.status = event
     },
     search() {
       this.filter.pageNum = 1
@@ -132,28 +142,34 @@ export default {
       this.filter.pageSize = pagination.limit
       this.fetchData()
     },
-    fetchData() {
+    async fetchData() {
       this.loading = true
-      this.$store
-        .dispatch('account/list', this.filter)
-        .then(data => {
-          // console.log(data)
 
-          this.loading = false
-          this.list = data.records
-          this.pages.total = data.total
-          this.pages.page = data.current
-          this.pages.limit = data.size
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      const { data: res } = await this.$http.get(`dynamic/1/list`, { params: this.filter })
+      // console.log(res, 11111111122222222222)
+      this.list = res.data.records
+      this.pages.total = res.data.total
+      this.pages.page = res.data.current
+      this.pages.limit = res.data.size
+
+      this.loading = false
     },
-    add() {
+
+    edit(item) {
+      const that = this
+      this.url = item.picVOList[0].url
+
+      item.picVOList.forEach(item1 => {
+        that.srcList.push(item1.url)
+        // console.log(item1, 1111111111111111)
+      })
+
       this.centerDialogVisible = true
     },
-    edit() {
-      this.centerDialogVisible = true
+    async closeStatus(item) {
+      const { data: res } = await this.$http.put(`dynamic/${item.id}/up-down`)
+      console.log(res, '999999999999')
+      this.fetchData()
     }
 
   }
@@ -186,13 +202,13 @@ export default {
 }
 // 解封按钮
 
-.button_control {
-    .el-button {
-  background-color: #44c9ab;
-  color: #fff;
-  border: none;
-}
-}
+// .button_control {
+//     .el-button {
+//   background-color: #44c9ab;
+//   color: #fff;
+//   border: none;
+// }
+// }
 </style>
 <style lang="scss">
 </style>

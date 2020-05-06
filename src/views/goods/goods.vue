@@ -3,8 +3,8 @@
     <div class="filter-container">
       <div class="filter-left">
         <div>
-          <span>商户名称:</span>
-          <el-input v-model="filter.userName" placeholder="请输入商户名称" @keyup.enter.native="search" />
+          <span>店铺名称:</span>
+          <el-input v-model="filter.shopName" placeholder="请输入店铺名称" @keyup.enter.native="search" />
         </div>
 
         <el-button type="primary" @click="search">查询</el-button>
@@ -13,13 +13,13 @@
 
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
-      <el-table-column prop="nickName" label="商户名称" width="200" />
-      <el-table-column prop="nickName" label="服务数量" />
+      <el-table-column prop="shopName" label="商户名称" width="200" />
+      <el-table-column prop="goodsNum" label="服务数量" />
 
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
           <div class="button_control">
-            <el-button type="primary" @click="lookGoodsdetail">
+            <el-button type="primary" @click="lookGoodsdetail(scope.row)">
               <span>查看</span>
 
             </el-button>
@@ -45,17 +45,14 @@ export default {
     return {
       roleStatus: [],
 
-      url:
-        'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-      srcList: [
-        'https://apd-421275995afef25fd1576864c706b121.v.smtcdns.com/mv.music.tc.qq.com/AAva_HEsP8jgQ-Kpye9BjReqmiZT6foInR32EbsAZbSI/07B883435DD047613333D87F37051B6413951F7BA411548C9F730E58BF995D87C7410A11B8B35F190098A58BA7391D71ZZqqmusic_default/1049_M01103000046vwzC2MYicl1001719213.f9844.mp4?fname=1049_M01103000046vwzC2MYicl1001719213.f9844.mp4'
-      ],
+      url: '',
+      srcList: [],
       filter: {
-        userName: '',
-        employee: '',
-        phoneNum: null,
+        shopName: '',
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        orderBy: 'sa.modify_time',
+        orderType: '2'
       },
       pages: {
         total: 0,
@@ -88,27 +85,34 @@ export default {
       this.filter.pageSize = pagination.limit
       this.fetchData()
     },
-    fetchData() {
+    async fetchData() {
       this.loading = true
-      this.$store
-        .dispatch('account/list', this.filter)
-        .then(data => {
-          // console.log(data)
+      // this.$store
+      //   .dispatch('account/list', this.filter)
+      //   .then(data => {
+      //     // console.log(data)
 
-          this.loading = false
-          this.list = data.records
-          this.pages.total = data.total
-          this.pages.page = data.current
-          this.pages.limit = data.size
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      //     this.loading = false
+      //     this.list = data.records
+      //     this.pages.total = data.total
+      //     this.pages.page = data.current
+      //     this.pages.limit = data.size
+      //   })
+      //   .catch(() => {
+      //     this.loading = false
+      //   })
+      const { data: res } = await this.$http.get('goods/shop', { params: this.filter })
+
+      this.loading = false
+      this.list = res.data.records
+      this.pages.total = res.data.total
+      this.pages.page = res.data.current
+      this.pages.limit = res.data.size
     },
-    lookGoodsdetail() {
+    lookGoodsdetail(item) {
       // console.log(1);
 
-      this.$router.push('/goods/goods_detail')
+      this.$router.push({ path: '/goods/goods_detail', query: { id: item.id }})
     }
   }
 }

@@ -1,16 +1,34 @@
 <template>
   <div class="app-container">
+    <div class="filter-container">
+      <div class="filter-left">
+        <div>
+          <span>店铺名称:</span>
+          <el-input
+            v-model="filter.shopName"
+            placeholder=""
+            @keyup.enter.native="search"
+          />
+        </div>
+
+        <el-button type="primary" plain @click="search">
+          查询
+        </el-button>
+
+      </div>
+
+    </div>
     <!-- 导出按钮 -->
     <div class="leading-out">
-      <el-button>导出</el-button>
+      <el-button @click="exportShop">导出</el-button>
     </div>
     <!-- 表格 -->
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
-      <el-table-column prop="nickName" label="手机号" />
-      <el-table-column prop="nickName" label="店铺名称" />
-      <el-table-column prop="nickName" label="店铺分类" width="100" />
-      <el-table-column prop="nickName" label="营业执照编号" />
+      <el-table-column prop="phone" label="手机号" />
+      <el-table-column prop="shopName" label="店铺名称" />
+      <el-table-column prop="shopCategoryName" label="店铺分类" width="100" />
+      <el-table-column prop="bussinessLicenseNo" label="营业执照编号" />
 
       <el-table-column label="营业执照照片" width="100">
         <template slot-scope="scope">
@@ -27,27 +45,35 @@
         </template>
       </el-table-column>
 
-      <el-table-column prop="nickName" label="人均价格" width="100" />
-      <el-table-column prop="nickName" label="地址信息" />
-      <el-table-column prop="nickName" label="营业时间" />
+      <el-table-column prop="perCapitaPrice" label="人均价格" width="200" />
 
+      <el-table-column label="地址信息">
+        <template slot-scope="scope">
+          <span>{{ scope.row.province }}{{ scope.row.city }}{{ scope.row.region }}{{ scope.row.adress }}</span>
+        </template>
+      </el-table-column>
+
+      <el-table-column label="营业时间">
+        <template slot-scope="scope">
+          <span>{{ scope.row.openTime }}-{{ scope.row.closeTime }}</span>
+        </template>
+      </el-table-column>
       <el-table-column label="状态" width="100">
         <template slot-scope="scope">
+          <span v-if="scope.row.status === -1" class="color-red">冻结</span>
           <span v-if="scope.row.status === 0" class="color-gray">未入驻</span>
-          <span v-if="scope.row.status === 2" class="color-black">审核中</span>
-
-          <span v-if="scope.row.status === -1" class="color-red">审核失败</span>
-          <span v-if="scope.row.status === 1" class="color-green">审核成功</span>
+          <span v-if="scope.row.status === 1" class="color-black">审核中</span>
+          <span v-if="scope.row.status === 2" class="color-green">审核成功</span>
+          <span v-if="scope.row.status === 3" class="color-red">审核失败</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" width="100">
         <template slot-scope="scope">
           <div class="control">
             <span v-if="scope.row.status === 0" class="color-gray">审核</span>
-            <span v-if="scope.row.status === 2" class="color-green" @click="examine">审核</span>
-
-            <span v-if="scope.row.status === -1" class="color-green" @click="examine">查看</span>
-            <span v-if="scope.row.status === 1" class="color-green" @click="examineSystem">设置</span>
+            <span v-if="scope.row.status === 1" class="color-green" @click="examine">审核</span>
+            <span v-if="scope.row.status === 2" class="color-green" @click="examineSystem(scope.row)">设置</span>
+            <span v-if="scope.row.status === 3" class="color-green" @click="examine">查看</span>
           </div>
         </template>
       </el-table-column>
@@ -91,8 +117,8 @@
       <div class="content">
         <div class="radioRow">
           <span>是否设置为首页</span>
-          <el-radio v-model="radio1" label="1">是</el-radio>
-          <el-radio v-model="radio1" label="2">否</el-radio>
+          <el-radio v-model="radio1" label="0">是</el-radio>
+          <el-radio v-model="radio1" label="1">否</el-radio>
         </div>
         <div class="radioRow">
           <span>结算方式</span>
@@ -102,7 +128,7 @@
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
-        <el-button type="primary" @click="saveSystemDialog">确 定</el-button>
+        <el-button type="primary" @click="saveShopDialog">确 定</el-button>
       </span>
     </el-dialog>
     <pagination
@@ -126,17 +152,10 @@ export default {
   },
   data() {
     return {
-      url:
-        'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
-
-      srcList: [
-        'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
-      ],
-      doorUrl:
-        'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg',
-      doorList: [
-        'https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg'
-      ],
+      url: '',
+      srcList: [],
+      doorUrl: '',
+      doorList: [],
       // 营业执照弹框
       centerDialogVisible: false,
       // 门头照片弹框
@@ -148,16 +167,16 @@ export default {
       textarea: '',
       radio: '1',
       // 审核设置
-      radio1: '1',
+      radio1: '',
 
-      radio2: '1',
+      radio2: '',
 
       filter: {
-        userName: '',
-        employee: '',
-        phoneNum: null,
+        shopName: '',
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        orderBy: 'account.create_time',
+        orderType: 2
       },
       pages: {
         total: 0,
@@ -165,7 +184,9 @@ export default {
         limit: 10
       },
       list: [],
-      loading: false
+      loading: false,
+      // id
+      infoId: ''
     }
   },
   computed: {
@@ -187,28 +208,47 @@ export default {
       this.filter.pageSize = pagination.limit
       this.fetchData()
     },
-    fetchData() {
+    async fetchData() {
       this.loading = true
-      this.$store
-        .dispatch('account/list', this.filter)
-        .then(data => {
-          // console.log(data)
 
-          this.loading = false
-          this.list = data.records
-          this.pages.total = data.total
-          this.pages.page = data.current
-          this.pages.limit = data.size
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      const { data: res } = await this.$http.get('shop/list', { params: this.filter })
+      // console.log(res, 1111)
+
+      this.loading = false
+
+      this.list = res.data.records
+      this.pages.total = res.data.total
+      this.pages.page = res.data.current
+      this.pages.limit = res.data.size
     },
+    // 查看营业执照
+    lookShop(item) {
+      const that = this
+      if (item.licenseList < 1) {
+        this.centerDialogVisible = true
+        return
+      }
+      this.url = item.licenseList[0].url
+      item.licenseList.forEach(item1 => {
+        that.srcList.push(item1.url)
+      })
 
-    lookShop() {
       this.centerDialogVisible = true
     },
-    lookDoor() {
+    // 查看门头照片
+    lookDoor(item) {
+      const that = this
+      // console.log(item.shopDoorList, 111111)
+      if (item.shopDoorList < 1) {
+        this.DialogVisible = true
+        return
+      }
+      this.doorUrl = item.shopDoorList[0].url
+
+      item.shopDoorList.forEach(item1 => {
+        that.doorList.push(item1.url)
+      })
+
       this.DialogVisible = true
     },
     // 审核 examine
@@ -228,18 +268,61 @@ export default {
     },
 
     // 审核设置
-    examineSystem() {
+    examineSystem(item) {
+      // console.log(item.id, 111111111)
+      this.infoId = item.id
       this.systemDialogVisible = true
     },
-    saveSystemDialog() {
-      console.log(this.radio2, '111223122')
-      // this.systemDialogVisible = false;
+    // 保存店铺设置
+    async saveShopDialog() {
+      const { data: res } = await this.$http.put(`shop/${this.infoId}/set`, { isFirst: this.radio1, settlementMethod: this.radio2 })
+      console.log(res, 1111111111)
+      this.fetchData()
+      this.systemDialogVisible = false
+    },
+    // 导出
+    exportShop() {
+      this.$http({
+        method: 'get',
+        url: 'shop/export',
+        responseType: 'blob'
+      })
+        .then(res => {
+          console.log(res)
+          const link = document.createElement('a')
+          const blob = new Blob([res.data], {
+            type: 'application/vnd.ms-excel'
+          })
+          link.style.display = 'none'
+          link.href = URL.createObjectURL(blob)
+          const num = Math.ceil(Math.random() * 1000)
+
+          link.setAttribute('download', '用户_' + num + '.xlsx')
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        })
+        // eslint-disable-next-line handle-callback-err
+        .catch(error => {
+          this.$Notice.error({
+            title: '错误',
+            desc: '网络连接错误'
+          })
+        })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+    .filter-left {
+
+      width: 100%;
+      .el-input {
+        width: 200px;
+        margin-right: 10px;
+      }
+  }
 .leading-out {
   margin-bottom: 20px;
   .el-button {

@@ -3,17 +3,17 @@
     <div class="filter-container">
       <div class="filter-left">
         <div>
-          <span>用户昵称:</span>
+          <span>用户名:</span>
           <el-input
             v-model="filter.userName"
-            placeholder="请输入用户昵称"
+            placeholder="请输入用户名"
             @keyup.enter.native="search"
           />
         </div>
 
-        <!-- <el-input
+        <el-input
           v-model="filter.employee"
-          placeholder="昵称"
+          placeholder="员工姓名"
           @keyup.enter.native="search"
         />
         <el-input
@@ -26,18 +26,16 @@
         </el-button>
         <el-button type="primary" plain icon="el-icon-circle-plus-outline" @click="add">
           新增账号
-        </el-button> -->
-        <el-button type="primary" @click="search">
-          查询
         </el-button>
+
       </div>
 
     </div>
-    <div class="leading-out">
+    <!-- <div class="leading-out">
       <el-button>
         导出
       </el-button>
-    </div>
+    </div> -->
     <el-table
       v-loading="loading"
       :data="list"
@@ -51,28 +49,24 @@
         label="序号"
       />
       <el-table-column
-        prop="nickName"
-        label="用户昵称"
-      />
-      <el-table-column
         prop="userName"
-        label="姓名"
-        width="120px"
+        label="用户名"
       />
       <el-table-column
-        prop="phone"
-        label="注册时间"
+        prop="nickName"
+        label="昵称"
+        width="120px"
       />
       <el-table-column
         prop="phone"
         label="手机号"
-        width="120px"
       />
-      <!-- <el-table-column
+      <el-table-column
         prop="roleName"
         label="角色"
-        width="100px"
-      /> -->
+        width="120px"
+      />
+
       <el-table-column
         label="状态"
         width="100"
@@ -144,7 +138,9 @@ export default {
         employee: '',
         phoneNum: null,
         pageNum: 1,
-        pageSize: 10
+        pageSize: 5,
+        orderBy: 'create_time',
+        orderType: '2'
       },
       pages: {
         total: 0,
@@ -267,11 +263,12 @@ export default {
 
 <style lang="scss" scoped>
    .filter-left {
-      justify-content: space-between;
+      // justify-content: space-between;
       width: 100%;
-      margin-bottom: 60px;
+
       .el-input {
         width: 200px;
+        margin-left: 10px;
       }
   }
   .leading-out {

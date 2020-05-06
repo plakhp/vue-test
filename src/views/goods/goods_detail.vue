@@ -12,23 +12,28 @@
 
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
-      <el-table-column prop="nickName" label="商品图片" />
-      <el-table-column prop="nickName" label="商品标题" />
+      <el-table-column label="商品图片">
+        <template slot-scope="scope">
+          <img :src="scope.row.picture" class="goods_img">
+        </template>
+
+      </el-table-column>
+      <el-table-column prop="goodsName" label="商品标题" />
       <el-table-column label="商品类型" width="120">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === -1">服务</span>
-          <span v-if="scope.row.status === 1">拼团</span>
+          <span v-if="scope.row.goodsType === -1">服务</span>
+          <span v-if="scope.row.goodsType === 1">拼团</span>
           <!-- <span v-if="scope.row.status === 0" class="color-gray">停用</span> -->
         </template>
       </el-table-column>
       <el-table-column label="商品价格" width="120">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === -1">￥10</span>
-          <span v-if="scope.row.status === 1" class="color-green" @click="lookPintuan">查看</span>
+          <span v-if="scope.row.goodsType === -1">￥{{ scope.row.originPrice }}</span>
+          <span v-if="scope.row.goodsType === 1" class="color-green" @click="lookPintuan">查看</span>
           <!-- <span v-if="scope.row.status === 0" class="color-gray">停用</span> -->
         </template>
       </el-table-column>
-      <el-table-column prop="nickName" label="商品原价" width="120" />
+      <el-table-column prop="price" label="商品原价" width="120" />
       <el-table-column label="商品详情" width="120">
         <template slot-scope="scope">
           <span class="color-green" @click="lookGoodsdetail">查看</span>
@@ -36,21 +41,21 @@
       </el-table-column>
       <el-table-column label="状态" width="120">
         <template slot-scope="scope">
-          <span v-if="scope.row.status === -1" class="color-red">已下架</span>
-          <span v-if="scope.row.status === 1" class="color-green">已上架</span>
+          <span v-if="scope.row.state === 0" class="color-red">已下架</span>
+          <span v-if="scope.row.state === 1" class="color-green">已上架</span>
           <!-- <span v-if="scope.row.status === 0" class="color-gray">停用</span> -->
         </template>
       </el-table-column>
 
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
-          <div v-if="scope.row.status === -1" class="button_control">
-            <el-button type="primary" @click="updateGoods">
+          <div v-if="scope.row.state === 0" class="button_control">
+            <el-button type="primary" @click="updateGoods(scope.row)">
               <span>上架</span>
             </el-button>
           </div>
-          <div v-if="scope.row.status === 1">
-            <el-button type="danger" @click="removeGoods">
+          <div v-if="scope.row.state === 1">
+            <el-button type="danger" @click="removeGoods(scope.row)">
               <span>下架</span>
             </el-button>
           </div>
@@ -60,7 +65,7 @@
     <!-- 下架弹出框 -->
     <el-dialog title="下架" :visible.sync="centerDialogVisible" width="30%" center>
       <div class="content">
-        <el-input v-model="value" placeholder="请输入下架原因" />
+        <el-input v-model="offReason" placeholder="请输入下架原因" />
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -101,19 +106,20 @@ export default {
   },
   data() {
     return {
+      id: '',
       // 拼团
       DialogVisible: false,
       // 商品详情
       goodsDialogVisible: false,
       // 下架
-      value: '',
+      offReason: '',
       centerDialogVisible: false,
       filter: {
-        userName: '',
-        employee: '',
-        phoneNum: null,
+        goodsName: '',
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        orderBy: 'modify_time',
+        orderType: 2
       },
       pages: {
         total: 0,
@@ -126,14 +132,18 @@ export default {
         visible: false,
         status: 0,
         formData: {}
-      }
+      },
+      // 下架商品id
+      goodsId: ''
     }
   },
   computed: {
     ...mapGetters([])
   },
   created() {
-    this.fetchData()
+    const id = this.$route.query.id
+    this.id = id
+    this.fetchData(id)
   },
   methods: {
     // changeStatus(event) {
@@ -141,45 +151,45 @@ export default {
     // },
     search() {
       this.filter.pageNum = 1
-      this.fetchData()
+      this.fetchData(this.id)
     },
     changeSize(pagination) {
       this.filter.pageNum = pagination.page
       this.filter.pageSize = pagination.limit
-      this.fetchData()
+      this.fetchData(this.id)
     },
-    fetchData() {
+    async fetchData(shopId) {
       this.loading = true
-      this.$store
-        .dispatch('account/list', this.filter)
-        .then(data => {
-          // console.log(data)
 
-          this.loading = false
-          this.list = data.records
-          this.pages.total = data.total
-          this.pages.page = data.current
-          this.pages.limit = data.size
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      const { data: res } = await this.$http.get(`goods/${shopId}/list`, { params: this.filter })
+      this.loading = false
+      this.list = res.data.records
+      this.pages.total = res.data.total
+      this.pages.page = res.data.current
+      this.pages.limit = res.data.size
     },
     // 上架商品
-    updateGoods() {},
+    async updateGoods(item) {
+      const { data: res } = await this.$http.put(`goods/${item.id}/up-down`, { offReason: this.offReason })
+      this.fetchData(this.id)
+    },
     // 下架商品
-    removeGoods() {
+    removeGoods(item) {
       this.centerDialogVisible = true
+      this.goodsId = item.id
     },
     // 关闭
     closeDialog() {
       this.centerDialogVisible = false
-      this.value = ''
+      this.offReason = ''
     },
-    // 保存备注
-    saveDialog() {
+    // 保存下架商品
+    async saveDialog() {
+      const { data: res } = await this.$http.put(`goods/${this.goodsId}/up-down`, { offReason: this.offReason })
+
       this.centerDialogVisible = false
-      this.value = ''
+      this.offReason = ''
+      this.fetchData(this.id)
     },
     // 拼团
     lookPintuan() {
@@ -229,6 +239,11 @@ span {
 // 拼团
 .pintuan_list {
     margin-bottom: 10px;
+}
+// 商品图
+.goods_img {
+  width: 80px;
+  height: 80px;
 }
 </style>
 <style lang="scss">

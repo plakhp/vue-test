@@ -14,7 +14,7 @@ const router = {
     children: []
   },
   {
-    path: 'jubao',
+    path: 'word',
     name: '热门关键词设置',
     component: () =>
         import ('@/views/baseSystem/word'),

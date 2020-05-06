@@ -22,17 +22,22 @@ import * as filters from './filters' // global filters
 
 import ViewUI from 'view-design'
 import 'view-design/dist/styles/iview.css'
-
+import { getToken } from '@/utils/auth'
 Vue.use(ViewUI)
 // 导入axios
 import axios from 'axios'
 // 配置请求的根路径
-axios.defaults.baseURL = ''
+const server = process.env.VUE_APP_BASE_API + '/' + process.env.VUE_APP_SERVER_OAUTH + '/'
+// console.log(server, '11111111111111111111111111')
+
+axios.defaults.baseURL = server
 axios.interceptors.request.use(config => {
-  config.headers['Authorization'] = window.sessionStorage.getItem('token')
+  config.headers['Authorization'] = getToken()
   return config
 })
 Vue.prototype.$http = axios
+import Qs from 'qs' // 引入方式
+Vue.prototype.$qs = Qs // 全局加载
 /**
    * If you don't want to use mock-server
    * you want to use MockJs for mock api

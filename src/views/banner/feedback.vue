@@ -1,22 +1,42 @@
 <template>
   <div class="app-container">
+    <div class="filter-container">
+      <div class="filter-left">
+        <div>
+          <span>用户昵称:</span>
+          <el-input
+            v-model="filter.username"
+            placeholder="请输入用户昵称"
+            @keyup.enter.native="search"
+          />
+        </div>
 
+        <el-input
+          v-model="filter.phone"
+          placeholder="手机号"
+          @keyup.enter.native="search"
+        />
+        <el-button type="primary" plain @click="search">
+          查询
+        </el-button>
+      </div>
+    </div>
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
-      <el-table-column prop="nickName" label="反馈用户" />
-      <el-table-column prop="nickName" label="反馈时间" />
-      <el-table-column prop="nickName" label="反馈内容" />
+      <el-table-column prop="userName" label="反馈用户" />
+      <el-table-column prop="phone" label="反馈手机" />
+
+      <el-table-column prop="createTime" label="反馈时间" />
+      <el-table-column prop="descriptionn" label="反馈内容" />
 
       <el-table-column label="是否处理" width="320">
         <template slot-scope="scope">
-          <!-- <div class="control">
-            <span @click="edit(scope.row)" class="color-green">编辑</span>
-            <span class="color-green">置顶</span>
-            <span @click="del(scope.row)" class="color-red">删除</span>
-            <span class="color-green">启动</span>
-          </div> -->
-          <el-radio v-model="radio" label="1">是</el-radio>
-          <el-radio v-model="radio" label="2">否</el-radio>
+
+          <el-radio-group v-model="scope.row.isHandle" @change="changeStatus($event,scope.row)">
+            <el-radio :label="0">否</el-radio>
+            <el-radio :label="1">是</el-radio>
+
+          </el-radio-group>
         </template>
       </el-table-column>
     </el-table>
@@ -37,13 +57,14 @@ export default {
   },
   data() {
     return {
-      radio: '1',
+      radio: 0,
       filter: {
-        userName: '',
-        employee: '',
-        phoneNum: null,
+        username: '',
+        phone: '',
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        orderBy: 'create_time',
+        orderType: '2'
       },
       pages: {
         total: 0,
@@ -75,90 +96,23 @@ export default {
       this.filter.pageSize = pagination.limit
       this.fetchData()
     },
-    fetchData() {
+    async fetchData() {
       this.loading = true
-      this.$store
-        .dispatch('account/list', this.filter)
-        .then(data => {
-          // console.log(data)
 
-          this.loading = false
-          this.list = data.records
-          this.pages.total = data.total
-          this.pages.page = data.current
-          this.pages.limit = data.size
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      const { data: res } = await this.$http.get('feedback/list', { params: this.filter })
+      this.loading = false
+      this.list = res.data.records
+      this.pages.total = res.data.total
+      this.pages.page = res.data.current
+      this.pages.limit = res.data.size
+      // console.log(res)
     },
-    add() {
-      this.dialogData.visible = true
-      this.dialogData.status = 0
-      this.dialogData.formData = {}
-    },
-    edit(item) {
-      this.dialogData.visible = true
-      this.dialogData.status = 1
-      this.dialogData.formData = item
-    },
-    del(item) {
-      this.$confirm('此操作将删除该账号, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$store.dispatch('account/del', item.id).then(_ => {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          })
-          this.fetchData()
-        })
-      })
-    },
-    resetPassword(item) {
-      this.$confirm('此操作将重置该账号密码, 是否继续?', '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$store
-          .dispatch('account/resetPassword', { userId: item.id })
-          .then(_ => {
-            this.$message({
-              message: '重置密码成功',
-              type: 'success'
-            })
-          })
-      })
-    },
-    editStatus(item) {
-      let message = '冻结'
-      if (item.status === -1) {
-        message = '解冻'
-      } else if (item.status === 0) {
-        message = '激活'
-      }
-      this.$confirm(`此操作将${message}该账号, 是否继续?`, '提示', {
-        confirmButtonText: '确定',
-        cancelButtonText: '取消',
-        type: 'warning'
-      }).then(() => {
-        this.$store.dispatch('account/editStatus', item.id).then(_ => {
-          this.$message({
-            message: `账号${message}成功`,
-            type: 'success'
-          })
-          this.fetchData()
-        })
-      })
-    },
-    dialogCallback(type) {
-      if (type === 'refresh') {
-        this.fetchData()
-      }
-      this.dialogData.visible = false
+
+    async changeStatus(e, item) {
+      // console.log(e)
+      // console.log(item, '11111111111111')
+      const res = await this.$http.put(`feedback/${item.id}/handle`, { isHandle: e })
+      this.fetchData()
     }
 
   }
@@ -166,6 +120,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+   .filter-left {
+
+      width: 100%;
+
+      .el-input {
+        width: 200px;
+        margin-left: 10px;
+      }
+  }
 .title {
   margin-bottom: 10px;
   display: flex;

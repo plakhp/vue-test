@@ -11,6 +11,8 @@ import systemRouter from './modules/system' // 系统管理
 import yunyingRouter from './modules/yunying' // 运营管理
 import baseSystem from './modules/baseSystem' // 基础设置
 import trends from './modules/trends' // 动态管理 trends
+import user from './modules/user' // 用户管理 trends
+
 import goods from './modules/goods' // 商品管理
 import order from './modules/order' // 订单管理
 import shopManage from './modules/shopManage' // 商户管理
@@ -206,6 +208,7 @@ export const asyncRoutes = [
   yunyingRouter,
   baseSystem,
   trends,
+  user,
   goods,
   order,
   shopManage,

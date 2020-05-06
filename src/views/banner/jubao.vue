@@ -3,21 +3,35 @@
 
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
-      <el-table-column prop="nickName" label="举报用户" width="100" />
-      <el-table-column prop="nickName" label="被举报用户" width="100" />
-      <el-table-column prop="nickName" label="举报类型" width="100" />
-
-      <el-table-column prop="nickName" label="举报内容" />
-      <el-table-column label="图片/视频" width="100">
+      <el-table-column prop="reportUser" label="举报用户" width="100" />
+      <el-table-column prop="reportedUser" label="被举报用户" width="100" />
+      <el-table-column label="举报类型" width="100">
         <template slot-scope="scope">
-          <span class="color-green" @click="edit(scope.row)">查看</span>
+          <span v-if="scope.row.tipType==1">用户</span>
+          <span v-if="scope.row.tipType==2">动态</span>
+          <span v-if="scope.row.tipType==3">商户</span>
+          <span v-if="scope.row.tipType==4">评论</span>
         </template>
       </el-table-column>
-      <el-table-column prop="nickName" label="举报原因" />
+      <el-table-column prop="content" label="举报内容" />
+      <el-table-column label="图片/视频" width="100">
+        <template slot-scope="scope">
+          <span class="color-green" @click="look(scope.row)">查看</span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="reason" label="举报原因" />
       <el-table-column label="是否处理" width="100">
         <template slot-scope="scope">
           <el-switch
-            v-model="value"
+            v-if="scope.row.isHandle==1"
+            v-model="value1"
+            active-color="#13ce66"
+            inactive-color="#ff4949"
+            @change="changeStatus(scope.row)"
+          />
+          <el-switch
+            v-if="scope.row.isHandle==0"
+            v-model="value2"
             active-color="#13ce66"
             inactive-color="#ff4949"
             @change="changeStatus(scope.row)"
@@ -27,17 +41,26 @@
       <el-table-column label="备注" width="100">
         <template slot-scope="scope">
           <div class="leading-out">
-            <el-button type="primary" @click="add(scope.row)">添加</el-button>
+            <el-button v-if="scope.row.remark" type="primary" @click="add(scope.row)">查看</el-button>
+            <el-button v-else type="primary" @click="add(scope.row)">添加</el-button>
+
           </div>
         </template>
       </el-table-column>
     </el-table>
-    <!-- 弹出框 -->
+    <!-- 图片弹出款 -->
+    <el-dialog title="查看" :visible.sync="imgDialogVisible" width="30%" center>
+      <div class="demo-image__preview">
+        <el-image v-if="url" style="width: 200px; height: 200px" :src="url" :preview-src-list="srcList" />
+        <video v-if="videoLink" id="video1" :src="videoLink" style="width:300px;height:200px" controls />
+      </div>
+    </el-dialog>
+    <!-- 查看弹出框 -->
     <el-dialog title="添加备注" :visible.sync="centerDialogVisible" width="30%" center>
       <div class="content">
         <div class="title">备注</div>
         <el-input
-          v-model="textarea"
+          v-model="remark"
           type="textarea"
           :rows="2"
           placeholder="请输入内容"
@@ -49,7 +72,14 @@
         <el-button type="primary" @click="saveDialog">确 定</el-button>
       </span>
     </el-dialog>
+    <!-- 分页功能 -->
+    <pagination :hidden="list.length === 0" :total="pages.total" :page="pages.page" :limit="pages.limit" @pagination="changeSize" />
   </div>
+  <!-- <div v-else>
+    <div class="noneList">
+      暂无数据
+    </div>
+  </div> -->
 </template>
 
 <script>
@@ -63,15 +93,18 @@ export default {
   },
   data() {
     return {
-      value: true,
+      value1: true,
+      value2: false,
+      imgDialogVisible: false,
       centerDialogVisible: false,
-      textarea: '',
+      remark: '',
       filter: {
-        userName: '',
-        employee: '',
+        type: '',
         phoneNum: null,
         pageNum: 1,
-        pageSize: 10
+        pageSize: 5,
+        orderBy: 'create_time',
+        orderType: '2'
       },
       pages: {
         total: 0,
@@ -84,7 +117,14 @@ export default {
         visible: false,
         status: 0,
         formData: {}
-      }
+      },
+      // 添加备注的id
+      id: '',
+      // 预览图片
+      url: '',
+      srcList: [],
+      // 视频
+      videoLink: ''
     }
   },
   computed: {
@@ -94,8 +134,12 @@ export default {
     this.fetchData()
   },
   methods: {
-    changeStatus(event) {
-      // console.log(event);
+    //  是否处理开关
+    async changeStatus(event) {
+      console.log(event)
+      // tip-off/{id}/switch
+      const { data: res } = await this.$http.put(`tip-off/${event.id}/switch`)
+      this.fetchData()
     },
     search() {
       this.filter.pageNum = 1
@@ -106,41 +150,70 @@ export default {
       this.filter.pageSize = pagination.limit
       this.fetchData()
     },
-    fetchData() {
+    async fetchData() {
       this.loading = true
-      this.$store
-        .dispatch('account/list', this.filter)
-        .then(data => {
-          // console.log(data)
 
-          this.loading = false
-          this.list = data.records
-          this.pages.total = data.total
-          this.pages.page = data.current
-          this.pages.limit = data.size
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      const { data: res } = await this.$http.get('tip-off/list', { params: this.filter })
+      this.loading = false
+      // console.log(res, 888888888888)
+      this.list = res.data.records
+      this.pages.total = res.data.total
+      this.pages.page = res.data.current
+      this.pages.limit = res.data.size
     },
-    add() {
+    add(e) {
+      this.id = e.id
       this.centerDialogVisible = true
+      this.remark = e.remark
+    },
+    // 查看图片
+    look(e) {
+      if (e.fileList.length < 1 && !e.videoLink) {
+        return this.$message.warning('图片/视频不存在')
+      }
+      this.imgDialogVisible = true
+      const that = this
+      this.videoLink = e.videoLink
+      if (e.fileList.length > 0) {
+        this.url = e.fileList[0].url
+        e.fileList.forEach(item1 => {
+          that.srcList.push(item1.url)
+        })
+      }
+    },
+    // 播放视频
+    playVideo() {
+      var myVideo = document.getElementById('video1')
+
+      myVideo.play()
+
+    //   function pauseVid() {
+    //     myVideo.pause();
+    //   }
     },
     // 关闭
     closeDialog() {
       this.centerDialogVisible = false
-      this.textarea = ''
+      this.remark = ''
     },
     // 保存备注
-    saveDialog() {
+    async saveDialog() {
+      if (!this.remark) {
+        return this.$message.warning('备注不能为空')
+      }
+      // eslint-disable-next-line no-unused-vars
+      const res = await this.$http.put(`tip-off/${this.id}/remark`, {
+        remark: this.remark
+      })
       this.centerDialogVisible = false
-      this.textarea = ''
+      this.fetchData()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+
 .leading-out .el-button {
   background-color: #44c9ab;
   color: #fff;
@@ -148,11 +221,19 @@ export default {
 }
 </style>
 <style lang="scss">
+.noneList {
+  margin-top: 300px;
+  text-align: center;
+  font-size: 30px;
+}
 .content .el-textarea__inner {
   height: 200px !important;
   margin-top: 20px;
   resize: none !important;
   outline: none !important;
   background-color: #eee;
+}
+.demo-image__preview {
+  text-align: center;
 }
 </style>

@@ -9,7 +9,7 @@
  */
 import request from '@/utils/request'
 
-const server = process.env.VUE_APP_SERVER_ADMIN
+const server = process.env.VUE_APP_SERVER_OAUTH
 
 export function list() {
   return request({

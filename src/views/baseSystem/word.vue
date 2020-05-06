@@ -1,12 +1,19 @@
 <template>
   <div class="app-container">
-    <div class="title">
-      <!-- <span>数据列表</span> -->
-      <el-button @click="add">添加</el-button>
+    <div class="filter-container">
+      <div class="filter-left">
+        <div>
+          <span>关键字:</span>
+          <el-input v-model="filter.key" placeholder="关键字" @keyup.enter.native="search" />
+        </div>
+
+        <el-button type="primary" plain @click="search">查询</el-button>
+        <el-button type="primary" plain icon="el-icon-circle-plus-outline" @click="add">新增</el-button>
+      </div>
     </div>
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
-      <el-table-column prop="nickName" label="关键词" />
+      <el-table-column prop="keyWord" label="关键词" />
 
       <el-table-column label="操作" width="300">
         <template slot-scope="scope">
@@ -24,7 +31,7 @@
     <el-dialog title="添加热门关键词" :visible.sync="centerDialogVisible" width="30%" center>
       <div class="content">
         <span>关键词：</span>
-        <el-input v-model="value" />
+        <el-input v-model="keyWord" />
       </div>
       <span slot="footer" class="dialog-footer">
         <el-button @click="closeDialog">取 消</el-button>
@@ -52,15 +59,17 @@ export default {
   },
   data() {
     return {
-      value: '1',
+      keyWord: '',
       centerDialogVisible: false,
 
       filter: {
-        userName: '',
+        key: '',
         employee: '',
         phoneNum: null,
         pageNum: 1,
-        pageSize: 10
+        pageSize: 10,
+        orderBy: 'create_time',
+        orderType: '2'
       },
       pages: {
         total: 0,
@@ -95,65 +104,101 @@ export default {
       this.filter.pageSize = pagination.limit
       this.fetchData()
     },
-    fetchData() {
+    async fetchData() {
       this.loading = true
-      this.$store
-        .dispatch('account/list', this.filter)
-        .then(data => {
-          // console.log(data)
+      // this.$store
+      //   .dispatch('account/list', this.filter)
+      //   .then(data => {
+      //     // console.log(data)
 
-          this.loading = false
-          this.list = data.records
-          this.pages.total = data.total
-          this.pages.page = data.current
-          this.pages.limit = data.size
-        })
-        .catch(() => {
-          this.loading = false
-        })
+      //     this.loading = false
+      //     this.list = data.records
+      //     this.pages.total = data.total
+      //     this.pages.page = data.current
+      //     this.pages.limit = data.size
+      //   })
+      //   .catch(() => {
+      //     this.loading = false
+      //   })
+      const { data: res } = await this.$http.get('hot-key/list', { params: this.filter })
+      // console.log(res)
+
+      this.list = res.data.records
+      this.pages.total = res.data.total
+      this.pages.page = res.data.current
+      this.pages.limit = res.data.size
+      this.loading = false
     },
     add() {
       this.centerDialogVisible = true
     },
-    edit() {
+    async edit(item) {
+      // 查看详情
       this.centerDialogVisible = true
+      const { data: res } = await this.$http.get(`hot-key/${item.id}`)
+      console.log(res)
+
+      this.keyWord = res.data.keyWord
+      this.id = item.id
     },
     del(item) {
       this.$confirm('此操作将执行删除操作, 是否继续?', '提示', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
         type: 'warning'
-      }).then(() => {
-        this.$store.dispatch('account/del', item.id).then(_ => {
-          this.$message({
-            message: '删除成功',
-            type: 'success'
-          })
-          this.fetchData()
+      }).then(async() => {
+        const { data: res } = await this.$http.delete(`hot-key/${item.id}`)
+        console.log(res)
+
+        this.$message({
+          message: '删除成功',
+          type: 'success'
         })
+        this.fetchData()
       })
     },
     // 关闭
     closeDialog() {
       this.centerDialogVisible = false
-      this.value = ''
+      this.keyWord = ''
     },
     // 保存备注
-    saveDialog() {
-      this.centerDialogVisible = false
-      this.value = ''
+    async saveDialog() {
+      console.log(this.id)
+      // 分类id不存在，添加
+      if (!this.id) {
+        // id不存在，添加
+        const { data: res } = await this.$http.post('hot-key', { keyWord: this.keyWord })
+
+        if (res.code !== 0) {
+          this.$message.warning('添加失败！')
+          return
+        }
+        this.$message.success('添加成功！')
+        this.centerDialogVisible = false
+        this.keyWord = ''
+        this.fetchData()
+      } else {
+        // 编辑
+        const { data: res } = await this.$http.put(`hot-key/${this.id}`, { keyWord: this.keyWord })
+        // console.log(res)
+        this.centerDialogVisible = false
+        this.$message.success('编辑成功！')
+        this.id = ''
+        this.keyWord = ''
+        this.fetchData()
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.title {
-  margin-bottom: 10px;
-  display: flex;
-   justify-content: flex-end;
-  .el-button {
-    width: 100px;
+.filter-left {
+  width: 100%;
+  .el-input {
+    width: 200px;
+    margin-right: 10px;
   }
 }
 .content {
