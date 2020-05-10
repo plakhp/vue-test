@@ -4,7 +4,7 @@
       <div class="filter-left">
         <div>
           <span>商户名称:</span>
-          <el-input v-model="filter.userName" placeholder="请输入商户名称" @keyup.enter.native="search" />
+          <el-input v-model="filter.goodsName" placeholder="请输入商户名称" @keyup.enter.native="search" />
         </div>
         <el-button type="primary" @click="search">查询</el-button>
       </div>

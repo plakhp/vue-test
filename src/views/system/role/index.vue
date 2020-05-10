@@ -7,14 +7,14 @@
           placeholder="角色名称"
           @keyup.enter.native="search"
         />
-        <el-select v-model="filter.status" placeholder="角色状态" :clearable="true">
+        <!-- <el-select v-model="filter.status" placeholder="角色状态" :clearable="true">
           <el-option
             v-for="(item, index) in roleStatus"
             :key="index"
             :label="item.name"
             :value="item.id"
           />
-        </el-select>
+        </el-select> -->
         <el-button type="primary" plain @click="search">
           查询
         </el-button>
@@ -42,7 +42,7 @@
         prop="remark"
         label="角色描述"
       />
-      <el-table-column
+      <!-- <el-table-column
         label="状态"
         width="100"
       >
@@ -50,7 +50,7 @@
           <span v-if="scope.row.status === 0" class="color-red">禁用</span>
           <span v-if="scope.row.status === 1" class="color-green">正常</span>
         </template>
-      </el-table-column>
+      </el-table-column> -->
       <el-table-column
         label="操作"
         width="320"
@@ -63,14 +63,14 @@
           >
             <span>编辑</span>
           </el-button>
-          <el-button
+          <!-- <el-button
             plain
             type="warning"
             @click="editStatus(scope.row)"
           >
             <span v-if="scope.row.status === 1">禁用</span>
             <span v-if="scope.row.status === 0">启用</span>
-          </el-button>
+          </el-button> -->
           <el-button
             plain
             type="danger"

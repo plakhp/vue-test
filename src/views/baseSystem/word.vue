@@ -28,7 +28,7 @@
       </el-table-column>
     </el-table>
     <!-- 弹出框 -->
-    <el-dialog title="添加热门关键词" :visible.sync="centerDialogVisible" width="30%" center>
+    <el-dialog title="添加热门关键词" :visible.sync="centerDialogVisible" width="30%" center @close="closeDialog">
       <div class="content">
         <span>关键词：</span>
         <el-input v-model="keyWord" />
@@ -106,20 +106,7 @@ export default {
     },
     async fetchData() {
       this.loading = true
-      // this.$store
-      //   .dispatch('account/list', this.filter)
-      //   .then(data => {
-      //     // console.log(data)
-
-      //     this.loading = false
-      //     this.list = data.records
-      //     this.pages.total = data.total
-      //     this.pages.page = data.current
-      //     this.pages.limit = data.size
-      //   })
-      //   .catch(() => {
-      //     this.loading = false
-      //   })
+ 
       const { data: res } = await this.$http.get('hot-key/list', { params: this.filter })
       // console.log(res)
 

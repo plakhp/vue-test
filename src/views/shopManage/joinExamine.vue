@@ -119,7 +119,7 @@
       </span>
     </el-dialog>
     <!-- 审核设置弹出框 -->
-    <el-dialog title="设置" :visible.sync="systemDialogVisible" width="30%" center>
+    <el-dialog title="设置" :visible.sync="systemDialogVisible" width="30%" center @close="closeDialog">
       <div class="content">
         <div class="radioRow">
           <span>是否设置为首页</span>
@@ -206,7 +206,7 @@ export default {
   },
   methods: {
     changeStatus(event) {
-      console.log(event)
+      // console.log(event)
     },
     search() {
       this.filter.pageNum = 1
@@ -272,8 +272,9 @@ export default {
     // 关闭
     closeDialog() {
       this.examineDialogVisible = false
-      this.textarea = ''
       this.systemDialogVisible = false
+          this.radio1= ''
+          this.radio2= ''
     },
     // 保存审核结果备注 shop/{approveId}/approve
    async saveDialog() {
@@ -306,7 +307,7 @@ export default {
         responseType: 'blob'
       })
         .then(res => {
-          console.log(res)
+       
           const link = document.createElement('a')
           const blob = new Blob([res.data], {
             type: 'application/vnd.ms-excel'

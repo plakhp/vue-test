@@ -145,7 +145,7 @@ export default {
         responseType: 'blob'
       })
         .then(res => {
-          console.log(res)
+        
           const link = document.createElement('a')
           const blob = new Blob([res.data], {
             type: 'application/vnd.ms-excel'

@@ -87,20 +87,7 @@ export default {
     },
     async fetchData() {
       this.loading = true
-      // this.$store
-      //   .dispatch('account/list', this.filter)
-      //   .then(data => {
-      //     // console.log(data)
 
-      //     this.loading = false
-      //     this.list = data.records
-      //     this.pages.total = data.total
-      //     this.pages.page = data.current
-      //     this.pages.limit = data.size
-      //   })
-      //   .catch(() => {
-      //     this.loading = false
-      //   })
       const { data: res } = await this.$http.get('goods/shop', { params: this.filter })
 
       this.loading = false

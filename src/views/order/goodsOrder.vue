@@ -8,7 +8,15 @@
         </div>
         <div>
           <span>商户名称:</span>
-          <el-input v-model="filter.shopId" placeholder="请输入商户名称" @keyup.enter.native="search" />
+          <!-- <el-input v-model="filter.shopId" placeholder="请输入商品名称" @keyup.enter.native="search" /> -->
+            <el-select v-model="filter.shopId" placeholder="请输入商户名称" :clearable="true">
+          <el-option
+            v-for="(item, index) in list"
+            :key="index"
+            :label="item.shopName"
+            :value="item.shopId"
+          />
+        </el-select>
         </div>
         <div>
           <span>下单时间:</span>
@@ -40,13 +48,24 @@
       </div>
       <div>
         <span>商品类型:</span>
-        <el-input v-model="filter.goodsType" placeholder="请输入商品类型" @keyup.enter.native="search" />
+        <!-- <el-input v-model="filter.goodsType" placeholder="请输入商品类型" @keyup.enter.native="search" /> -->
+          <el-select v-model="filter.goodsType" placeholder="请输入商品类型" :clearable="true">
+          <el-option
+            v-for="(item, index) in goodsTypeStatus"
+            :key="index"
+            :label="item.name"
+            :value="item.id"
+          />
+        </el-select>
       </div>
+       <div >
+      <el-button>导出</el-button>
+    </div>
     </div>
     <!-- 导出按钮 -->
     <!-- <div class="leading-out">
       <el-button>导出</el-button>
-    </div>-->
+    </div> -->
     <!-- 表格 -->
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
@@ -158,7 +177,22 @@ export default {
         visible: false,
         status: 0,
         formData: {}
+      },
+      // 商品类型
+      goodsTypeStatus:[
+        {
+        name: '商品',
+        id: 1
+      },
+      {
+        name: '套餐',
+        id: 2
+      },
+      {
+        name: '拼团',
+        id: 3
       }
+      ]
     }
   },
   computed: {
@@ -170,7 +204,7 @@ export default {
   },
   methods: {
     changeStatus(event) {
-      console.log(event)
+      // console.log(event)
     },
     search() {
       this.filter.pageNum = 1
@@ -256,22 +290,31 @@ export default {
   }
 }
 .content {
-  display: flex;
+  overflow: hidden;
   margin-bottom: 20px;
   div {
-    margin-right: 72px;
+    float: left;
+    display: flex;
+    align-items: center;
+    margin-right: 145px;
   }
+    div:last-child{
+      float: right;
+      margin: 0;
+    }
   .el-input {
     width: 200px;
   }
-}
-.leading-out {
-  margin-bottom: 20px;
-  .el-button {
+   .el-button {
+ 
     background-color: #44c9ab;
     color: #fff;
     border: none;
   }
+}
+.leading-out {
+  margin-bottom: 20px;
+ 
 }
 
 // 解封按钮

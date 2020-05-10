@@ -6,29 +6,29 @@ const router = {
   path: '/system',
   component: Layout,
   name: '系统管理',
-  meta: { title: '系统管理', icon: 'system', affix: true, roles: ['oauth_manager'] },
+  meta: { title: '系统管理',  affix: true, roles: ['oauth_manager'] },
   children: [
     {
       path: 'account',
       name: '账号管理',
       component: () => import('@/views/system/account/index'),
-      meta: { title: '账号管理', icon: 'account', affix: true, roles: ['account_manager'], activeMenu: '/system/account' },
+      meta: { title: '账号管理',  affix: true, roles: ['account_manager'], activeMenu: '/system/account' },
       children: []
     },
     {
       path: 'role',
       name: '角色管理',
       component: () => import('@/views/system/role/index'),
-      meta: { title: '角色管理', icon: 'role', affix: true, roles: ['role_manager'], activeMenu: '/system/role' },
-      children: []
-    },
-    {
-      path: 'menu',
-      name: '菜单管理',
-      component: () => import('@/views/system/menu/index'),
-      meta: { title: '菜单管理', icon: 'menu', affix: true, roles: ['menu_manager'], activeMenu: '/system/menu' },
+      meta: { title: '角色管理', affix: true, roles: ['role_manager'], activeMenu: '/system/role' },
       children: []
     }
+    // {
+    //   path: 'menu',
+    //   name: '菜单管理',
+    //   component: () => import('@/views/system/menu/index'),
+    //   meta: { title: '菜单管理',  affix: true, roles: ['menu_manager'], activeMenu: '/system/menu' },
+    //   children: []
+    // }
   ]
 }
 

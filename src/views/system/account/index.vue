@@ -13,7 +13,7 @@
 
         <el-input
           v-model="filter.employee"
-          placeholder="员工姓名"
+          placeholder="昵称"
           @keyup.enter.native="search"
         />
         <el-input

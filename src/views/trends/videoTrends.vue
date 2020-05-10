@@ -4,11 +4,11 @@
       <div class="filter-left">
         <div>
           <span>用户昵称:</span>
-          <el-input v-model="filter.userName" placeholder="请输入用户昵称" @keyup.enter.native="search" />
+          <el-input v-model="filter.nickName" placeholder="请输入用户昵称" @keyup.enter.native="search" />
         </div>
         <div>
           <span>动态文字:</span>
-          <el-input v-model="filter.userName" placeholder="请输入动态文字" @keyup.enter.native="search" />
+          <el-input v-model="filter.content" placeholder="请输入动态文字" @keyup.enter.native="search" />
         </div>
         <div>
           <span>状态:</span>
@@ -214,13 +214,13 @@ export default {
   text-align: center;
 }
 // 解封按钮
-.button_control {
-  .el-button {
-    background-color: #44c9ab;
-    color: #fff;
-    border: none;
-  }
-}
+// .button_control {
+//   .el-button {
+//     background-color: #44c9ab;
+//     color: #fff;
+//     border: none;
+//   }
+// }
 </style>
 <style lang="scss">
 </style>

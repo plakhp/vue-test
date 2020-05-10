@@ -22,7 +22,7 @@
       <el-table-column label="广告图片">
         <template slot-scope="scope">
           <div class="banner_img">
-            <el-image v-if="scope.row.picture" :src="scope.row.picture" />
+            <el-image   style="width: 200px; height: 100px"  v-if="scope.row.picture" :src="scope.row.picture" :fit="fit"/>
             <!-- <div v-else>暂无</div> -->
           </div>
         </template>
@@ -88,7 +88,7 @@ export default {
         pageNum: 1,
         pageSize: 10,
         orderType: '1',
-        orderBy: 'modify_time'
+        orderBy: 'sort DESC,modify_time'
       },
       pages: {
         total: 0,
@@ -101,7 +101,8 @@ export default {
         visible: false,
         status: 0,
         formData: {}
-      }
+      },
+      fit:'contain'
     }
   },
   computed: {
@@ -206,5 +207,8 @@ export default {
 }
 .banner_img {
   height: 80px;
+  .el-image {
+
+  }
 }
 </style>

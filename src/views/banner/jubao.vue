@@ -23,26 +23,26 @@
       <el-table-column label="是否处理" width="100">
         <template slot-scope="scope">
           <el-switch
-            v-if="scope.row.isHandle==1"
-            v-model="value1"
+    
+            :value="scope.row.isHandle==1"
             active-color="#13ce66"
             inactive-color="#ff4949"
             @change="changeStatus(scope.row)"
           />
-          <el-switch
+          <!-- <el-switch
             v-if="scope.row.isHandle==0"
             v-model="value2"
             active-color="#13ce66"
             inactive-color="#ff4949"
             @change="changeStatus(scope.row)"
-          />
+          /> -->
         </template>
       </el-table-column>
       <el-table-column label="备注" width="100">
         <template slot-scope="scope">
           <div class="leading-out">
-            <el-button v-if="scope.row.remark" type="primary" @click="add(scope.row)">查看</el-button>
-            <el-button v-else type="primary" @click="add(scope.row)">添加</el-button>
+            <el-button v-if="scope.row.isHandle==1" type="primary" @click="add(scope.row)">查看</el-button>
+            <el-button v-if="scope.row.isHandle==0" type="primary" @click="add(scope.row)">添加</el-button>
 
           </div>
         </template>
@@ -56,7 +56,7 @@
       </div>
     </el-dialog>
     <!-- 查看弹出框 -->
-    <el-dialog title="添加备注" :visible.sync="centerDialogVisible" width="30%" center>
+    <el-dialog :title="title" :visible.sync="centerDialogVisible" width="30%" center>
       <div class="content">
         <div class="title">备注</div>
         <el-input
@@ -93,8 +93,8 @@ export default {
   },
   data() {
     return {
-      value1: true,
-      value2: false,
+      value1: '',
+      value2: '',
       imgDialogVisible: false,
       centerDialogVisible: false,
       remark: '',
@@ -124,7 +124,9 @@ export default {
       url: '',
       srcList: [],
       // 视频
-      videoLink: ''
+      videoLink: '',
+    
+      title:'添加备注'
     }
   },
   computed: {
@@ -136,7 +138,7 @@ export default {
   methods: {
     //  是否处理开关
     async changeStatus(event) {
-      console.log(event)
+      // console.log(event)
       // tip-off/{id}/switch
       const { data: res } = await this.$http.put(`tip-off/${event.id}/switch`)
       this.fetchData()
@@ -156,6 +158,14 @@ export default {
       const { data: res } = await this.$http.get('tip-off/list', { params: this.filter })
       this.loading = false
       // console.log(res, 888888888888)
+      // res.data.records.forEach((item)=>{
+      //   if(item.isHandle==0){
+      //     this.value2 = false
+      //   }
+      //   if(item.isHandle==1){
+      //     this.value1 = true
+      //   }
+      // })
       this.list = res.data.records
       this.pages.total = res.data.total
       this.pages.page = res.data.current
@@ -165,10 +175,22 @@ export default {
       this.id = e.id
       this.centerDialogVisible = true
       this.remark = e.remark
+      // this.isHandle = e.isHandle
+       if(e.isHandle==0) {
+        this.title = '添加备注'
+      }
+      if(e.isHandle==1) {
+        this.title = '查看备注'
+      }
     },
     // 查看图片
     look(e) {
-      if (e.fileList.length < 1 && !e.videoLink) {
+      console.log(e,99999999999)
+     
+      if (!e.fileList&& !e.videoLink) {
+        return this.$message.warning('图片/视频不存在')
+      }
+        if (e.fileList.length<1&& !e.videoLink) {
         return this.$message.warning('图片/视频不存在')
       }
       this.imgDialogVisible = true

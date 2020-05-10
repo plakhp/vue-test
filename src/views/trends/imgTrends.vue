@@ -47,7 +47,7 @@
       </el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
-          <div class="button_control">
+       <div class="button_control">
             <el-button v-if="scope.row.status === 0" type="primary" @click="closeStatus(scope.row)">
               <span>解封</span>
             </el-button>
@@ -163,12 +163,11 @@ export default {
         that.srcList.push(item1.url)
         // console.log(item1, 1111111111111111)
       })
-
       this.centerDialogVisible = true
     },
     async closeStatus(item) {
       const { data: res } = await this.$http.put(`dynamic/${item.id}/up-down`)
-      console.log(res, '999999999999')
+      // console.log(res, '999999999999')
       this.fetchData()
     }
 
