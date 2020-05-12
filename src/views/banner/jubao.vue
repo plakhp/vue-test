@@ -41,8 +41,8 @@
       <el-table-column label="备注" width="100">
         <template slot-scope="scope">
           <div class="leading-out">
-            <el-button v-if="scope.row.isHandle==1" type="primary" @click="add(scope.row)">查看</el-button>
-            <el-button v-if="scope.row.isHandle==0" type="primary" @click="add(scope.row)">添加</el-button>
+            <!-- <el-button v-if="scope.row.isHandle==1" type="primary" @click="add(scope.row)">查看</el-button> -->
+            <el-button type="primary" @click="add(scope.row)">添加</el-button>
 
           </div>
         </template>
@@ -157,15 +157,7 @@ export default {
 
       const { data: res } = await this.$http.get('tip-off/list', { params: this.filter })
       this.loading = false
-      // console.log(res, 888888888888)
-      // res.data.records.forEach((item)=>{
-      //   if(item.isHandle==0){
-      //     this.value2 = false
-      //   }
-      //   if(item.isHandle==1){
-      //     this.value1 = true
-      //   }
-      // })
+
       this.list = res.data.records
       this.pages.total = res.data.total
       this.pages.page = res.data.current
@@ -176,12 +168,12 @@ export default {
       this.centerDialogVisible = true
       this.remark = e.remark
       // this.isHandle = e.isHandle
-       if(e.isHandle==0) {
-        this.title = '添加备注'
-      }
-      if(e.isHandle==1) {
-        this.title = '查看备注'
-      }
+      //  if(e.isHandle==0) {
+      //   this.title = '添加备注'
+      // }
+      // if(e.isHandle==1) {
+      //   this.title = '查看备注'
+      // }
     },
     // 查看图片
     look(e) {

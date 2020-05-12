@@ -22,7 +22,7 @@
       <el-table-column label="广告图片">
         <template slot-scope="scope">
           <div class="banner_img">
-            <el-image   style="width: 200px; height: 100px"  v-if="scope.row.picture" :src="scope.row.picture" :fit="fit"/>
+            <el-image   style="width: 200px; height: 200px"  v-if="scope.row.picture" :src="scope.row.picture" :fit="fit"/>
             <!-- <div v-else>暂无</div> -->
           </div>
         </template>
@@ -102,7 +102,7 @@ export default {
         status: 0,
         formData: {}
       },
-      fit:'contain'
+      fit:'scale-down'
     }
   },
   computed: {
