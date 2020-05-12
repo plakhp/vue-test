@@ -287,10 +287,13 @@ export default {
     // 审核设置
     examineSystem(item) {
       // console.log(item.settlementMethod, 111111111)
-      // console.log(item.result, 2222222222)
+      this.radio1 = item.isFirst + ''
+      this.radio2 = item.settlementMethod + ''
 
       this.infoId = item.id
       this.systemDialogVisible = true
+      console.log(item.settlementMethod, 2222222222)
+
     },
     // 保存店铺设置
     async saveShopDialog() {

@@ -28,7 +28,13 @@
       </el-table-column>
     </el-table>
     <!-- 弹出框 -->
-    <el-dialog title="添加分类" :visible.sync="centerDialogVisible" width="30%" center @close="closeDialog">
+    <el-dialog
+      title="添加分类"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center
+      @close="closeDialog"
+    >
       <div class="content">
         <span>分类名称：</span>
         <el-input v-model="categoryName" />
@@ -145,12 +151,13 @@ export default {
     },
     // 保存备注
     async saveDialog() {
-      // 分类id不存在，添加
-      if (!this.id) {
-        if(!this.categoryName){
+          if(!this.categoryName){
           this.$message.warning('分类不能为空！')
           return 
         }
+      // 分类id不存在，添加
+      if (!this.id) {
+    
         // 分类id不存在，添加
         const { data: res } = await this.$http.post('shop-category', { categoryName: this.categoryName })
 
@@ -164,7 +171,7 @@ export default {
       } else {
         // 编辑
         const { data: res } = await this.$http.put(`shop-category/${this.id}`, { categoryName: this.categoryName })
-        // console.log(res, 1111111111111)
+    
         this.$message.success('编辑成功！')
         this.centerDialogVisible = false
         this.categoryName = ''

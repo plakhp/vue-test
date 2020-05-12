@@ -9,14 +9,14 @@
         <div>
           <span>商户名称:</span>
           <!-- <el-input v-model="filter.shopId" placeholder="请输入商品名称" @keyup.enter.native="search" /> -->
-            <el-select v-model="filter.shopId" placeholder="请输入商户名称" :clearable="true">
-          <el-option
-            v-for="(item, index) in list"
-            :key="index"
-            :label="item.shopName"
-            :value="item.shopId"
-          />
-        </el-select>
+          <el-select v-model="filter.shopId" placeholder="请输入商户名称" :clearable="true">
+            <el-option
+              v-for="(item, index) in shopList"
+              :key="index"
+              :label="item.shopName"
+              :value="item.id"
+            />
+          </el-select>
         </div>
         <div>
           <span>下单时间:</span>
@@ -49,7 +49,7 @@
       <div>
         <span>商品类型:</span>
         <!-- <el-input v-model="filter.goodsType" placeholder="请输入商品类型" @keyup.enter.native="search" /> -->
-          <el-select v-model="filter.goodsType" placeholder="请输入商品类型" :clearable="true">
+        <el-select v-model="filter.goodsType" placeholder="请输入商品类型" :clearable="true">
           <el-option
             v-for="(item, index) in goodsTypeStatus"
             :key="index"
@@ -58,14 +58,14 @@
           />
         </el-select>
       </div>
-       <div >
-      <el-button>导出</el-button>
-    </div>
+      <div>
+        <el-button @click="exportShop">导出</el-button>
+      </div>
     </div>
     <!-- 导出按钮 -->
     <!-- <div class="leading-out">
       <el-button>导出</el-button>
-    </div> -->
+    </div>-->
     <!-- 表格 -->
     <el-table v-loading="loading" :data="list" stripe border style="width: 100%">
       <el-table-column type="index" width="50" label="序号" />
@@ -192,7 +192,16 @@ export default {
         name: '拼团',
         id: 3
       }
-      ]
+      ],
+      // 商户
+         shopFilter: {
+        shopName: '',
+        pageNum: 1,
+        pageSize: 10,
+        orderBy: 'sa.modify_time',
+        orderType: '2'
+      },
+      shopList:[]
     }
   },
   computed: {
@@ -201,6 +210,8 @@ export default {
   },
   created() {
     this.fetchData()
+    // 所有商户
+    this.getAllShop()
   },
   methods: {
     changeStatus(event) {
@@ -246,12 +257,24 @@ export default {
           this.loading = false
    
     },
+   async getAllShop() {
+        
+      const { data: res } = await this.$http.get('goods/shop', { params: this.shopFilter })
+      // console.log(res,1111111)
+         this.shopList = res.data.records
+    },
     // 选择日期时间
     changeDate(e) {
 
-      
-      this.filter.orderTimeStart = getDate(e[0])
+      // console.log(e,1111111111)
+      if(!e){
+        this.filter.orderTimeStart = ''
+        this.filter.orderTimeEnd = ''
+      }else{
+             this.filter.orderTimeStart = getDate(e[0])
       this.filter.orderTimeEnd =getDate(e[1])
+      }
+ 
 
     // console.log(this.filter.orderTimeStart,1);
     // console.log(this.filter.orderTimeEnd,2);
@@ -274,6 +297,56 @@ export default {
     saveDialog() {
       this.centerDialogVisible = false
       this.value = ''
+    },
+       // 导出
+  async  exportShop() {
+         var data = this.filter
+      if(!data.orderNo){
+       this.filter.orderNo = ""
+      }
+      if(!data.shopId){
+        this.filter.shopId = ""
+      }
+          if(!data.orderTimeStart){
+        this.filter.orderTimeStart=""
+      }
+          if(!data.orderTimeEnd){
+        this.filter.orderTimeEnd=""
+      }
+          if(!data.state){
+        this.filter.state = ""
+      }
+          if(!data.goodsType){
+        this.filter.goodsType=""
+      }
+
+      this.$http({
+        method: 'get',
+        url: `order/${1}/export`+`?orderNo=${this.filter.orderNo}&shopId=${this.filter.shopId}&orderTimeStart=${this.filter.orderTimeStart}&orderTimeEnd=${this.filter.orderTimeEnd}&state=${this.filter.state}&goodsType=${this.filter.goodsType}&pageNum=${this.filter.pageNum}&pageSize=${this.filter.pageSize}&orderBy=${this.filter.orderBy}&orderType=${this.filter.orderType}`,
+        responseType: 'blob'
+      })
+        .then(res => {
+      
+          const link = document.createElement('a')
+          const blob = new Blob([res.data], {
+            type: 'application/vnd.ms-excel'
+          })
+          link.style.display = 'none'
+          link.href = URL.createObjectURL(blob)
+          const num = Math.ceil(Math.random() * 1000)
+
+          link.setAttribute('download', '用户_' + num + '.xlsx')
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+        })
+        // eslint-disable-next-line handle-callback-err
+        .catch(error => {
+          this.$Notice.error({
+            title: '错误',
+            desc: '网络连接错误'
+          })
+        })
     }
   
   }
@@ -298,15 +371,14 @@ export default {
     align-items: center;
     margin-right: 145px;
   }
-    div:last-child{
-      float: right;
-      margin: 0;
-    }
+  div:last-child {
+    float: right;
+    margin: 0;
+  }
   .el-input {
     width: 200px;
   }
-   .el-button {
- 
+  .el-button {
     background-color: #44c9ab;
     color: #fff;
     border: none;
@@ -314,7 +386,6 @@ export default {
 }
 .leading-out {
   margin-bottom: 20px;
- 
 }
 
 // 解封按钮

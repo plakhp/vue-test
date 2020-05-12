@@ -36,7 +36,7 @@
         <div class="banner_title">只能上传jpg/png格式文件，文件不能超过50kb</div>
       </el-form-item>
       <el-form-item label="广告链接" class="banner_link" prop="shopId">
-        <el-select v-model="form.shopId" placeholder="商户名称" :clearable="true" @change="changeShop">
+        <el-select v-model="form.shopId" placeholder="商户名称" :clearable="true" @change="changeShop" filterable>
           <el-option
             v-for="(item, index) in allShop"
             :key="index"
@@ -45,7 +45,7 @@
           />
         </el-select>
 
-        <el-select v-model="form.goodsId" placeholder="商品名称" :clearable="true">
+        <el-select v-model="form.goodsId" placeholder="商品名称" :clearable="true" filterable>
           <el-option
             v-for="(item, index) in allGoods"
             :key="index"
