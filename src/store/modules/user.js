@@ -86,7 +86,7 @@ const actions = {
 
   // get user info
   getInfo({ commit, state }) {
-    // console.log(this.$store.state.userData, 111112222)
+
     return new Promise((resolve, reject) => {
       // Change the right API
 
@@ -99,11 +99,12 @@ const actions = {
       const { userMenus, nickName, avatar } = data
 
       // roles must be a non-empty array
-      if (!userMenus || userMenus.length <= 0) {
-        reject('getInfo: roles must be a non-null array!')
-      }
+      // if (!userMenus || userMenus.length <= 0) {
+      //   reject('getInfo: roles must be a non-null array!')
+      // }
+      // debugger
       const roles = genRoles(userMenus)
-      // console.log(roles, 1111111111)
+      console.log(roles, 1111111111)
 
       const roleButtons = genRoleButtons(userMenus)
 

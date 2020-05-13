@@ -6,7 +6,7 @@ const router = {
   path: '/system',
   component: Layout,
   name: '系统管理',
-  meta: { title: '系统管理',  affix: true, roles: ['oauth_manager'] },
+  meta: { title: '系统管理',  affix: true, roles: ['system_manager'] },
   children: [
     {
       path: 'account',
@@ -21,14 +21,14 @@ const router = {
       component: () => import('@/views/system/role/index'),
       meta: { title: '角色管理', affix: true, roles: ['role_manager'], activeMenu: '/system/role' },
       children: []
+    },
+    {
+      path: 'menu',
+      name: '菜单管理',
+      component: () => import('@/views/system/menu/index'),
+      meta: { title: '菜单管理',  affix: true, roles: ['menu_manager'], activeMenu: '/system/menu' },
+      children: []
     }
-    // {
-    //   path: 'menu',
-    //   name: '菜单管理',
-    //   component: () => import('@/views/system/menu/index'),
-    //   meta: { title: '菜单管理',  affix: true, roles: ['menu_manager'], activeMenu: '/system/menu' },
-    //   children: []
-    // }
   ]
 }
 

@@ -4,14 +4,14 @@ const router = {
   path: '/trends',
   component: Layout,
   name: '动态管理',
-  meta: { title: '动态管理',  affix: true, roles: ['oauth_manager'] },
+  meta: { title: '动态管理',  affix: true, roles: ['trends_manager'] },
   children: [
     {
       path: 'imgTrends',
       name: '图片动态',
       component: () =>
         import ('@/views/trends/imgTrends'),
-      meta: { title: '图片动态',  affix: true, roles: ['menu_manager'], activeMenu: '/trends/imgTrends' },
+      meta: { title: '图片动态',  affix: true, roles: ['imgTrends_manager'], activeMenu: '/trends/imgTrends' },
       children: []
     },
     {
@@ -19,7 +19,7 @@ const router = {
       name: '视频动态',
       component: () =>
         import ('@/views/trends/videoTrends'),
-      meta: { title: '视频动态', affix: true, roles: ['menu_manager'], activeMenu: '/trends/videoTrends' },
+      meta: { title: '视频动态', affix: true, roles: ['videoTrends_manager'], activeMenu: '/trends/videoTrends' },
       children: []
     }
 

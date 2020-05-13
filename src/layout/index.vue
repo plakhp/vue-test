@@ -10,6 +10,7 @@
       </div>
       <!-- 首页展示内容 -->
       <app-main />
+      
       <!-- <right-panel v-if="showSettings">
         <settings />
       </right-panel> -->
@@ -18,7 +19,7 @@
 </template>
 
 <script>
-// import RightPanel from '@/components/RightPanel'
+import RightPanel from '@/components/RightPanel'
 import { AppMain, Navbar, Settings, Sidebar, TagsView } from './components'
 // AppMain 首页展示内容   // Navbar 头部展示条  // Sidebar 左侧菜单栏
 
@@ -30,10 +31,10 @@ export default {
   components: {
     AppMain,
     Navbar,
-    // RightPanel,
-    // Settings,
-    Sidebar
-    // TagsView
+    RightPanel,
+    Settings,
+    Sidebar,
+    TagsView
   },
   mixins: [ResizeMixin],
   computed: {
