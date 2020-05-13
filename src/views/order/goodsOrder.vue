@@ -20,11 +20,11 @@
         </div>
         <div>
           <span>下单时间:</span>
-          <!-- <el-date-picker v-model="value1" type="date" placeholder="请选择时间" /> -->
+
           <el-date-picker
             v-model="value1"
             type="daterange"
-            range-separator="至"
+            range-separator="-"
             start-placeholder="开始日期"
             end-placeholder="结束日期"
             @change="changeDate"
@@ -34,7 +34,7 @@
         <el-button type="primary" @click="search">查询</el-button>
       </div>
     </div>
-    <div class="content">
+    <div class="filter-left">
       <div>
         <span>订单状态:</span>
         <el-select v-model="filter.state" placeholder="订单状态" :clearable="true">
@@ -58,7 +58,18 @@
           />
         </el-select>
       </div>
+      <div class="order_price">
+        <span>订单金额:</span>
+        <el-input v-model="filter.minPrice" placeholder="最小金额" @keyup.enter.native="search" />
+        -
+        <el-input v-model="filter.maxPrice" placeholder="最大金额" @keyup.enter.native="search" />
+      </div>
       <div>
+        <span>下单用户:</span>
+
+        <el-input v-model="filter.nickName" placeholder="请输入用户名" @keyup.enter.native="search" />
+      </div>
+      <div class="btns">
         <el-button @click="exportShop">导出</el-button>
       </div>
     </div>
@@ -160,6 +171,9 @@ export default {
         orderTimeStart: '',
         orderTimeEnd: '',
         state: '',
+        minPrice:'',
+        maxPrice:'',
+        nickName:'',
         goodsType: '',
         pageNum: 1,
         pageSize: 10,
@@ -355,6 +369,7 @@ export default {
 
 <style lang="scss" scoped>
 .filter-left {
+  display: flex;
   justify-content: space-between;
   width: 100%;
   margin-bottom: 20px;
@@ -362,33 +377,22 @@ export default {
     width: 200px;
   }
 }
-.content {
-  overflow: hidden;
-  margin-bottom: 20px;
-  div {
-    float: left;
-    display: flex;
-    align-items: center;
-    margin-right: 145px;
-  }
-  div:last-child {
-    float: right;
-    margin: 0;
-  }
-  .el-input {
-    width: 200px;
-  }
-  .el-button {
-    background-color: #44c9ab;
-    color: #fff;
-    border: none;
-  }
+.btns .el-button {
+  background-color: #44c9ab;
+  color: #fff;
+  border: none;
 }
+
 .leading-out {
   margin-bottom: 20px;
 }
+// 订单金额
+.order_price {
+    .el-input {
+    width: 100px;
+  }
+}
 
-// 解封按钮
 
 .button_control {
   .el-button {

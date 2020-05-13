@@ -52,6 +52,7 @@
           <span>{{ scope.row.province }}{{ scope.row.city }}{{ scope.row.region }}{{ scope.row.adress }}</span>
         </template>
       </el-table-column>
+      <el-table-column prop="entryTime" label="入驻时间" />
 
       <el-table-column label="营业时间">
         <template slot-scope="scope">

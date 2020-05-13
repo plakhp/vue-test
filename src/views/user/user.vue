@@ -7,13 +7,17 @@
           <el-input v-model="filter.nickName" placeholder="请输入用户昵称" @keyup.enter.native="search" />
           <el-input v-model="filter.phone" placeholder="请输入手机号码" @keyup.enter.native="search" />
           <el-input v-model="filter.fullName" placeholder="请输入姓名" @keyup.enter.native="search" />
-
+               <el-date-picker
+            v-model="dateValue"
+            type="daterange"
+            range-separator="-"
+            start-placeholder="开始日期"
+            end-placeholder="结束日期"
+            @change="changeDate"
+          />
         </div>
         <el-button type="primary" plain @click="search">查询</el-button>
 
-        <!-- <el-button type="primary" @click="search">
-          查询
-        </el-button>-->
       </div>
     </div>
     <div class="leading-out">
@@ -57,7 +61,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination'
-
+import {getDate} from '../getDate.js'
 export default {
   name: 'Account',
   components: {
@@ -72,7 +76,9 @@ export default {
         pageNum: 1,
         pageSize: 5,
         orderBy: 'create_time',
-        orderType: '2'
+        orderType: '2',
+        registerDtStart:'',
+        registerDtEnd:''
       },
       pages: {
         total: 0,
@@ -85,7 +91,9 @@ export default {
         visible: false,
         status: 0,
         formData: {}
-      }
+      },
+      // 时间
+      dateValue:''
     }
   },
   computed: {
@@ -115,6 +123,18 @@ export default {
       this.pages.limit = res.data.size
 
       this.loading = false
+    },
+      // 选择日期时间
+    changeDate(e) {
+
+      console.log(e,1111111111)
+      if(!e){
+        this.filter.registerDtStart = ''
+        this.filter.registerDtEnd = ''
+      }else{
+      this.filter.registerDtStart = getDate(e[0])
+      this.filter.registerDtEnd =getDate(e[1])
+      }
     },
     // 冻结解冻客户端账号
     editStatus(item) {
@@ -179,7 +199,14 @@ export default {
     width: 200px;
     margin-right: 10px;
   }
+  .el-button {
+    margin-left: 10px;
+  }
+  .el-date-editor {
+      margin:0 10px;
+  }
 }
+// 导出按钮样式
 .leading-out {
   margin-bottom: 10px;
   .el-button {
@@ -189,3 +216,4 @@ export default {
   }
 }
 </style>
+
