@@ -60,8 +60,7 @@
       </div>
       <div class="order_price">
         <span>订单金额:</span>
-        <el-input v-model="filter.minPrice" placeholder="最小金额" @keyup.enter.native="search" />
-        -
+        <el-input v-model="filter.minPrice" placeholder="最小金额" @keyup.enter.native="search" />-
         <el-input v-model="filter.maxPrice" placeholder="最大金额" @keyup.enter.native="search" />
       </div>
       <div>
@@ -244,38 +243,79 @@ export default {
     async fetchData() {
       this.loading = true
       var data = this.filter
+      var data = this.filter
       if(!data.orderNo){
-        delete data.orderNo
+       this.filter.orderNo = ""
       }
       if(!data.shopId){
-        delete data.shopId
+        this.filter.shopId = ""
       }
           if(!data.orderTimeStart){
-        delete data.orderTimeStart
+        this.filter.orderTimeStart=""
       }
           if(!data.orderTimeEnd){
-        delete data.orderTimeEnd
+        this.filter.orderTimeEnd=""
       }
           if(!data.state){
-        delete data.state
+        this.filter.state = ""
       }
           if(!data.goodsType){
-        delete data.goodsType
+        this.filter.goodsType=""
       }
+         if(!data.minPrice){
+        this.filter.minPrice=""
+      }
+         if(!data.maxPrice){
+        this.filter.maxPrice=""
+      }
+         if(!data.nickName){
+        this.filter.nickName=""
+      }
+    
       
-      const { data: res } = await this.$http.get(`order/${1}/list`, {params:data} )
-          this.list = res.data.records
-          this.pages.total =  res.data.total
-          this.pages.page =   res.data.current
-          this.pages.limit =  res.data.size
+      // const { data: res } = await this.$http.get(`order/${1}/list`, {params:data} )
+              this.$http({
+        method: 'get',
+        url: `order/${1}/list`+`?nickName=${this.filter.nickName}&minPrice=${this.filter.minPrice}&maxPrice=${this.filter.maxPrice}&orderNo=${this.filter.orderNo}&shopId=${this.filter.shopId}&orderTimeStart=${this.filter.orderTimeStart}&orderTimeEnd=${this.filter.orderTimeEnd}&state=${this.filter.state}&goodsType=${this.filter.goodsType}&pageNum=${this.filter.pageNum}&pageSize=${this.filter.pageSize}&orderBy=${this.filter.orderBy}&orderType=${this.filter.orderType}`,
+    
+      })
+        .then(res=> {
+            console.log(res.data.data,11111);
+           this.list = res.data.data.records
+          this.pages.total =  res.data.data.total
+          this.pages.page =   res.data.data.current
+          this.pages.limit =  res.data.data.size
           this.loading = false
+        })
+      
    
     },
    async getAllShop() {
-        
+                 var data = this.filter
+      if(!data.orderNo){
+       this.filter.orderNo = ""
+      }
+      if(!data.shopId){
+        this.filter.shopId = ""
+      }
+          if(!data.orderTimeStart){
+        this.filter.orderTimeStart=""
+      }
+          if(!data.orderTimeEnd){
+        this.filter.orderTimeEnd=""
+      }
+          if(!data.state){
+        this.filter.state = ""
+      }
+          if(!data.goodsType){
+        this.filter.goodsType=""
+      }
       const { data: res } = await this.$http.get('goods/shop', { params: this.shopFilter })
+ 
       // console.log(res,1111111)
-         this.shopList = res.data.records
+                 this.shopList = res.data.records
+
+    
     },
     // 选择日期时间
     changeDate(e) {
@@ -333,10 +373,19 @@ export default {
           if(!data.goodsType){
         this.filter.goodsType=""
       }
+             if(!data.minPrice){
+        this.filter.minPrice=""
+      }
+         if(!data.maxPrice){
+        this.filter.maxPrice=""
+      }
+         if(!data.nickName){
+        this.filter.nickName=""
+      }
 
       this.$http({
         method: 'get',
-        url: `order/${1}/export`+`?orderNo=${this.filter.orderNo}&shopId=${this.filter.shopId}&orderTimeStart=${this.filter.orderTimeStart}&orderTimeEnd=${this.filter.orderTimeEnd}&state=${this.filter.state}&goodsType=${this.filter.goodsType}&pageNum=${this.filter.pageNum}&pageSize=${this.filter.pageSize}&orderBy=${this.filter.orderBy}&orderType=${this.filter.orderType}`,
+        url: `order/${1}/export`+`?nickName=${this.filter.nickName}&minPrice=${this.filter.minPrice}&maxPrice=${this.filter.maxPrice}&orderNo=${this.filter.orderNo}&shopId=${this.filter.shopId}&orderTimeStart=${this.filter.orderTimeStart}&orderTimeEnd=${this.filter.orderTimeEnd}&state=${this.filter.state}&goodsType=${this.filter.goodsType}&pageNum=${this.filter.pageNum}&pageSize=${this.filter.pageSize}&orderBy=${this.filter.orderBy}&orderType=${this.filter.orderType}`,
         responseType: 'blob'
       })
         .then(res => {
@@ -388,11 +437,10 @@ export default {
 }
 // 订单金额
 .order_price {
-    .el-input {
+  .el-input {
     width: 100px;
   }
 }
-
 
 .button_control {
   .el-button {
