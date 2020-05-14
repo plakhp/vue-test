@@ -6,6 +6,6 @@ function getDate(originVal){
     const hh = (dt.getHours() + '').padStart(2, '0')
     const mm = (dt.getMinutes() + '').padStart(2, '0')
     const ss = (dt.getSeconds() + '').padStart(2, '0')
-    return `${y}.${m}.${d}`
+    return `${y}-${m}-${d}`
     }
     export  {getDate}

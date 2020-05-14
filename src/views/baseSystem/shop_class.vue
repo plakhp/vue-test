@@ -118,6 +118,7 @@ export default {
       this.pages.limit = res.data.size
     },
     async add() {
+     
       this.centerDialogVisible = true
     },
     // 查看分类详情
@@ -167,6 +168,8 @@ export default {
         }
         this.centerDialogVisible = false
         this.categoryName = ''
+        this.$message.success('添加成功！')
+
         this.fetchData()
       } else {
         // 编辑
@@ -175,6 +178,7 @@ export default {
         this.$message.success('编辑成功！')
         this.centerDialogVisible = false
         this.categoryName = ''
+         this.id = ''
         this.fetchData()
       }
     }
