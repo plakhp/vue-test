@@ -23,19 +23,11 @@
       <el-table-column label="是否处理" width="100">
         <template slot-scope="scope">
           <el-switch
-    
             :value="scope.row.isHandle==1"
             active-color="#13ce66"
             inactive-color="#ff4949"
             @change="changeStatus(scope.row)"
           />
-          <!-- <el-switch
-            v-if="scope.row.isHandle==0"
-            v-model="value2"
-            active-color="#13ce66"
-            inactive-color="#ff4949"
-            @change="changeStatus(scope.row)"
-          /> -->
         </template>
       </el-table-column>
       <el-table-column label="备注" width="100">

@@ -28,7 +28,13 @@
       </el-table-column>
     </el-table>
     <!-- 弹出框 -->
-    <el-dialog title="添加热门关键词" :visible.sync="centerDialogVisible" width="30%" center @close="closeDialog">
+    <el-dialog
+      title="添加热门关键词"
+      :visible.sync="centerDialogVisible"
+      width="30%"
+      center
+      @close="closeDialog"
+    >
       <div class="content">
         <span>关键词：</span>
         <el-input v-model="keyWord" />
@@ -151,7 +157,10 @@ export default {
     },
     // 保存备注
     async saveDialog() {
-      console.log(this.id)
+          if(!this.keyWord){
+          this.$message.warning('不能为空！')
+          return 
+        }
       // 分类id不存在，添加
       if (!this.id) {
         // id不存在，添加
