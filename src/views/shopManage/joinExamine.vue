@@ -263,7 +263,8 @@ export default {
     },
     // 入驻审核 examine
     examine(item) {
-
+      console.log(item,1111);
+      
       // 审核结果
     this.item = item
      // 拒绝原因
@@ -279,7 +280,7 @@ export default {
     },
     // 保存审核结果备注 shop/{approveId}/approve
    async saveDialog() {
-        const { data: res } = await this.$http.put(`shop/${this.item.id}/approve`, { id:this.item.id,result:this.radio,rejectReason:this.rejectReason })
+        const { data: res } = await this.$http.put(`shop/${this.item.shopApproveId}/approve`, { id:this.item.id,result:this.radio,rejectReason:this.rejectReason })
          this.fetchData()
       this.examineDialogVisible = false
       this.rejectReason = ''
@@ -287,14 +288,14 @@ export default {
 
     // 审核设置
     examineSystem(item) {
-      // console.log(item.settlementMethod, 111111111)
+      // console.log(item, 111111111)
       this.radio1 = item.isFirst + ''
       this.radio2 = item.settlementMethod + ''
   // console.log(item.shopInfoId,222222);
   
       this.infoId = item.shopInfoId
       this.systemDialogVisible = true
-      console.log(item.settlementMethod, 2222222222)
+      // console.log(item.settlementMethod, 2222222222)
 
     },
     // 保存店铺设置
