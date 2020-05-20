@@ -27,8 +27,10 @@
           :headers="headersObj"
           :on-success="successHandle"
           :before-upload="beforeAvatarUpload"
+          :on-remove="handleRemove"
           :file-list="fileList"
           v-model="form.picture"
+          :limit="1"
         >
           <div class="uploadImg">选择上传文件</div>
         </el-upload>
@@ -253,9 +255,11 @@ export default {
       // console.log(res.data.url)
       if (res.code !== 0) return this.$message.warning(res.msg)
       this.form.picture = res.data.url
+      // console.log(res.data,'11111');
+      
       this.fileList.push(res.data)
             // 上传完成关闭校验
-         this.$refs['image'].clearValidate()
+      this.$refs['image'].clearValidate()
     
     },
   
@@ -271,6 +275,15 @@ export default {
       }
       return isLt2M && isJPG
     },
+    // 移除图片
+       handleRemove(file, fileList) {
+        // console.log(file, 1111);
+        this.fileList.forEach(item => {
+          if(item.id==file.id){
+            this.fileList = []
+          }
+        });
+      },
     // 保存
     save() {
          

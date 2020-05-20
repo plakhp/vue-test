@@ -78,6 +78,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination'
+import { log } from 'util'
 
 export default {
   name: 'Account',
@@ -158,7 +159,8 @@ export default {
     edit(item) {
       const that = this
       this.url = item.picVOList[0].url
-
+      console.log(item.picVOList,111111);
+      that.srcList = []
       item.picVOList.forEach(item1 => {
         that.srcList.push(item1.url)
         // console.log(item1, 1111111111111111)
