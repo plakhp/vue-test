@@ -101,8 +101,8 @@
             <span v-if="item.result==1">通过</span>
           </div>
          <div v-if="!item.result">
-            <el-radio v-model="radio" label="1">通过</el-radio>
-          <el-radio v-model="radio" label="0">拒绝</el-radio>
+            <el-radio v-model="radio" :label="1">通过</el-radio>
+          <el-radio v-model="radio" :label="0">拒绝</el-radio>
          </div>
         </div>
         <div class="title">拒绝原因</div>
@@ -172,7 +172,7 @@ export default {
       // 设置
       systemDialogVisible: false,
       rejectReason: '',
-      radio: '1',
+      radio: 1,
       // 审核设置
       radio1: '',
 
@@ -286,9 +286,9 @@ export default {
       this.rejectReason = ''
     },
 
-    // 审核设置
+    // 设置
     examineSystem(item) {
-      // console.log(item, 111111111)
+      console.log(item, 111111111)
       this.radio1 = item.isFirst + ''
       this.radio2 = item.settlementMethod + ''
   // console.log(item.shopInfoId,222222);
