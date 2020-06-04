@@ -204,6 +204,11 @@ export default {
       this.fetchData()
     }
     this.getAllShop()
+    this.form = deepClone(this.formData)
+
+    if(this.form.shopId){
+      // this.getAllGoods(this.form.shopId)
+    }
     // const data = JSON.parse(window.localStorage.getItem('getUserData'))
   },
   methods: {
@@ -236,7 +241,7 @@ export default {
           // this.$refs.changeshopStatus.clearValidate(); // 关闭校验
     },
     async fetchData() {
-      // this.form = deepClone(this.formData)
+      
 
       const id = this.formData.id
       const { data: res } = await this.$http.get(`banner/${id}`)
@@ -265,6 +270,7 @@ export default {
   
     // 上传图片检验
     beforeAvatarUpload(file) {
+      console.log(file.type,'11111111')
       const isJPG = file.type === 'image/jpeg' || file.type === 'image/png'
       const isLt2M = file.size / 1024 < 50
       if (!isJPG) {

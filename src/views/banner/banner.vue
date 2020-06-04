@@ -155,6 +155,8 @@ export default {
       this.dialogData.visible = true
       this.dialogData.status = 1
       this.dialogData.formData = item
+      
+      
     },
     del(item) {
       this.$confirm('此操作将执行删除操作, 是否继续?', '提示', {

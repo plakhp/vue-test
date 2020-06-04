@@ -46,7 +46,7 @@
       </el-table-column>  
       <el-table-column label="商品详情" width="120">
         <template slot-scope="scope">
-          <span class="color-green" @click="lookGoodsdetail">查看</span>
+          <span class="color-green" @click="lookGoodsdetail(scope.row)">查看</span>
         </template>
       </el-table-column>
       <el-table-column label="状态" width="120">
@@ -91,8 +91,10 @@
     </el-dialog>
     <!-- 商品详情弹出框 -->
     <el-dialog title="商品详情" :visible.sync="goodsDialogVisible" width="30%" center>
-      <div class="content">
-        商品详情
+      <div  v-if="goods.content" v-html="goods.content">
+      </div>
+       <div class="content" v-else>
+         暂无内容
       </div>
     </el-dialog>
     <pagination
@@ -146,7 +148,8 @@ export default {
         formData: {}
       },
       // 下架商品id
-      goodsId: ''
+      goodsId: '',
+      goods:{}
     }
   },
   computed: {
@@ -210,7 +213,8 @@ export default {
       this.DialogVisible = true
     },
     // 查看商品详情
-    lookGoodsdetail() {
+    lookGoodsdetail(item) {
+      this.goods = item
       this.goodsDialogVisible = true
     }
   }

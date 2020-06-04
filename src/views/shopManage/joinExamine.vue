@@ -33,14 +33,14 @@
       <el-table-column label="营业执照照片" width="100">
         <template slot-scope="scope">
           <div class="control">
-            <span class="color-green" @click="lookShop(scope.row)">查看</span>
+            <span v-if="scope.row.status!=0" class="color-green" @click="lookShop(scope.row)">查看</span>
           </div>
         </template>
       </el-table-column>
       <el-table-column label="门头照片" width="100">
         <template slot-scope="scope">
           <div class="control">
-            <span class="color-green" @click="lookDoor(scope.row)">查看</span>
+            <span v-if="scope.row.status!=0"  class="color-green" @click="lookDoor(scope.row)">查看</span>
           </div>
         </template>
       </el-table-column>
@@ -124,8 +124,8 @@
       <div class="content">
         <div class="radioRow">
           <span>是否设置为首页</span>
-          <el-radio v-model="radio1" label="0">是</el-radio>
-          <el-radio v-model="radio1" label="1">否</el-radio>
+          <el-radio v-model="radio1" label="1">是</el-radio>
+          <el-radio v-model="radio1" label="0">否</el-radio>
         </div>
         <div class="radioRow">
           <span>结算方式</span>
@@ -270,6 +270,7 @@ export default {
      // 拒绝原因
     this.rejectReason = item.rejectReason
       this.examineDialogVisible = true
+      this.radio = item.result
     },
     // 关闭
     closeDialog() {
