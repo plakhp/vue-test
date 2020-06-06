@@ -207,7 +207,7 @@ export default {
     this.form = deepClone(this.formData)
 
     if(this.form.shopId){
-      // this.getAllGoods(this.form.shopId)
+      this.getAllGoods(this.form.shopId)
     }
     // const data = JSON.parse(window.localStorage.getItem('getUserData'))
   },
