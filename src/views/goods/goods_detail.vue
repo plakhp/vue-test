@@ -91,7 +91,7 @@
     </el-dialog>
     <!-- 商品详情弹出框 -->
     <el-dialog title="商品详情" :visible.sync="goodsDialogVisible" width="30%" center>
-      <div  v-if="goods.content" v-html="goods.content">
+      <div  class="goods_content" v-if="goods.content" v-html="goods.content">
       </div>
        <div class="content" v-else>
          暂无内容
@@ -266,6 +266,12 @@ span {
 .content {
   text-align: center;
 }
+
 </style>
 <style lang="scss">
+.goods_content {
+  img {
+    width: 100%;
+  }
+}
 </style>
