@@ -12,7 +12,12 @@
         </div>
         <div>
           <span>状态:</span>
-          <el-select v-model="filter.status" placeholder="全部" :clearable="true" @change="changeStatus">
+          <el-select
+            v-model="filter.status"
+            placeholder="全部"
+            :clearable="true"
+            @change="changeStatus"
+          >
             <el-option
               v-for="(item, index) in roleStatus"
               :key="index"
@@ -30,7 +35,11 @@
       <el-table-column type="index" width="50" label="序号" />
       <el-table-column prop="nickName" label="用户昵称" width="200" />
       <el-table-column prop="createTime" label="发布时间" width="200" />
-      <el-table-column prop="content" label="文字" />
+      <el-table-column label="文字">
+        <template slot-scope="scope">
+          <div class="content">{{scope.row.content}}</div>
+        </template>
+      </el-table-column>
       <el-table-column label="图片" width="200">
         <template slot-scope="scope">
           <div class="control">
@@ -42,12 +51,11 @@
         <template slot-scope="scope">
           <span v-if="scope.row.status === 0" class="color-red">封禁</span>
           <span v-if="scope.row.status === 1" class="color-green">正常</span>
-
         </template>
       </el-table-column>
       <el-table-column label="操作" width="120">
         <template slot-scope="scope">
-       <div class="button_control">
+          <div class="button_control">
             <el-button v-if="scope.row.status === 0" type="primary" @click="closeStatus(scope.row)">
               <span>解封</span>
             </el-button>
@@ -55,7 +63,6 @@
               <span>封禁</span>
             </el-button>
           </div>
-
         </template>
       </el-table-column>
     </el-table>
@@ -76,36 +83,39 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Pagination from '@/components/Pagination'
-import { log } from 'util'
+import { mapGetters } from "vuex";
+import Pagination from "@/components/Pagination";
+import { log } from "util";
 
 export default {
-  name: 'Account',
+  name: "Account",
   components: {
     Pagination
   },
   data() {
     return {
-      roleStatus: [{
-        value: '0',
-        label: '封禁'
-      }, {
-        value: '1',
-        label: '正常'
-      }],
+      roleStatus: [
+        {
+          value: "0",
+          label: "封禁"
+        },
+        {
+          value: "1",
+          label: "正常"
+        }
+      ],
 
       centerDialogVisible: false,
       // 预览图片
-      url: '',
+      url: "",
       srcList: [],
       filter: {
-        nickName: '',
-        content: '',
-        status: '',
+        nickName: "",
+        content: "",
+        status: "",
         pageNum: 1,
         pageSize: 10,
-        orderBy: 'modify_time',
+        orderBy: "create_time",
         orderType: 2
       },
       pages: {
@@ -120,61 +130,62 @@ export default {
         status: 0,
         formData: {}
       }
-    }
+    };
   },
   computed: {
     ...mapGetters([])
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     // 查看状态
     changeStatus(event) {
       // console.log(event)
-      this.filter.status = event
+      this.filter.status = event;
     },
     search() {
-      this.filter.pageNum = 1
-      this.fetchData()
+      this.filter.pageNum = 1;
+      this.fetchData();
     },
     changeSize(pagination) {
-      this.filter.pageNum = pagination.page
-      this.filter.pageSize = pagination.limit
-      this.fetchData()
+      this.filter.pageNum = pagination.page;
+      this.filter.pageSize = pagination.limit;
+      this.fetchData();
     },
     async fetchData() {
-      this.loading = true
+      this.loading = true;
 
-      const { data: res } = await this.$http.get(`dynamic/1/list`, { params: this.filter })
+      const { data: res } = await this.$http.get(`dynamic/1/list`, {
+        params: this.filter
+      });
       // console.log(res, 11111111122222222222)
-      this.list = res.data.records
-      this.pages.total = res.data.total
-      this.pages.page = res.data.current
-      this.pages.limit = res.data.size
+      this.list = res.data.records;
+      this.pages.total = res.data.total;
+      this.pages.page = res.data.current;
+      this.pages.limit = res.data.size;
 
-      this.loading = false
+      this.loading = false;
     },
 
     edit(item) {
-      const that = this
-      this.url = item.picVOList[0].url
-      console.log(item.picVOList,111111);
-      that.srcList = []
+      const that = this;
+      this.url = item.picVOList[0].url;
+      console.log(item.picVOList, 111111);
+      that.srcList = [];
       item.picVOList.forEach(item1 => {
-        that.srcList.push(item1.url)
+        that.srcList.push(item1.url);
         // console.log(item1, 1111111111111111)
-      })
-      this.centerDialogVisible = true
+      });
+      this.centerDialogVisible = true;
     },
     async closeStatus(item) {
-      const { data: res } = await this.$http.put(`dynamic/${item.id}/up-down`)
+      const { data: res } = await this.$http.put(`dynamic/${item.id}/up-down`);
       // console.log(res, '999999999999')
-      this.fetchData()
+      this.fetchData();
     }
-
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -201,15 +212,18 @@ export default {
 .demo-image__preview {
   text-align: center;
 }
-// 解封按钮
+//内容处理
+.content {
+    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.content:hover{
+  white-space:normal;
+  background-color:#F2F9F9;
+  transition: all .5s;
+}
 
-// .button_control {
-//     .el-button {
-//   background-color: #44c9ab;
-//   color: #fff;
-//   border: none;
-// }
-// }
 </style>
 <style lang="scss">
 </style>

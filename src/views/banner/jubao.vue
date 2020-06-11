@@ -13,7 +13,11 @@
           <span v-if="scope.row.tipType==4">评论</span>
         </template>
       </el-table-column>
-      <el-table-column prop="content" label="举报内容" />
+       <el-table-column label="文字">
+        <template slot-scope="scope">
+          <div class="content_txet">{{scope.row.content}}</div>
+        </template>
+      </el-table-column>
       <el-table-column label="图片/视频" width="100">
         <template slot-scope="scope">
           <span class="color-green" v-if="scope.row.tipType==2" @click="look(scope.row)" style="cursor: pointer;">查看</span>
@@ -224,6 +228,17 @@ export default {
   background-color: #44c9ab;
   color: #fff;
   border: none;
+}
+//内容处理
+.content_txet {
+    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.content_txet:hover{
+  white-space:normal;
+  background-color:#F2F9F9;
+  transition: all .5s;
 }
 </style>
 <style lang="scss">

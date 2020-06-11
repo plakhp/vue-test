@@ -37,7 +37,11 @@
       <el-table-column type="index" width="50" label="序号" />
       <el-table-column prop="nickName" label="用户昵称" width="200" />
       <el-table-column prop="createTime" label="发布时间" width="200" />
-      <el-table-column prop="content" label="文字" />
+      <el-table-column label="文字">
+        <template slot-scope="scope">
+          <div class="content">{{scope.row.content}}</div>
+        </template>
+      </el-table-column>
       <el-table-column label="视频" width="200">
         <template slot-scope="scope">
           <div class="control">
@@ -108,7 +112,7 @@ export default {
         status: '',
         pageNum: 1,
         pageSize: 10,
-        orderBy: 'modify_time',
+        orderBy: 'create_time',
         orderType: 2
       },
       pages: {
@@ -213,14 +217,17 @@ export default {
 .demo-image__preview {
   text-align: center;
 }
-// 解封按钮
-// .button_control {
-//   .el-button {
-//     background-color: #44c9ab;
-//     color: #fff;
-//     border: none;
-//   }
-// }
+//内容处理
+.content {
+    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.content:hover{
+  white-space:normal;
+  background-color:#F2F9F9;
+  transition: all .5s;
+}
 </style>
 <style lang="scss">
 </style>

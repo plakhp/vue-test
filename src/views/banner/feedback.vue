@@ -27,8 +27,12 @@
       <el-table-column prop="phone" label="反馈手机" />
 
       <el-table-column prop="createTime" label="反馈时间" />
-      <el-table-column prop="descriptionn" label="反馈内容" />
-
+      <!-- <el-table-column prop="descriptionn" label="反馈内容" /> -->
+    <el-table-column label="反馈内容">
+        <template slot-scope="scope">
+          <div class="content_txet">{{scope.row.descriptionn}}</div>
+        </template>
+      </el-table-column>
       <el-table-column label="是否处理" width="320">
         <template slot-scope="scope">
 
@@ -142,5 +146,16 @@ export default {
 }
 .banner_img {
     height: 80px;
+}
+//内容处理
+.content_txet {
+    overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.content_txet:hover{
+  white-space:normal;
+  background-color:#F2F9F9;
+  transition: all .5s;
 }
 </style>
