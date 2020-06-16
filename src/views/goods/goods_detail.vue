@@ -132,7 +132,8 @@ export default {
         goodsName: '',
         pageNum: 1,
         pageSize: 10,
-        orderBy: 'modify_time',
+        // orderBy: 'modify_time',
+        orderBy: 'create_time',
         orderType: 2
       },
       pages: {

@@ -51,7 +51,8 @@ export default {
         shopName: '',
         pageNum: 1,
         pageSize: 10,
-        orderBy: 'sa.modify_time',
+        // orderBy: 'sa.modify_time',
+        orderBy: 'sa.create_time',
         orderType: '2'
       },
       pages: {
