@@ -64,7 +64,7 @@
           controls
         />
       </div>
-      <div class="none">暂无</div>
+      <!-- <div class="none">暂无</div> -->
     </el-dialog>
     <!-- 查看弹出框 -->
     <el-dialog :title="title" :visible.sync="centerDialogVisible" width="30%" center>
