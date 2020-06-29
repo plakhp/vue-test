@@ -51,6 +51,7 @@
       </el-table-column>
       <el-table-column label="状态" width="120">
         <template slot-scope="scope">
+          <span v-if="scope.row.state === -1" class="color-red">平台下架</span>
           <span v-if="scope.row.state === 0" class="color-red">已下架</span>
           <span v-if="scope.row.state === 1" class="color-green">已上架</span>
           <!-- <span v-if="scope.row.status === 0" class="color-gray">停用</span> -->

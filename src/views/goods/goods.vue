@@ -21,23 +21,21 @@
           <div class="button_control">
             <el-button type="primary" @click="lookGoodsdetail(scope.row)">
               <span>查看</span>
-
             </el-button>
+          
           </div>
-
         </template>
       </el-table-column>
     </el-table>
-
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Pagination from '@/components/Pagination'
+import { mapGetters } from "vuex";
+import Pagination from "@/components/Pagination";
 
 export default {
-  name: 'Account',
+  name: "Account",
   components: {
     Pagination
   },
@@ -45,15 +43,15 @@ export default {
     return {
       roleStatus: [],
 
-      url: '',
+      url: "",
       srcList: [],
       filter: {
-        shopName: '',
+        shopName: "",
         pageNum: 1,
         pageSize: 10,
         // orderBy: 'sa.modify_time',
-        orderBy: 'sa.create_time',
-        orderType: '2'
+        orderBy: "sa.create_time",
+        orderType: "2"
       },
       pages: {
         total: 0,
@@ -67,43 +65,47 @@ export default {
         status: 0,
         formData: {}
       }
-    }
+    };
   },
   computed: {
     ...mapGetters([])
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
-
     search() {
-      this.filter.pageNum = 1
-      this.fetchData()
+      this.filter.pageNum = 1;
+      this.fetchData();
     },
     changeSize(pagination) {
-      this.filter.pageNum = pagination.page
-      this.filter.pageSize = pagination.limit
-      this.fetchData()
+      this.filter.pageNum = pagination.page;
+      this.filter.pageSize = pagination.limit;
+      this.fetchData();
     },
     async fetchData() {
-      this.loading = true
+      this.loading = true;
 
-      const { data: res } = await this.$http.get('goods/shop', { params: this.filter })
+      const { data: res } = await this.$http.get("goods/shop", {
+        params: this.filter
+      });
 
-      this.loading = false
-      this.list = res.data.records
-      this.pages.total = res.data.total
-      this.pages.page = res.data.current
-      this.pages.limit = res.data.size
+      this.loading = false;
+      this.list = res.data.records;
+      this.pages.total = res.data.total;
+      this.pages.page = res.data.current;
+      this.pages.limit = res.data.size;
     },
     lookGoodsdetail(item) {
       // console.log(1);
 
-      this.$router.push({ path: '/goods/goods_detail', query: { id: item.id }})
+      this.$router.push({
+        path: "/goods/goods_detail",
+        query: { id: item.id }
+      });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -133,11 +135,11 @@ export default {
 // 解封按钮
 
 .button_control {
-    .el-button {
-  background-color: #44c9ab;
-  color: #fff;
-  border: none;
-}
+  .el-button {
+    background-color: #44c9ab;
+    color: #fff;
+    border: none;
+  }
 }
 </style>
 <style lang="scss">

@@ -42,7 +42,6 @@
           <el-button plain type="warning" @click="editStatus(scope.row)">
             <span v-if="scope.row.state === -1">解冻</span>
             <span v-if="scope.row.state === 1">冻结</span>
-
             <span v-if="scope.row.state === 0">激活</span>
           </el-button>
         </template>

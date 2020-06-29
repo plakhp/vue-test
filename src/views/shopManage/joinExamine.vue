@@ -4,19 +4,11 @@
       <div class="filter-left">
         <div>
           <span>店铺名称:</span>
-          <el-input
-            v-model="filter.shopName"
-            placeholder=""
-            @keyup.enter.native="search"
-          />
+          <el-input v-model="filter.shopName" placeholder @keyup.enter.native="search" />
         </div>
 
-        <el-button type="primary" plain @click="search">
-          查询
-        </el-button>
-
+        <el-button type="primary" plain @click="search">查询</el-button>
       </div>
-
     </div>
     <!-- 导出按钮 -->
     <div class="leading-out">
@@ -40,7 +32,7 @@
       <el-table-column label="门头照片" width="100">
         <template slot-scope="scope">
           <div class="control">
-            <span v-if="scope.row.status!=0"  class="color-green" @click="lookDoor(scope.row)">查看</span>
+            <span v-if="scope.row.status!=0" class="color-green" @click="lookDoor(scope.row)">查看</span>
           </div>
         </template>
       </el-table-column>
@@ -73,7 +65,11 @@
           <div class="control">
             <span v-if="scope.row.status === 0" class="color-gray">审核</span>
             <span v-if="scope.row.status === 1" class="color-green" @click="examine(scope.row)">审核</span>
-            <span v-if="scope.row.status === 2" class="color-green" @click="examineSystem(scope.row)">设置</span>
+            <span
+              v-if="scope.row.status === 2"
+              class="color-green"
+              @click="examineSystem(scope.row)"
+            >设置</span>
             <span v-if="scope.row.status === 3" class="color-green" @click="examine(scope.row)">查看</span>
           </div>
         </template>
@@ -100,10 +96,10 @@
             <span v-if="item.result==0">拒绝</span>
             <span v-if="item.result==1">通过</span>
           </div>
-         <div v-if="!item.result">
+          <div v-if="!item.result">
             <el-radio v-model="radio" :label="1">通过</el-radio>
-          <el-radio v-model="radio" :label="0">拒绝</el-radio>
-         </div>
+            <el-radio v-model="radio" :label="0">拒绝</el-radio>
+          </div>
         </div>
         <div class="title">拒绝原因</div>
         <el-input
@@ -120,7 +116,13 @@
       </span>
     </el-dialog>
     <!-- 审核设置弹出框 -->
-    <el-dialog title="设置" :visible.sync="systemDialogVisible" width="30%" center @close="closeDialog">
+    <el-dialog
+      title="设置"
+      :visible.sync="systemDialogVisible"
+      width="30%"
+      center
+      @close="closeDialog"
+    >
       <div class="content">
         <div class="radioRow">
           <span>是否设置为首页</span>
@@ -131,6 +133,11 @@
           <span>结算方式</span>
           <el-radio v-model="radio2" label="0" change="settleAccounts">月结</el-radio>
           <el-radio v-model="radio2" label="1" change="settleAccounts">季结</el-radio>
+        </div>
+        <div class="radioRow">
+          <span>店铺状态</span>
+          <el-radio v-model="accountStatus" label="-1">冻结</el-radio>
+          <el-radio v-model="accountStatus" label="1">解冻</el-radio>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -149,19 +156,19 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import Pagination from '@/components/Pagination'
+import { mapGetters } from "vuex";
+import Pagination from "@/components/Pagination";
 
 export default {
-  name: 'Account',
+  name: "Account",
   components: {
     Pagination
   },
   data() {
     return {
-      url: '',
+      url: "",
       srcList: [],
-      doorUrl: '',
+      doorUrl: "",
       doorList: [],
       // 营业执照弹框
       centerDialogVisible: false,
@@ -171,18 +178,18 @@ export default {
       examineDialogVisible: false,
       // 设置
       systemDialogVisible: false,
-      rejectReason: '',
+      rejectReason: "",
       radio: 1,
       // 审核设置
-      radio1: '',
-
-      radio2: '',
-
+      radio1: "",
+      radio2: "",
+      // 店鋪狀態
+      accountStatus: "",
       filter: {
-        shopName: '',
+        shopName: "",
         pageNum: 1,
         pageSize: 10,
-        orderBy: 'account.create_time',
+        orderBy: "account.create_time",
         orderType: 2
       },
       pages: {
@@ -193,162 +200,174 @@ export default {
       list: [],
       loading: false,
       // 审核id
-      infoId: '',
-      id:'',
+      infoId: "",
+      id: "",
       // 审核数据
-       item:{}
-    }
+      item: {}
+    };
   },
   computed: {
     ...mapGetters([])
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     changeStatus(event) {
       // console.log(event)
     },
     search() {
-      this.filter.pageNum = 1
-      this.fetchData()
+      this.filter.pageNum = 1;
+      this.fetchData();
     },
     changeSize(pagination) {
-      this.filter.pageNum = pagination.page
-      this.filter.pageSize = pagination.limit
-      this.fetchData()
+      this.filter.pageNum = pagination.page;
+      this.filter.pageSize = pagination.limit;
+      this.fetchData();
     },
     async fetchData() {
-      this.loading = true
+      this.loading = true;
 
-      const { data: res } = await this.$http.get('shop/list', { params: this.filter })
+      const { data: res } = await this.$http.get("shop/list", {
+        params: this.filter
+      });
       // console.log(res, 1111)
 
-      this.loading = false
+      this.loading = false;
 
-      this.list = res.data.records
-      this.pages.total = res.data.total
-      this.pages.page = res.data.current
-      this.pages.limit = res.data.size
+      this.list = res.data.records;
+      this.pages.total = res.data.total;
+      this.pages.page = res.data.current;
+      this.pages.limit = res.data.size;
     },
     // 查看营业执照
     lookShop(item) {
-      const that = this
+      const that = this;
       if (item.licenseList < 1) {
-        this.centerDialogVisible = true
-        return
+        this.centerDialogVisible = true;
+        return;
       }
-      this.url = item.licenseList[0].url
+      this.url = item.licenseList[0].url;
       item.licenseList.forEach(item1 => {
-        that.srcList.push(item1.url)
-      })
+        that.srcList.push(item1.url);
+      });
 
-      this.centerDialogVisible = true
+      this.centerDialogVisible = true;
     },
     // 查看门头照片
     lookDoor(item) {
-      const that = this
+      const that = this;
       // console.log(item.shopDoorList, 111111)
       if (item.shopDoorList < 1) {
-        this.DialogVisible = true
-        return
+        this.DialogVisible = true;
+        return;
       }
-      this.doorUrl = item.shopDoorList[0].url
+      this.doorUrl = item.shopDoorList[0].url;
 
       item.shopDoorList.forEach(item1 => {
-        that.doorList.push(item1.url)
-      })
+        that.doorList.push(item1.url);
+      });
 
-      this.DialogVisible = true
+      this.DialogVisible = true;
     },
     // 入驻审核 examine
     examine(item) {
-      console.log(item,1111);
-      
+      console.log(item, 1111);
+
       // 审核结果
-    this.item = item
-     // 拒绝原因
-    this.rejectReason = item.rejectReason
-      this.examineDialogVisible = true
-      this.radio = item.result
+      this.item = item;
+      // 拒绝原因
+      this.rejectReason = item.rejectReason;
+      this.examineDialogVisible = true;
+      this.radio = item.result;
     },
     // 关闭
     closeDialog() {
-      this.examineDialogVisible = false
-      this.systemDialogVisible = false
-          this.radio1= ''
-          this.radio2= ''
+      this.examineDialogVisible = false;
+      this.systemDialogVisible = false;
+      this.radio1 = "";
+      this.radio2 = "";
+      this.accountStatus = "";
     },
     // 保存审核结果备注 shop/{approveId}/approve
-   async saveDialog() {
-        const { data: res } = await this.$http.put(`shop/${this.item.shopApproveId}/approve`, { id:this.item.id,result:this.radio,rejectReason:this.rejectReason })
-         this.fetchData()
-      this.examineDialogVisible = false
-      this.rejectReason = ''
+    async saveDialog() {
+      const { data: res } = await this.$http.put(
+        `shop/${this.item.shopApproveId}/approve`,
+        {
+          id: this.item.id,
+          result: this.radio,
+          rejectReason: this.rejectReason
+        }
+      );
+      this.fetchData();
+      this.examineDialogVisible = false;
+      this.rejectReason = "";
     },
 
     // 设置
     examineSystem(item) {
-      console.log(item, 111111111)
-      this.radio1 = item.isFirst + ''
-      this.radio2 = item.settlementMethod + ''
-  // console.log(item.shopInfoId,222222);
-  
-      this.infoId = item.shopInfoId
-      this.systemDialogVisible = true
-      // console.log(item.settlementMethod, 2222222222)
+      console.log(item, 111111111);
+      this.radio1 = item.isFirst + "";
+      this.radio2 = item.settlementMethod + "";
+      this.accountStatus = item.accountStatus + "";
+      // console.log(item.shopInfoId,222222);
 
+      this.infoId = item.shopInfoId;
+      this.systemDialogVisible = true;
+      // console.log(item.settlementMethod, 2222222222)
     },
     // 保存店铺设置
     async saveShopDialog() {
-      const { data: res } = await this.$http.put(`shop/${this.infoId}/set`, { isFirst: this.radio1, settlementMethod: this.radio2 })
-      // console.log(res, 1111111111)
-      this.fetchData()
-      this.systemDialogVisible = false
+      const { data: res } = await this.$http.put(`shop/${this.infoId}/set`, {
+        isFirst: Number(this.radio1),
+        settlementMethod: Number(this.radio2),
+        accountStatus: Number(this.accountStatus)
+      });
+      console.log(res, 1111111111);
+      this.fetchData();
+      this.systemDialogVisible = false;
     },
     // 导出
     exportShop() {
       this.$http({
-        method: 'get',
-        url: 'shop/export',
-        responseType: 'blob'
+        method: "get",
+        url: "shop/export",
+        responseType: "blob"
       })
         .then(res => {
-       
-          const link = document.createElement('a')
+          const link = document.createElement("a");
           const blob = new Blob([res.data], {
-            type: 'application/vnd.ms-excel'
-          })
-          link.style.display = 'none'
-          link.href = URL.createObjectURL(blob)
-          const num = Math.ceil(Math.random() * 1000)
+            type: "application/vnd.ms-excel"
+          });
+          link.style.display = "none";
+          link.href = URL.createObjectURL(blob);
+          const num = Math.ceil(Math.random() * 1000);
 
-          link.setAttribute('download', '用户_' + num + '.xlsx')
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
+          link.setAttribute("download", "用户_" + num + ".xlsx");
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
         })
         // eslint-disable-next-line handle-callback-err
         .catch(error => {
           this.$Notice.error({
-            title: '错误',
-            desc: '网络连接错误'
-          })
-        })
+            title: "错误",
+            desc: "网络连接错误"
+          });
+        });
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
-    .filter-left {
-
-      width: 100%;
-      .el-input {
-        width: 200px;
-        margin-right: 10px;
-      }
+.filter-left {
+  width: 100%;
+  .el-input {
+    width: 200px;
+    margin-right: 10px;
   }
+}
 .leading-out {
   margin-bottom: 20px;
   .el-button {
@@ -365,17 +384,15 @@ export default {
   text-align: center;
 }
 .radioRow {
-
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 .radioRow div {
-    display: inline-block;
+  display: inline-block;
 }
-.radioRow >span  {
+.radioRow > span {
   display: inline-block;
   margin-right: 30px;
   width: 120px;
-
 }
 </style>
 <style lang="scss">
