@@ -136,9 +136,11 @@
         </div>
         <div class="radioRow">
           <span>店铺状态</span>
-          <!-- <el-radio v-model="accountStatus" label="-1">冻结</el-radio>
-          <el-radio v-model="accountStatus" label="1">解冻</el-radio>-->
-          <el-switch v-model="value" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+          <div class="shop-status">
+            <el-switch v-model="value" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
+            <span v-if="value">解冻店铺</span>
+            <span v-else>冻结店铺</span>
+          </div>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -397,13 +399,22 @@ export default {
   text-align: center;
 }
 .radioRow {
+  display: flex;
   margin-bottom: 30px;
 }
-.radioRow div {
-  display: inline-block;
+
+// 店铺状态
+.shop-status {
+  display: flex;
+  align-items: center;
+  span {
+    margin-left: 20px;
+    color: #999;
+    font-size: 14px;
+  }
 }
 .radioRow > span {
-  display: inline-block;
+
   margin-right: 30px;
   width: 120px;
 }

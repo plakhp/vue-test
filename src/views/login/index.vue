@@ -92,9 +92,9 @@ export default {
   },
   mounted() {
     if (this.loginForm.username === '') {
-      this.$refs.userName.focus()
+   
     } else if (this.loginForm.password === '') {
-      this.$refs.password.focus()
+     
     }
   },
   destroyed() {
