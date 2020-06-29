@@ -136,8 +136,9 @@
         </div>
         <div class="radioRow">
           <span>店铺状态</span>
-          <el-radio v-model="accountStatus" label="-1">冻结</el-radio>
-          <el-radio v-model="accountStatus" label="1">解冻</el-radio>
+          <!-- <el-radio v-model="accountStatus" label="-1">冻结</el-radio>
+          <el-radio v-model="accountStatus" label="1">解冻</el-radio>-->
+          <el-switch v-model="value" active-color="#13ce66" inactive-color="#ff4949"></el-switch>
         </div>
       </div>
       <span slot="footer" class="dialog-footer">
@@ -184,6 +185,7 @@ export default {
       radio1: "",
       radio2: "",
       // 店鋪狀態
+      value: false,
       accountStatus: "",
       filter: {
         shopName: "",
@@ -306,24 +308,35 @@ export default {
 
     // 设置
     examineSystem(item) {
-      console.log(item, 111111111);
       this.radio1 = item.isFirst + "";
       this.radio2 = item.settlementMethod + "";
       this.accountStatus = item.accountStatus + "";
-      // console.log(item.shopInfoId,222222);
-
+      // 店铺状态
+      if (this.accountStatus == 1) {
+        this.value = true;
+      } else if (this.accountStatus == -1) {
+        this.value = false;
+      }
+      // value
       this.infoId = item.shopInfoId;
       this.systemDialogVisible = true;
       // console.log(item.settlementMethod, 2222222222)
     },
     // 保存店铺设置
     async saveShopDialog() {
+      // console.log(this.value, "aaaaaaaaaaaaa");
+      // 为true 店铺状态正常
+      if (this.value) {
+        this.accountStatus = 1;
+      } else {
+        this.accountStatus = -1;
+      }
       const { data: res } = await this.$http.put(`shop/${this.infoId}/set`, {
         isFirst: Number(this.radio1),
         settlementMethod: Number(this.radio2),
         accountStatus: Number(this.accountStatus)
       });
-      console.log(res, 1111111111);
+
       this.fetchData();
       this.systemDialogVisible = false;
     },
