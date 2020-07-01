@@ -139,11 +139,11 @@ export default {
       //   })
       const { data: res } = await this.$http.get('banner/1/list', { params: this.filter })
       // console.log(res, 11111111111)
-      console.log(res)
-      this.list = res.data.records
-      this.pages.total = res.data.total
-      this.pages.page = res.data.current
-      this.pages.limit = res.data.size
+      // console.log(res)
+      // this.list = res.data.records
+      // this.pages.total = res.data.total
+      // this.pages.page = res.data.current
+      // this.pages.limit = res.data.size
       this.loading = false
     },
     add() {

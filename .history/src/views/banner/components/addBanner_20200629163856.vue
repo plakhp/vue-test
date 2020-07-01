@@ -167,7 +167,7 @@ export default {
        filter: {
         shopName: '',
         pageNum: 1,
-        pageSize: 500,
+        pageSize: 10,
         orderBy: 'sa.modify_time',
         orderType: '2'
       },
@@ -176,7 +176,7 @@ export default {
        goods: {
         goodsName: '',
         pageNum: 1,
-        pageSize: 500,
+        pageSize: 10,
         orderBy: 'modify_time',
         orderType: 2
       },
