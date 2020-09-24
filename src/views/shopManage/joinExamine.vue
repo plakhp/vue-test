@@ -124,11 +124,11 @@
       @close="closeDialog"
     >
       <div class="content">
-        <div class="radioRow">
+        <!-- <div class="radioRow">
           <span>是否设置为首页</span>
           <el-radio v-model="radio1" label="1">是</el-radio>
           <el-radio v-model="radio1" label="0">否</el-radio>
-        </div>
+        </div> -->
         <div class="radioRow">
           <span>结算方式</span>
           <el-radio v-model="radio2" label="0" change="settleAccounts">月结</el-radio>
