@@ -169,7 +169,7 @@ export default {
 			)
 			console.log(res, '通过结果')
 			if (res.code !== 0) {
-				this.$message.error(res.msg)
+				this.$message.error('收款用户不存在！')
 				return
 			}
 			this.fetchData()
