@@ -167,9 +167,14 @@ export default {
 				`profit-apply/${item.id}/approve`,
 				readyData
 			)
-			console.log(res, '通过结果')
+			// console.log(res, '通过结果')
+			if (res.code !== 0 && res.code == 10000) {
+				let msg = res.msg.substr(5, res.msg.length)
+				this.$message.error(msg)
+				return
+			}
 			if (res.code !== 0) {
-				this.$message.error('收款用户不存在！')
+				this.$message.error(res.msg)
 				return
 			}
 			this.fetchData()
